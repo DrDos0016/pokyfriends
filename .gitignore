@@ -1,0 +1,35 @@
+*.conf
+*.log
+*.pyc
+*.vhost
+
+manage.py
+private
+private.py
+
+venv
+
+# Excluded static files
+pokyfriends_web/static/image/pokyfriends.jpg
+pokyfriends_web/static/image/sugar.png
+
+# Excluded Apps (intended to be their own repositories)
+bk_mario_maker
+blackout
+blog
+chimp_or_chump
+clock
+gallery
+gen4_wifi
+maestro_tiles
+owo_whos_this
+pmdexplorers
+pokedex_ebooks_web
+pokemon_size_quiz
+pokemon_type_chart_quiz
+pokepan_crystal
+ptcq
+stickers
+stitchr
+train_box_release
+zzt
