@@ -1,0 +1,159 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}BK Mario Maker{% endblock %}
+
+{% block meta %}
+<link rel="shortcut icon" href="{% static 'tool/bk-mario-maker/favicon.png' %}">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="author" content="Dr. Dos">
+<meta name="description" content="A Mario Maker Construction Tools Randomizer - Create and compete with a limited toolset">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'tool/bk-mario-maker/style.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'tool/bk-mario-maker/bkmario.js' %}"></script>
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+</head>
+
+<div id="main">
+    <div class="ad"></div>
+
+    <div id="game">
+        <h1>Game</h1>
+        <div class="game-choice" data-game="smb"><img src="{% static 'tool/bk-mario-maker/banner-smb.png' %}" alt="Super Mario Bros."></div>
+        <div class="game-choice" data-game="smb3"><img src="{% static 'tool/bk-mario-maker/banner-smb3.png' %}" alt="Super Mario Bros. 3"></div>
+        <div class="game-choice" data-game="smw"><img src="{% static 'tool/bk-mario-maker/banner-smw.png' %}" alt="Super Mario World"></div>
+        <div class="game-choice" data-game="nsmb"><img src="{% static 'tool/bk-mario-maker/banner-nsmb.png' %}" alt="New Super Mario Bros."></div>
+    </div>
+
+    <div id="theme">
+        <h1>Theme</h1>
+        <div class="theme-choice"><img src="{% static 'tool/bk-mario-maker/theme-grassland.png' %}" alt="Grassland"></div>
+        <div class="theme-choice"><img src="{% static 'tool/bk-mario-maker/theme-underground.png' %}" alt="Underground"></div>
+        <div class="theme-choice"><img src="{% static 'tool/bk-mario-maker/theme-water.png' %}" alt="Water"></div>
+        <div class="theme-choice"><img src="{% static 'tool/bk-mario-maker/theme-ghosthouse.png' %}" alt="Ghost House"></div>
+        <div class="theme-choice"><img src="{% static 'tool/bk-mario-maker/theme-airship.png' %}" alt="Air Ship"></div>
+        <div class="theme-choice"><img src="{% static 'tool/bk-mario-maker/theme-castle.png' %}" alt="Castle"></div>
+    </div>
+
+    <div id="elements">
+        <h1 style="position:relative;width:100%;">Elements
+            <div class="no-shadow">
+            <select id="tileset">
+                <option value="smb">Super Mario Bros.</option>
+                <option value="smb3">Super Mario Bros. 3</option>
+                <option value="smw">Super Mario World</option>
+                <option value="nsmb">New Super Mario Bros.</option>
+            </select>
+            </div>
+        </h1>
+
+        <div class="element-choice"><img id="1-1" src="{% static 'tool/bk-mario-maker/smb/1-1.png' %}" alt="1-1"></div><div class="element-choice"><img id="1-2" src="{% static 'tool/bk-mario-maker/smb/1-2.png' %}" alt="1-2"></div><div class="element-choice"><img id="1-3" src="{% static 'tool/bk-mario-maker/smb/1-3.png' %}" alt="1-3"></div><div class="element-choice"><img id="1-4" src="{% static 'tool/bk-mario-maker/smb/1-4.png' %}" alt="1-4"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="1-5" src="{% static 'tool/bk-mario-maker/smb/1-5.png' %}" alt="1-5"></div><div class="element-choice"><img id="1-6" src="{% static 'tool/bk-mario-maker/smb/1-6.png' %}" alt="1-6"></div><div class="element-choice"><img id="1-7" src="{% static 'tool/bk-mario-maker/smb/1-7.png' %}" alt="1-7"></div><div class="element-choice"><img id="1-8" src="{% static 'tool/bk-mario-maker/smb/1-8.png' %}" alt="1-8"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="1-9" src="{% static 'tool/bk-mario-maker/smb/1-9.png' %}" alt="1-9"></div><div class="element-choice"><img id="1-10" src="{% static 'tool/bk-mario-maker/smb/1-10.png' %}" alt="1-10"></div><div class="element-choice"><img id="1-11" src="{% static 'tool/bk-mario-maker/smb/1-11.png' %}" alt="1-11"></div><div class="element-choice"><img id="1-12" src="{% static 'tool/bk-mario-maker/smb/1-12.png' %}" alt="1-12"></div>
+
+        <div class="spacer"></div>
+
+        <div class="element-choice"><img id="2-1" src="{% static 'tool/bk-mario-maker/smb/2-1.png' %}" alt="2-1"></div><div class="element-choice"><img id="2-2" src="{% static 'tool/bk-mario-maker/smb/2-2.png' %}" alt="2-2"></div><div class="element-choice"><img id="2-3" src="{% static 'tool/bk-mario-maker/smb/2-3.png' %}" alt="2-3"></div><div class="element-choice"><img id="2-4" src="{% static 'tool/bk-mario-maker/smb/2-4.png' %}" alt="2-4"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="2-5" src="{% static 'tool/bk-mario-maker/smb/2-5.png' %}" alt="2-5"></div><div class="element-choice"><img id="2-6" src="{% static 'tool/bk-mario-maker/smb/2-6.png' %}" alt="2-6"></div><div class="element-choice"><img id="2-7" src="{% static 'tool/bk-mario-maker/smb/2-7.png' %}" alt="2-7"></div><div class="element-choice"><img id="2-8" src="{% static 'tool/bk-mario-maker/smb/2-8.png' %}" alt="2-8"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="2-9" src="{% static 'tool/bk-mario-maker/smb/2-9.png' %}" alt="2-9"></div><div class="element-choice"><img id="2-10" src="{% static 'tool/bk-mario-maker/smb/2-10.png' %}" alt="2-10"></div><div class="element-choice"><img id="2-11" src="{% static 'tool/bk-mario-maker/smb/2-11.png' %}" alt="2-11"></div><div class="element-choice"><img id="2-12" src="{% static 'tool/bk-mario-maker/smb/2-12.png' %}" alt="2-12"></div>
+
+        <div class="spacer"></div>
+
+        <div class="element-choice"><img id="3-1" src="{% static 'tool/bk-mario-maker/smb/3-1.png' %}" alt="3-1"></div><div class="element-choice"><img id="3-2" src="{% static 'tool/bk-mario-maker/smb/3-2.png' %}" alt="3-2"></div><div class="element-choice"><img id="3-3" src="{% static 'tool/bk-mario-maker/smb/3-3.png' %}" alt="3-3"></div><div class="element-choice"><img id="3-4" src="{% static 'tool/bk-mario-maker/smb/3-4.png' %}" alt="3-4"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="3-5" src="{% static 'tool/bk-mario-maker/smb/3-5.png' %}" alt="3-5"></div><div class="element-choice"><img id="3-6" src="{% static 'tool/bk-mario-maker/smb/3-6.png' %}" alt="3-6"></div><div class="element-choice"><img id="3-7" src="{% static 'tool/bk-mario-maker/smb/3-7.png' %}" alt="3-7"></div><div class="element-choice"><img id="3-8" src="{% static 'tool/bk-mario-maker/smb/3-8.png' %}" alt="3-8"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="3-9" src="{% static 'tool/bk-mario-maker/smb/3-9.png' %}" alt="3-9"></div><div class="element-choice"><img id="3-10" src="{% static 'tool/bk-mario-maker/smb/3-10.png' %}" alt="3-10"></div><div class="element-choice"><img id="3-11" src="{% static 'tool/bk-mario-maker/smb/3-11.png' %}" alt="3-11"></div><div class="element-choice"><img id="3-12" src="{% static 'tool/bk-mario-maker/smb/3-12.png' %}" alt="3-12"></div>
+
+        <div class="spacer"></div>
+
+        <div class="element-choice"><img id="4-1" src="{% static 'tool/bk-mario-maker/smb/4-1.png' %}" alt="4-1"></div><div class="element-choice"><img id="4-2" src="{% static 'tool/bk-mario-maker/smb/4-2.png' %}" alt="4-2"></div><div class="element-choice"><img id="4-3" src="{% static 'tool/bk-mario-maker/smb/4-3.png' %}" alt="4-3"></div><div class="element-choice"><img id="4-4" src="{% static 'tool/bk-mario-maker/smb/4-4.png' %}" alt="4-4"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="4-5" src="{% static 'tool/bk-mario-maker/smb/4-5.png' %}" alt="4-5"></div><div class="element-choice"><img id="4-6" src="{% static 'tool/bk-mario-maker/smb/4-6.png' %}" alt="4-6"></div><div class="element-choice"><img id="4-7" src="{% static 'tool/bk-mario-maker/smb/4-7.png' %}" alt="4-7"></div><div class="element-choice"><img id="4-8" src="{% static 'tool/bk-mario-maker/smb/4-8.png' %}" alt="4-8"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="4-9" src="{% static 'tool/bk-mario-maker/smb/4-9.png' %}" alt="4-9"></div><div class="element-choice"><img id="4-10" src="{% static 'tool/bk-mario-maker/smb/4-10.png' %}" alt="4-10"></div><div class="element-choice"><img id="4-11" src="{% static 'tool/bk-mario-maker/smb/4-11.png' %}" alt="4-11"></div><div class="element-choice"><img id="4-12" src="{% static 'tool/bk-mario-maker/smb/4-12.png' %}" alt="4-12"></div>
+
+        <div class="spacer"></div>
+
+        <div class="element-choice"><img id="5-1" src="{% static 'tool/bk-mario-maker/smb/5-1.png' %}" alt="5-1"></div><div class="element-choice"><img id="5-2" src="{% static 'tool/bk-mario-maker/smb/5-2.png' %}" alt="5-2"></div><div class="element-choice"><img id="5-3" src="{% static 'tool/bk-mario-maker/smb/5-3.png' %}" alt="5-3"></div><div class="element-choice"><img id="5-4" src="{% static 'tool/bk-mario-maker/smb/5-4.png' %}" alt="5-4"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="5-5" src="{% static 'tool/bk-mario-maker/smb/5-5.png' %}" alt="5-5"></div><div class="element-choice"><img id="5-6" src="{% static 'tool/bk-mario-maker/smb/5-6.png' %}" alt="5-6"></div><div class="element-choice"><img id="5-7" src="{% static 'tool/bk-mario-maker/smb/5-7.png' %}" alt="5-7"></div><div class="element-choice"><img id="5-8" src="{% static 'tool/bk-mario-maker/smb/5-8.png' %}" alt="5-8"></div>
+        <div class="blank"></div>
+        <div class="element-choice"><img id="5-9" src="{% static 'tool/bk-mario-maker/smb/5-9.png' %}" alt="5-9"></div><div class="element-choice"><img id="5-10" src="{% static 'tool/bk-mario-maker/smb/5-10.png' %}" alt="5-10"></div><div class="element-choice"><img id="5-11" src="{% static 'tool/bk-mario-maker/smb/5-11.png' %}" alt="5-11"></div><div class="element-choice"><img id="5-12" src="{% static 'tool/bk-mario-maker/smb/5-12.png' %}" alt="5-12"></div>
+    </div>
+
+    <div class="flex-break"></div>
+
+    <div id="autoscroll">
+        <h1>Autoscroll</h1>
+        <div class="autoscroll-choice">Off</div>
+        <div class="autoscroll-choice">Slow</div>
+        <div class="autoscroll-choice">Medium</div>
+        <div class="autoscroll-choice">Fast</div>
+    </div>
+
+    <div id="featured">
+        <h1>Featured</h1>
+        <div class="featured-choice"><img id="f1" src="{% static 'tool/bk-mario-maker/blank-featured.png' %}" alt="x"></div>
+        <div class="featured-choice"><img id="f2" src="{% static 'tool/bk-mario-maker/blank-featured.png' %}" alt="x"></div>
+        <br><br>
+        <div class="featured-choice"><img id="f3" src="{% static 'tool/bk-mario-maker/blank-featured.png' %}" alt="x"></div>
+        <div class="featured-choice"><img id="f4" src="{% static 'tool/bk-mario-maker/blank-featured.png' %}" alt="x"></div>
+    </div>
+
+    <div id="controls">
+        <h1>Randomize</h1>
+        <div class="control-button">Everything</div>
+        <div class="control-button">Randomize Game</div>
+        <div class="control-button">Randomize Theme</div>
+        <div class="control-button">Randomize Elements</div>
+        <div class="control-button">Randomize Autoscroll</div>
+        <div class="control-button">Randomize Featured</div>
+        <div class="control-button">Reset</div>
+    </div>
+
+    <div id="time">
+        <h1>Current Time</h1>
+        <div class="time-button" style="cursor:auto" id="date">YYYY-MM-DD</div>
+        <div class="time-button" style="cursor:auto" id="clock">--:--:--</div>
+
+        <h1>Upload Time</h1>
+        <div class="time-button"><input id="upload-date" value="" placeholder="YYYY-MM-DD"></div>
+        <div class="time-button"><input id="upload-time" value="" placeholder="00:00:00"></div>
+    </div>
+
+    <div id="link">
+        <h1>Page Links</h1>
+        <div class="link-button">
+            <input id="link-input" value="#" readonly><br>
+            <a href="#" id="link-text">Link</a><br>
+            <!--<a id="twitter" href="#" target="_blank">Tweet</a>-->
+        </div>
+
+        <h1>Credits</h1>
+        <div class="credits">
+            <img src="{% static 'tool/bk-mario-maker/mii.png' %}" alt="Dr. Dos">
+            Created by Dr. Dos<br>
+            All graphics by Nintendo<br>
+            Sprites ripped by Doc<br>
+            &bull; <a href="http://pokyfriends.com" style="font-size:smaller">Let's Be Pokyfriends</a>
+        </div>
+    </div>
+
+    <div class="flex-break"></div>
+
+    <div class="ad"></div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "cdosblog/blog-main.html" %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %}{% if title %}{{title}}{% endif %} - C:\Dos\Blog\{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/blog.css'  %}?{{TS}}">
+{% endblock %}
+
+{% block header %}<h1>TAGS</h1>{% endblock %}
+
+{% block blog_content %}
+<div class="block">
+<ul>
+    {% for tag in tags %}
+    <li>{{tag.get_link}}</li>
+    {% endfor %}
+</ul>
+</div>
+{% endblock %}

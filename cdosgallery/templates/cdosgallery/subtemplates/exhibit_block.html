@@ -1,0 +1,9 @@
+{% load static %}
+<a class="exhibit-thumb" href="{{exhibit.get_absolute_url}}">
+    <div class="thumb-wrapper">
+        <img src="{% static exhibit.thumbnail %}">
+    </div>
+    <div class="title">{{exhibit.title}}</div>
+    <div class="artist">{{exhibit.artist.name}}</div>
+    <div class="date">{{exhibit.date|default:"Unknown"}}</div>
+</a>

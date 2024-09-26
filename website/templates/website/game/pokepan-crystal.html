@@ -1,0 +1,93 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Poképan Crystal{% endblock %}
+
+{% block css %}
+<style>
+body
+{
+    background:url("{% static 'game/pokepan-crystal/bg.png' %}");
+    background-size:cover;
+}
+
+#checksums
+{
+    width:100%;
+    height:12em;
+}
+
+.image-set
+{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-evenly;
+}
+
+.image-set img
+{
+    margin:0.5em;
+    border:1px solid #AAA;
+}
+
+.dl-link
+{
+    font-size:x-large;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="block">
+    <div class="c"><img src="{% static 'game/pokepan-crystal/Pokepan.png' %}" alt="Pokepan Crystal Logo" id="game-logo"></div>
+
+    <p>Poképan Crystal is a patch for Pokémon Crystal which makes the game more open to differing sexual orientations.
+    The only change made is to make the move "Attract" skip the check to see if the user and target are opposite gendered.
+    Pokémon may now infatuate (and be infatuated by) males, females, and genderless Pokémon.</p>
+
+    <p>I made this hack as a way to mess around with the wonderful <a href="https://github.com/pret/pokecrystal" target="_blank">Pokecrystal disassembly</a> project,
+    learning a little about how the game works and getting a chance to play with assembly code.
+    Had I the time to really dive into the guts of the game's code,
+    I would love to make the game's handling of gender itself more diverse than male/female/none.</p>
+
+    <p>Pokémon Crystal was released in Japan in December 2000 and in the US in July 2001.
+    Nearly 20 years later and the idea of non-heterosexual attraction in Pokémon (whether it be the human characters or the Pokémon themselves) remains unseen,
+    leaving people to cobble together their own representation through fan-works.</p>
+
+    <p>The hack was published on Itch after being rejected from Romhacking.net with a response that the site did not allow "political statements". Afterwards it was uploaded to Itch.io in hopes that it would find a more welcoming home there. The staff member that rejected the hack originally was removed from their position shortly afterwards and the hack was resubmitted and accepted. A nice summary of the events that unfolded can be found in this <a href="https://videogamechoochoo.com/romhacking-net-accused-of-homophobia-after-blocking-pokemon-romhack/" target="_blank">interview on Video Game Choo Choo</a>.</p>
+
+    <h2>Download</h2>
+
+    <a href="{% static 'game/pokepan-crystal/pokepan-crystal.zip' %}" class="dl-link">Download Poképan Crystal</a>
+
+    <h2>Screenshots</h2>
+
+    <div class="image-set">
+    <img src="{% static 'game/pokepan-crystal/pokepan1.png' %}">
+    <img src="{% static 'game/pokepan-crystal/pokepan2.png' %}">
+    <img src="{% static 'game/pokepan-crystal/pokepan3.png' %}">
+    <img src="{% static 'game/pokepan-crystal/pokepan4.png' %}">
+    </div>
+
+    <h2>Install instructions</h2>
+
+    <p>To play, patch your Pokemon Crystal v1.1 rom using a utility such as Lunar IPS and run using any Game Boy Color emulator.</p>
+
+    <textarea id="checksums">
+Pokemon - Crystal Version (UE) (V1.1) [C][!]
+
+ROM/File Size: 2097152 (200000)
+ROM checksum: 18D2
+ROM/File MD5: 301899B8087289A6436B0A241FBBB474
+ROM/File SHA-1: F2F52230B536214EF7C9924F483392993E226CFB
+ROMFile CRC32: 3358E30A
+ROM/File SHA-256: FDCC3C8C43813CF8731FC037D2A6D191BAC75439C34B24BA1C27526E6ACDC8A2
+    </textarea>
+
+    <h2>Alternative Sources</h2>
+    <ul>
+    <li><a href="https://dr-dos.itch.io/pokepan-crystal" target="_blank">Poképan Crystal on Itch</a></li>
+    <li><a href="http://www.romhacking.net/hacks/4492/" target="_blank">Poképan Crystal on Romhacking.net</a></li>
+    </ul>
+</div>
+{% endblock %}

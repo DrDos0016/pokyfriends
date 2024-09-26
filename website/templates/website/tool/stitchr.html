@@ -1,0 +1,150 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Stitchr{% endblock %}
+{% block header %}<h1>Stitchr</h1>{% endblock %}
+
+{% block meta %}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'tool/stitchr/spectrum.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'tool/stitchr/style.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'tool/stitchr/spectrum.js' %}"></script>
+<script src="{% static 'tool/stitchr/stitchr.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div id="header">
+    <div class="option" id="photoset">
+        <span>Load<br>Images</span>
+        <div class="icon">
+            <span id="loaded_images">0</span>/<span id="total_images">0</span>
+        </div>
+    </div>
+    <div class="option" id="bg_color">
+        <span>Background<br>Color</span>
+        <div class="icon">
+        </div>
+    </div>
+    <div class="option" id="layout">
+        <span>Image<br>Layout</span>
+        <div class="icon">
+            ⇊
+        </div>
+    </div>
+    <div class="option" id="border">
+        <span>Image<br>Border</span>
+        <div class="icon">
+        </div>
+    </div>
+    <div class="option" id="margin">
+        <span>Image<br>Margin</span>
+        <div class="icon">4</div>
+    </div>
+    <div class="option" id="order">
+        <span>Rearrange<br>Images</span>
+        <div class="icon">&#8633;</div>
+    </div>
+    <div class="option" id="donate">
+        <span>Donate!</span><br><br>
+        <div class="icon">$</div>
+    </div>
+</div>
+<div id="content">
+    <canvas width="500" height="500" id="canvas"></canvas>
+</div>
+<div class="overlay" id="photoset_overlay">
+    <div class="menu">
+        <!--
+        <b>Enter Photoset URL</b><br><br>
+        <div style="width:95%;margin:auto;">
+            <input id="url" type="text" name="url" style="width:25em" value="" placeholder="ex: http://user.tumblr.com/post/123456789000/">
+            <button id="load_photoset" data-no-render="1">Load Photoset</button>
+            <div class="text-output" id="photoset-output"></div>
+        </div>
+        <br>
+        -->
+        <b>Upload Image</b><br><br>
+        <div style="width:95%;margin:auto;">
+            <input id="local" type="file" name="local" value="" accept="image/*" style="width:25em">
+            <button id="add-local">Add Image</button>
+            <div class="text-output" id="local-output"></div>
+        </div>
+        <br>
+        <b>Important Notes</b><br>
+        <ul>
+            <li>The image may appear distorted, this is to ensure the entire image is visible at all times. When you save the image, it won't be distorted.</li>
+            <li>By virtue of canvases not being animated, animated gifs will not work properly with Stitchr. Sorry!</li>
+            <li>Transparent images will maintain their transparency properly.</li>
+            <li>You can also drag and drop local images to manually create a stitchr photoset.</li>
+        </ul>
+
+        <div style="text-align:right"><button class="ok" data-no-render="1">OK</button></div>
+    </div>
+</div>
+<div class="overlay" id="bg_color_overlay">
+    <div class="menu">
+        <b>Select Color</b><br><br>
+        <input id="bg_input" value="#F0F0F0"><br>
+    </div>
+</div>
+<div class="overlay" id="layout_overlay">
+    <div class="menu">
+        <b>Select Layout</b><br><br>
+        <label><input name="layout" value="vert" type="radio" checked> Vertical</label>
+        <label><input name="layout" value="horiz" type="radio"> Horizontal</label>
+        <label><input name="layout" value="grid" type="radio"> Grid</label><br>
+        <label><input name="grid_width" value="2" maxlength="1"> Grid Width</label>
+        <div style="text-align:right"><button class="ok">OK</button></div>
+    </div>
+</div>
+<div class="overlay" id="border_overlay">
+    <div class="menu">
+        <b>Select Border</b><br><br>
+        <input name="border_size" value="1" maxlength="2" class="small"> Border Size<br>
+        <br>
+        <b>Select Color</b><br><br>
+        <input id="border_color_input" value="#000000"><br>
+    </div>
+</div>
+<div class="overlay" id="margin_overlay">
+    <div class="menu">
+        <b>Select Margin</b><br><br>
+        <input name="margin_size" value="4" maxlength="2" class="small"> Margin Size<br>
+        <div style="text-align:right"><button class="ok">OK</button></div>
+    </div>
+</div>
+<div class="overlay" id="order_overlay">
+    <div class="menu" style="max-width:500px">
+        <b>Adjust Order</b><br><br>
+
+        Click on an image, then use the right/left keys to move it forwards/backwards.
+        <div id="order_area"></div>
+        <div style="text-align:right"><button class="ok">OK</button></div>
+    </div>
+</div>
+<div class="overlay" id="donate_overlay">
+    <div class="menu" style="max-width:500px">
+        <b>Donate!</b><br><br>
+
+        <p>Stitchr was created by Dr. Dos. If you found this tool useful, a donation would be greatly appreciated!</p>
+        <div style="text-align:center">
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_s-xclick" />
+            <input type="hidden" name="hosted_button_id" value="ZXFBNC7QTU6L2" />
+            <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate" />
+            <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+            </form>
+        </div>
+
+        <br>
+        <a href="https://pokyfriends.com">Let's Be Pokyfriends</a>
+
+        <div style="text-align:right"><button class="ok" data-no-render="1">OK</button></div>
+    </div>
+</div>
+{% endblock %}

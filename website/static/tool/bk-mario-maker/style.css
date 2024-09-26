@@ -1,0 +1,350 @@
+@font-face
+{
+    font-family:"pretendo";
+    src: url('/static/tool/bk-mario-maker/Pretendo.ttf');
+}
+
+main a, main a:visited
+{
+    color:#00F;
+    text-decoration:none;
+}
+
+main
+{
+    background-color:#3656CD;
+    background-image:url("/static/tool/bk-mario-maker/background.png");
+    background-repeat:no-repeat;
+    background-position:bottom center;
+    background-size:100%;
+    color:#000;
+    font-size:smaller;
+}
+
+main h1
+{
+    width:100%;
+    font-size:12pt;
+    text-align:center;
+    border-radius:10px;
+    font-family:"pretendo", sans-serif;
+    letter-spacing:0.05em;
+    padding-top:4px;
+    padding-bottom:4px;
+    color:#000;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+h1 div
+{
+    float:right;
+    margin-right:24px;
+    margin-top:-2px;
+}
+
+#tileset
+{
+    font-size:8pt;
+}
+
+.gray
+{
+    filter:brightness(30%);
+    -webkit-filter:brightness(30%);
+}
+
+.selected
+{
+    outline:2px dashed #000;
+}
+
+.flex-break
+{
+    width:100%;
+    height:0px;
+}
+
+#main
+{
+    display:flex;
+    width:980px;
+    max-height:725px;
+    margin:auto;
+    /*background:rgba(200,200,200,0.2);*/
+    flex-wrap:wrap;
+    align-items:flex-start;
+    justify-content:space-between;
+    border-radius:10px;
+}
+
+#main div div, #main h1
+{
+    box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.75);
+    background:#E9E9E9;
+}
+
+#main .no-shadow, #main .blank, #main .spacer
+{
+    box-shadow: none;
+    background:transparent;
+}
+
+#game, #theme, #elements, #autoscroll, #featured, #link, #controls, #time
+{
+    width:100px;
+    min-height:100px;
+    margin:5px;
+}
+
+#game
+{
+    width:auto;
+}
+
+.game-choice
+{
+    border-radius:10px;
+    padding:8px;
+    margin:5px;
+    min-width:48px;
+    text-align:center;
+    cursor:pointer;
+}
+
+#game img
+{
+    width:100%;
+}
+
+#theme
+{
+    width:12%;
+}
+
+.theme-choice
+{
+    border-radius:10px;
+    padding:3px;
+    margin:auto;
+    margin-bottom:5px;
+    width:40px;
+    text-align:center;
+    cursor:pointer;
+}
+
+#elements
+{
+    width:70%;
+    text-align:center;
+}
+
+.element-choice
+{
+    display:inline-block;
+    border-radius:10px;
+    padding:3px;
+    min-width:35px;
+    text-align:center;
+    cursor:pointer;
+    margin:4px;
+}
+
+.element-choice img, .featured-choice img
+{
+    margin-top:2px;
+}
+
+.blank
+{
+    display:inline-block;
+    width:15px;
+}
+
+.spacer
+{
+    width:100%;
+    height:3px;
+}
+
+#autoscroll
+{
+    width:12%;
+}
+
+.autoscroll-choice
+{
+    border-radius:10px;
+    padding:3px;
+    text-align:center;
+    margin-bottom:5px;
+    width:100%;
+    box-sizing:border-box;
+    cursor:pointer;
+}
+
+#featured
+{
+    width:12%;
+    text-align:center;
+}
+
+.featured-choice
+{
+    display:inline-block;
+    border-radius:10px;
+    padding:3px;
+    min-width:35px;
+    text-align:center;
+    cursor:pointer;
+}
+
+#link
+{
+    width:25%;
+}
+
+#controls
+{
+    width:20%;
+}
+
+.control-button
+{
+    display:inline-block;
+    border-radius:10px;
+    padding:3px;
+    min-width:35px;
+    text-align:center;
+    cursor:pointer;
+    margin-bottom:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+#time
+{
+    width:15%;
+}
+
+.time-button
+{
+    display:inline-block;
+    border-radius:10px;
+    padding:3px;
+    min-width:35px;
+    text-align:center;
+    margin-bottom:5px;
+    width:100%;
+    box-sizing:border-box;
+    font-size:14pt;
+}
+
+.time-button input
+{
+    font-size:14pt;
+}
+
+input
+{
+    border:0;
+    text-align:center;
+    width:90%;
+    background:#E9E9E9;
+}
+
+.link-button
+{
+    display:inline-block;
+    border-radius:10px;
+    padding:3px;
+    min-width:35px;
+    text-align:center;
+    margin-bottom:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+.credits, .share
+{
+    display:inline-block;
+    border-radius:10px;
+    padding:5px;
+    min-width:35px;
+    text-align:left;
+    margin-bottom:5px;
+    width:100%;
+    box-sizing:border-box;
+    font-size:smaller;
+}
+
+.share
+{
+    text-align:center;
+}
+
+.credits img
+{
+    max-width:50px;
+    max-height:50px;
+    float:right;
+    border:1px solid #000;
+    margin-right:4px;
+}
+
+.ad
+{
+    display:none;
+}
+
+/* Mobile */
+@media (max-width: 999px)
+{
+    #main
+    {
+        width:100%;
+    }
+
+    #main div div, #main h1
+    {
+        box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+    }
+
+    #game, #theme, #elements, #autoscroll, #featured, #link, #controls, #time
+    {
+        width:100%;
+        text-align:center;
+    }
+
+    h1 div
+    {
+        position:static;
+        display:block;
+        text-align:center;
+        margin-top:0.5em;
+    }
+
+    .game-choice, .theme-choice
+    {
+        width:45%;
+        margin-left:auto;
+        margin-right:auto;
+        display:inline-block;
+        min-height:5vh;
+    }
+
+    #elements .blank, #elements .spacer
+    {
+        display:none;
+    }
+
+    .element-choice
+    {
+        width:12%;
+        margin:2px;
+    }
+
+    .ad
+    {
+    }
+}

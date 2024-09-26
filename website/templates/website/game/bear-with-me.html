@@ -1,0 +1,18 @@
+{% extends "website/game/zzt-base.html" %}
+{% load pokyfriends_tags %}
+
+{% block title %}Bear With Me{% endblock %}
+
+{% block zeta_config %}{% zeta_launcher "bearwithme-poky.zip" "pokyfriends-zzt-bearwithme" "BEARWME.zzt" engine="" %}{% endblock %}
+
+{% block world_overview %}
+<h2>Bear With Me (2021)</h2>
+
+<p><i>Please note that this game runs on a modified version of the original ZZT v3.2. ClassicZoo features will not be available.</i></p>
+{% endblock %}
+
+{% block links %}
+<ul>
+    <li><a href="https://museumofzzt.com/file/view/bearwithme/" target="_blank">Bear With Me</a> on the Museum of ZZT</li>
+</ul>
+{% endblock %}

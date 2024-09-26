@@ -1,0 +1,65 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'game/chimp-or-chump/style.css'  %}?{{TS}}">
+<style>
+header { background-color:#000; }
+main { border-color:#000; }
+main .content { width:auto; }
+</style>
+{% endblock %}
+
+{% block title %}Chimp or Chump{% endblock %}
+{% block header %}
+<h1>
+    <img src="{% static 'game/chimp-or-chump/images/brain-l.png' %}">
+    Chimp or Chump
+    <img src="{% static 'game/chimp-or-chump/images/brain-r.png' %}">
+</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <p>Ayumu is a very clever chimp with a memory worth envying. His memory is so
+    excellent that he can memorize the position of 10 numbers in less than half
+    a second. You can check out his abilities in <a href="https://www.youtube.com/watch?v=qyJomdyjyvM" target="_blank">this video</a>.
+    After you've done so, you can try to memorize the location of numbers
+    yourself, and see how you compare. Are you a chimp or a chump?</p>
+
+    <p>Click the start button to play <img src="{% static 'game/chimp-or-chump/images/start.png' %}" style="width:1px;height=1px">
+    <p><b style="color:red">If the start button doesn't load below, try refreshing the page.</b></p></p>
+</div>
+
+<div id="gameframe">
+<canvas id="game" width="640" height="480">
+<div style="font-size:36pt;font-weight:bold;color:#FF0000;">Sorry!</div>
+<div style="font-size:18pt;color:#FFFF00">Your browser lacks Canvas support which would allow it to play HTML5 games such as this one!</div>
+</canvas>
+</div>
+<div style="text-align:center;margin-top:15px;"><img id="soundtoggle" src="{% static 'game/chimp-or-chump/images/sound.png' %}"></div>
+<div id="debugCoords" style="display:none">&nbsp;</div>
+<div id="debugLocs" style="display:none">&nbsp;</div>
+<!--Images are Brittanic Bold size 36 with AA-->
+<!--Preload Images-->
+<div style="display:none;">
+<img src="{% static 'game/chimp-or-chump/images/1.png' %}" id="i1">
+<img src="{% static 'game/chimp-or-chump/images/2.png' %}" id="i2">
+<img src="{% static 'game/chimp-or-chump/images/3.png' %}" id="i3">
+<img src="{% static 'game/chimp-or-chump/images/4.png' %}" id="i4">
+<img src="{% static 'game/chimp-or-chump/images/5.png' %}" id="i5">
+<img src="{% static 'game/chimp-or-chump/images/6.png' %}" id="i6">
+<img src="{% static 'game/chimp-or-chump/images/7.png' %}" id="i7">
+<img src="{% static 'game/chimp-or-chump/images/8.png' %}" id="i8">
+<img src="{% static 'game/chimp-or-chump/images/9.png' %}" id="i9">
+<img src="{% static 'game/chimp-or-chump/images/10.png' %}" id="i10">
+<img src="{% static 'game/chimp-or-chump/images/start.png' %}" id="istart">
+<img src="{% static 'game/chimp-or-chump/images/gameover.png' %}" id="igameover">
+<img src="{% static 'game/chimp-or-chump/images/continue.png' %}" id="icont">
+<img src="{% static 'game/chimp-or-chump/images/statsframe.png' %}" id="iframe">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'game/chimp-or-chump/chimp-or-chump.js' %}"></script>
+{% endblock %}

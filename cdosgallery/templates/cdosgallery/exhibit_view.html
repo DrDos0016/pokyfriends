@@ -1,0 +1,108 @@
+{% extends "gallery/index.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'gallery/css/gallery.css'  %}?{{TS}}">
+{% endblock %}
+
+{% block og %}
+<meta property="og:title" content="{{title}}">
+<meta property="og:image" content="{{DOMAIN}}{% static exhibit.images.all.0.thumb_url %}">
+<meta property="og:description" content="{{exhibit.description}}">
+<meta property="og:url" content="{{request.build_absolute_uri}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@dosmeow">
+{% endblock %}
+
+{% block pages %}
+<div class="c" style="width:100%;text-align:center;">
+<b>
+    {% if previous_gallery_url != "/gallery/" %}<a href="{{previous_gallery_url}}">Go Back</a> &bull;{% endif %}
+    <a href="/gallery/">Main Gallery</a>
+</b>
+</div>
+{% endblock %}
+{% block gallery_filters %}{% endblock %}
+
+{% block items %}
+{% if exhibit.visibility == 2 %}
+<div class="text-block">
+    <p>This file is <i>UNLISTED</i>. Please do not share the link without
+    permission. Thank you!</p>
+</div>
+{% elif exhibit.visibility == 3 %}
+    <p>This file is <i>PRIVATE</i>. I sure hope nobody but me sees this
+    message.</p>
+{% endif %}
+<div id="exhibit">
+    <div class="exhibit-frame">
+        <a href="{% static displayed_image.url %}" target="_blank" class="noext">
+            <img class="exhibit-full" src="{% static displayed_image.url %}" alt="{{exhibit.description|default:'No Desc'}}" title="{{exhibit.title}}">
+        </a>
+    </div>
+    <h2>{{exhibit.title}}</h2>
+    {{exhibit.artist}} &mdash; {{exhibit.date|date:"Y"}}
+</div>
+
+<div class="text-block">
+<p>{{exhibit.description|safe|linebreaks}}</p>
+</div>
+
+{% if image_count > 1 %}
+<div class="exhibit-previews">
+    {% for image in images %}
+    <div class="exhibit-preview tiny">
+        <a href="?image={{forloop.counter}}">
+            <img class="exhibit-thumb" src="{% static image.thumb_url %}" alt="{{image.description|default:'No Desc'}}" title="{{image.description}}">
+        <div class="exhibit-info">
+            <span class="exhibit-title">{{image.description}}</span>
+        </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>{% endif %}
+
+<table id="exhibit-details">
+    <tr>
+        <th>Title</th>
+        <td>{{exhibit.title}}</td>
+    </tr>
+    <tr>
+        <th>Date (approx.)</th>
+        <td>{{exhibit.date|date:"N dS, Y"}}</td>
+    </tr>
+    <tr>
+        <th>Rating</th>
+        <td>{{exhibit.sfw|yesno:"SFW,NSFW 🔞"}}</td>
+    </tr>
+    <tr>
+        <th>Image{{image_count|pluralize}}</th>
+        <td>{{image_count}}</td>
+    </tr>
+    <tr>
+        <th>Visibility</th>
+        <td>{% if exhibit.visibility == 1 %}Public{% elif exhibit.visibility == 2 %}Unlisted{% else %}Private{% endif %}</td>
+    </tr>
+    <tr>
+        <th>Artist</th>
+        <td><a href="/gallery/artist/{{exhibit.artist.slug}}/">{{exhibit.artist}}</a></td>
+    </tr>
+    <tr>
+        <th>Character{{characters_count|pluralize}}</th>
+        <td>{% for c in exhibit_characters %}<a href="/gallery/character/{{c.slug}}/">{{c}}</a>{% endfor %}</td>
+    </tr>
+</table>
+
+<div id="sources">
+    <h3>Sources</h3>
+    {% if exhibit.sources %}
+    <ul>
+        {% for s in exhibit.source_list %}
+        <li><a href="{{s.url}}" target="_blank">{{s.text}}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <i>None available. The source may be unknown or the artist may no longer have the art uploaded.</i>
+    {% endif %}
+</div>
+{% endblock %}

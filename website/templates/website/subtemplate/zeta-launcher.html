@@ -1,0 +1,29 @@
+<script type="text/javascript" src="/static/game/zzt/zeta-{{zeta_version}}/zeta_loader.js"></script>
+<script type="text/javascript">
+ZetaLoad({
+	render: {
+		canvas: document.getElementById("zeta_canvas")
+	},
+	storage: { // optional - if not present, saves to RAM (lost on page refresh)
+		type: "auto", // can also be "localstorage" or "indexeddb"; "auto" is recommended
+		database: "{{save_db}}"
+	},
+	path: "/static/game/zzt/zeta-{{zeta_version}}/",
+	arg: "{{launch_file}}", // optional
+    {% if commands %}commands: [{{commands}}],{% endif %}
+	files: [
+		{% if engine %}{
+			"type": "zip",
+			"url": "/static/game/zzt/engine/{{engine}}",
+			"filenameMapper": function(f) {
+				let fl = f.toLowerCase();
+				return fl.startsWith("zzt.") ? f : null;
+			}
+		},{% endif %}
+		{
+			"type": "zip",
+			"url": "/static/game/zzt/world/{{filename}}"
+		}
+	]
+});
+</script>

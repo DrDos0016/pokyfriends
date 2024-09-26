@@ -1,0 +1,17 @@
+{% extends "website/game/zzt-base.html" %}
+{% load pokyfriends_tags %}
+
+{% block title %}Wordles of ZZT{% endblock %}
+
+{% block zeta_config %}{% zeta_launcher "wordlesz.zip" "pokyfriends-zzt-wordlesz" "WORDLESZ.zzt" %}{% endblock %}
+
+{% block world_overview %}
+<h2>Wordles of ZZT (2022)</h2>
+{% endblock %}
+
+{% block links %}
+<ul>
+    <li><a href="https://museumofzzt.com/file/view/wordlesz/" target="_blank">Wordles of ZZT</a> on the Museum of ZZT</li>
+    <li><a href="https://dr-dos.itch.io/wordles-of-zzt" target="_blank">Wordles of ZZT</a> on Itch.io</li>
+</ul>
+{% endblock %}

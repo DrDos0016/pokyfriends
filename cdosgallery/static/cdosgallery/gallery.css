@@ -1,0 +1,75 @@
+.pagination
+{
+    font-family:monospace;
+    text-align:center;
+}
+
+.gallery-list
+{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:flex-start;
+    align-items:flex-start;
+}
+
+.gallery-list h2
+{
+    flex:1 0 100%;
+    color:var(--hot-pink);
+    background-color:var(--text);
+    padding-left:3ch;
+    margin-left:-5px;
+    margin-right:-5px;
+}
+
+.exhibit-thumb
+{
+    flex:0 0 24%;
+    /*min-height:150px;*/
+    display:flex;
+    flex-direction:column;
+    text-align:center;
+    padding:5px;
+    color:var(--text);
+    text-decoration:none;
+}
+
+.exhibit-thumb:hover { background-color:var(--pale-blue); }
+a.exhibit-thumb:visited { color:var(--text); }
+
+.exhibit-thumb .title
+{
+    margin-top:5px;
+    font-weight:bold;
+}
+
+.exhibit-thumb:hover .title
+{
+    text-decoration:underline;
+}
+
+.exhibit-thumb .artist, .exhibit-thumb .date
+{
+    font-size:10pt;
+}
+
+.exhibit-thumb img
+{
+    border:5px solid var(--border);
+    max-width:100%;
+    padding:5px;
+}
+
+.exhibit-thumb .thumb-wrapper
+{
+    flex:0;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+}
+
+.exhibit-thumb .thumb-wrapper img
+{
+    background-color:#FFF;
+}

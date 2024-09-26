@@ -1,0 +1,14 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<h1>{{title}}</h1>
+
+{% for project in projects %}
+<h2>{% if project.show_date %}({% if project.date.year == 1970 %}????{% else %}{{project.date.year}}{% endif %}){% endif %} <a href="{{project.get_absolute_url}}">{{project.title}}</a></h2>
+{% endfor %}
+
+{% endblock %}

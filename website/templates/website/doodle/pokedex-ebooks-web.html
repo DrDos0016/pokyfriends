@@ -1,0 +1,132 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Pokédex Ebooks Web{% endblock %}
+{% block header %}<h1>Pokédex Ebooks Web</h1>{% endblock %}
+
+{% block css %}
+<style>
+.controls
+{
+    margin:auto;
+    display:flex;
+    justify-content:space-around;
+}
+
+.controls .col
+{
+    text-align:left;
+    flex:1;
+    margin:1em;
+    padding:1em;
+    border:10px solid #36001F;
+    background-color:#EEE;
+}
+
+.controls label
+{
+    font-weight:bold;
+}
+
+input[type="submit"]
+{
+    width:auto;
+}
+
+.entry
+{
+    margin:auto;
+    font-size:20pt;
+    border:10px solid #36001F;
+    min-height:300px;
+    background-color:#EEE;
+}
+
+.entry p
+{
+    margin:0;
+}
+
+.head
+    {
+        display:flex;
+        margin:auto;
+        justify-content:space-around;
+    }
+
+    .head .entry
+    {
+        flex: 3;
+        margin:1em;
+        padding:1em;
+    }
+
+    .head .about
+    {
+        flex: 1;
+        margin:1em;
+        padding:1em;
+    }
+
+@media (max-width:1024px)
+{
+    .controls .col div
+    {
+        min-height:3em;
+    }
+
+    .controls input[type=radio]
+    {
+        height:3em;
+        width:3em;
+    }
+
+    .controls input
+    {
+        height:3em;
+        font-size:larger;
+    }
+
+    .entry
+    {
+        font-size:medium;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="main">
+    <div class="head">
+        <div class="entry"><p>{{markov}}{{error}}</p></div>
+
+        <div class="block about">
+            <div class="logo"><img src="{% static 'doodle/pokedex-ebooks-web/imposter.png' %}"></div>
+            <p><a href="{% url 'pokedex_ebooks_web_comics' %}">Pokédex Ebooks Comics</a>
+        </div>
+    </div>
+
+        <form class="controls">
+            <div class="col" id="length">
+                <label>Entry length</label><br>
+                <div><input type="radio" name="size" value="140" {% if request.GET.size == '140' %} checked {% endif %}{% if not request.GET.size %} checked {% endif %}> Short </div>
+                <div><input type="radio" name="size" value="300" {% if request.GET.size == '300' %} checked {% endif %}> Medium </div>
+                <div><input type="radio" name="size" value="500" {% if request.GET.size == '500' %} checked {% endif %}> Long </div>
+            </div>
+            <div class="col" id="ambiguity">
+                <label>Ambiguity</label><br>
+                <div><input type="radio" name="ambiguous" value="1" {% if request.GET.ambiguous == '1' %} checked {% endif %}> On</div>
+                <div><input type="radio" name="ambiguous" value="0" {% if request.GET.ambiguous != '1' %} checked {% endif %}> Off</div>
+            </div>
+            <div class="col" id="starts">
+                <label>Starts with</label><br>
+                <input type="text" name="starts_with" value="{{request.GET.starts_with|default:''}}">
+            </div>
+            <div class="col" id="reroll">
+                <input type="submit" value="New Pokédex Entry"><br>
+
+                <a href="?size={{request.GET.size|default:140}}&ambiguous={{request.GET.ambiguous|default:1}}&starts_with={{request.GET.starts_with}}&seed={{seed}}">Entry Permalink</a>
+            </div>
+        </form>
+</div>
+{% endblock %}

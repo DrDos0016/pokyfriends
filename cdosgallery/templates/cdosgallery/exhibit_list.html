@@ -1,0 +1,17 @@
+{% extends "cdosgallery/gallery-main.html" %}
+{% load static %}
+{% load gallery_tags %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}Gallery{% endblock %}
+{% block header %}<h1>Gallery</h1>{% endblock %}
+
+{% block gallery_content %}
+<div class="gallery-list">
+    {% for exhibit in exhibit_list %}
+    {% ifchanged exhibit.date.year %}
+    <h2>{{exhibit.date.year|default:"Unknown Date"}}</h2>
+    {% endifchanged %}
+    {% if exhibit.rating != "Explicit" or request.session.show_explicit_media %}{% exhibit_block exhibit %}{% else %}{% censored_exhibit_block exhibit %}{% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Gen5 Pokémon Clock{% endblock %}
+{% block header %}<h1>Gen5 Pokémon Clock</h1>{% endblock %}
+
+{% block css %}
+<style>
+main
+{
+    background:#333;
+    font-family:sans-serif;
+    min-height:440px;
+
+}
+
+#border
+{
+    width:400px;
+    height:400px;
+    border-radius:200px;
+    border:8px solid #000;
+    margin:auto;
+    position:relative;
+    background:#FFF;
+}
+
+.hour
+{
+    width:40px;
+    height:40px;
+    border-radius:20px;
+    border:2px solid #000;
+    position:absolute;
+    background-repeat:no-repeat;
+    background-position:center center;
+    z-index:1;
+    display:none;
+}
+
+#twelve { background-image:url("{% static 'global/pokedex-media/pokemon/icons/1.png' %}"); }
+#one { background-image:url("{% static 'global/pokedex-media/pokemon/icons/61.png' %}"); }
+#two { background-image:url("{% static 'global/pokedex-media/pokemon/icons/121.png' %}"); }
+#three { background-image:url("{% static 'global/pokedex-media/pokemon/icons/181.png' %}"); }
+#four { background-image:url("{% static 'global/pokedex-media/pokemon/icons/241.png' %}"); }
+#five { background-image:url("{% static 'global/pokedex-media/pokemon/icons/301.png' %}"); }
+#six { background-image:url("{% static 'global/pokedex-media/pokemon/icons/361.png' %}"); }
+#seven { background-image:url("{% static 'global/pokedex-media/pokemon/icons/421.png' %}"); }
+#eight { background-image:url("{% static 'global/pokedex-media/pokemon/icons/481.png' %}"); }
+#nine { background-image:url("{% static 'global/pokedex-media/pokemon/icons/541.png' %}"); }
+#ten { background-image:url("{% static 'global/pokedex-media/pokemon/icons/601.png' %}"); }
+#eleven { background-image:url("{% static 'global/pokedex-media/pokemon/icons/661.png' %}"); }
+
+#center
+{
+    position:absolute;
+    width:128px;
+    height:128px;
+    top:136px;
+    left:136px;
+    border:1px solid #CCC;
+    border-radius:64px;
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-image:url("{% static 'global/pokedex-media/pokemon/icons/-2.png' %}");
+}
+
+#info
+{
+    position:absolute;
+    width:100px;
+    height:65px;
+    text-align:center;
+    top:275px;
+    left:150px;
+    color:#F00;
+    font-weight:bold;
+}
+
+#canvas
+{
+    background:transparent;
+    z-index:10;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div id="border">
+
+<canvas id="canvas" width="400px" height="400px"></canvas>
+
+<div class="hour" id="twelve"></div>
+<div class="hour" id="one"></div>
+<div class="hour" id="two"></div>
+<div class="hour" id="three"></div>
+<div class="hour" id="four"></div>
+<div class="hour" id="five"></div>
+<div class="hour" id="six"></div>
+<div class="hour" id="seven"></div>
+<div class="hour" id="eight"></div>
+<div class="hour" id="nine"></div>
+<div class="hour" id="ten"></div>
+<div class="hour" id="eleven"></div>
+
+<div id="center"></div>
+
+<div id="info">
+    <div id="time"></div>
+    <div id="num"></div>
+    <div id="name"></div>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+var kanto_names     = ["bulbasaur", "ivysaur", "venusaur", "charmander", "charmeleon", "charizard", "squirtle", "wartortle", "blastoise", "caterpie", "metapod", "butterfree", "weedle", "kakuna", "beedrill", "pidgey", "pidgeotto", "pidgeot", "rattata", "raticate", "spearow", "fearow", "ekans", "arbok", "pikachu", "raichu", "sandshrew", "sandslash", "nidoran ?", "nidorina", "nidoqueen", "nidoran ?", "nidorino", "nidoking", "clefairy", "clefable", "vulpix", "ninetales", "jigglypuff", "wigglytuff", "zubat", "golbat", "oddish", "gloom", "vileplume", "paras", "parasect", "venonat", "venomoth", "diglett", "dugtrio", "meowth", "persian", "psyduck", "golduck", "mankey", "primeape", "growlithe", "arcanine", "poliwag", "poliwhirl", "poliwrath", "abra", "kadabra", "alakazam", "machop", "machoke", "machamp", "bellsprout", "weepinbell", "victreebel", "tentacool", "tentacruel", "geodude", "graveler", "golem", "ponyta", "rapidash", "slowpoke", "slowbro", "magnemite", "magneton", "farfetchd", "doduo", "dodrio", "seel", "dewgong", "grimer", "muk", "shellder", "cloyster", "gastly", "haunter", "gengar", "onix", "drowzee", "hypno", "krabby", "kingler", "voltorb", "electrode", "exeggcute", "exeggutor", "cubone", "marowak", "hitmonlee", "hitmonchan", "lickitung", "koffing", "weezing", "rhyhorn", "rhydon", "chansey", "tangela", "kangaskhan", "horsea", "seadra", "goldeen", "seaking", "staryu", "starmie", "mr-mime", "scyther", "jynx", "electabuzz", "magmar", "pinsir", "tauros", "magikarp", "gyarados", "lapras", "ditto", "eevee", "vaporeon", "jolteon", "flareon", "porygon", "omanyte", "omastar", "kabuto", "kabutops", "aerodactyl", "snorlax", "articuno", "zapdos", "moltres", "dratini", "dragonair", "dragonite", "mewtwo", "mew"];
+var johto_names     = ["chikorita", "bayleef", "meganium", "cyndaquil", "quilava", "typhlosion", "totodile", "croconaw", "feraligatr", "sentret", "furret", "hoothoot", "noctowl", "ledyba", "ledian", "spinarak", "ariados", "crobat", "chinchou", "lanturn", "pichu", "cleffa", "igglybuff", "togepi", "togetic", "natu", "xatu", "mareep", "flaaffy", "ampharos", "bellossom", "marill", "azumarill", "sudowoodo", "politoed", "hoppip", "skiploom", "jumpluff", "aipom", "sunkern", "sunflora", "yanma", "wooper", "quagsire", "espeon", "umbreon", "murkrow", "slowking", "misdreavus", "unown", "wobbuffet", "girafarig", "pineco", "forretress", "dunsparce", "gligar", "steelix", "snubbull", "granbull", "qwilfish", "scizor", "shuckle", "heracross", "sneasel", "teddiursa", "ursaring", "slugma", "magcargo", "swinub", "piloswine", "corsola", "remoraid", "octillery", "delibird", "mantine", "skarmory", "houndour", "houndoom", "kingdra", "phanpy", "donphan", "porygon2", "stantler", "smeargle", "tyrogue", "hitmontop", "smoochum", "elekid", "magby", "miltank", "blissey", "raikou", "entei", "suicune", "larvitar", "pupitar", "tyranitar", "lugia", "ho-oh", "celebi"];
+var hoenn_names     = ["treecko", "grovyle", "sceptile", "torchic", "combusken", "blaziken", "mudkip", "marshtomp", "swampert", "poochyena", "mightyena", "zigzagoon", "linoone", "wurmple", "silcoon", "beautifly", "cascoon", "dustox", "lotad", "lombre", "ludicolo", "seedot", "nuzleaf", "shiftry", "taillow", "swellow", "wingull", "pelipper", "ralts", "kirlia", "gardevoir", "surskit", "masquerain", "shroomish", "breloom", "slakoth", "vigoroth", "slaking", "nincada", "ninjask", "shedinja", "whismur", "loudred", "exploud", "makuhita", "hariyama", "azurill", "nosepass", "skitty", "delcatty", "sableye", "mawile", "aron", "lairon", "aggron", "meditite", "medicham", "electrike", "manectric", "plusle", "minun", "volbeat", "illumise", "roselia", "gulpin", "swalot", "carvanha", "sharpedo", "wailmer", "wailord", "numel", "camerupt", "torkoal", "spoink", "grumpig", "spinda", "trapinch", "vibrava", "flygon", "cacnea", "cacturne", "swablu", "altaria", "zangoose", "seviper", "lunatone", "solrock", "barboach", "whiscash", "corphish", "crawdaunt", "baltoy", "claydol", "lileep", "cradily", "anorith", "armaldo", "feebas", "milotic", "castform", "kecleon", "shuppet", "banette", "duskull", "dusclops", "tropius", "chimecho", "absol", "wynaut", "snorunt", "glalie", "spheal", "sealeo", "walrein", "clamperl", "huntail", "gorebyss", "relicanth", "luvdisc", "bagon", "shelgon", "salamence", "beldum", "metang", "metagross", "regirock", "regice", "registeel", "latias", "latios", "kyogre", "groudon", "rayquaza", "jirachi", "deoxys"];
+var sinnoh_names    = ["turtwig", "grotle", "torterra", "chimchar", "monferno", "infernape", "piplup", "prinplup", "empoleon", "starly", "staravia", "staraptor", "bidoof", "bibarel", "kricketot", "kricketune", "shinx", "luxio", "luxray", "budew", "roserade", "cranidos", "rampardos", "shieldon", "bastiodon", "burmy", "wormadam", "mothim", "combee", "vespiquen", "pachirisu", "buizel", "floatzel", "cherubi", "cherrim", "shellos", "gastrodon", "ambipom", "drifloon", "drifblim", "buneary", "lopunny", "mismagius", "honchkrow", "glameow", "purugly", "chingling", "stunky", "skuntank", "bronzor", "bronzong", "bonsly", "mime-jr", "happiny", "chatot", "spiritomb", "gible", "gabite", "garchomp", "munchlax", "riolu", "lucario", "hippopotas", "hippowdon", "skorupi", "drapion", "croagunk", "toxicroak", "carnivine", "finneon", "lumineon", "mantyke", "snover", "abomasnow", "weavile", "magnezone", "lickilicky", "rhyperior", "tangrowth", "electivire", "magmortar", "togekiss", "yanmega", "leafeon", "glaceon", "gliscor", "mamoswine", "porygon-z", "gallade", "probopass", "dusknoir", "froslass", "rotom", "uxie", "mesprit", "azelf", "dialga", "palkia", "heatran", "regigigas", "giratina", "cresselia", "phione", "manaphy", "darkrai", "shaymin", "arceus"];
+var unova_names     = ["victini", "snivy", "servine", "serperior", "tepig", "pignite", "emboar", "oshawott", "dewott", "samurott", "patrat", "watchog", "lillipup", "herdier", "stoutland", "purrloin", "liepard", "pansage", "simisage", "pansear", "simisear", "panpour", "simipour", "munna", "musharna", "pidove", "tranquill", "unfezant", "blitzle", "zebstrika", "roggenrola", "boldore", "gigalith", "woobat", "swoobat", "drilbur", "excadrill", "audino", "timburr", "gurdurr", "conkeldurr", "tympole", "palpitoad", "seismitoad", "throh", "sawk", "sewaddle", "swadloon", "leavanny", "venipede", "whirlipede", "scolipede", "cottonee", "whimsicott", "petilil", "lilligant", "basculin", "sandile", "krokorok", "krookodile", "darumaka", "darmanitan", "maractus", "dwebble", "crustle", "scraggy", "scrafty", "sigilyph", "yamask", "cofagrigus", "tirtouga", "carracosta", "archen", "archeops", "trubbish", "garbodor", "zorua", "zoroark", "minccino", "cinccino", "gothita", "gothorita", "gothitelle", "solosis", "duosion", "reuniclus", "ducklett", "swanna", "vanillite", "vanillish", "vanilluxe", "deerling", "sawsbuck", "emolga", "karrablast", "escavalier", "foongus", "amoonguss", "frillish", "jellicent", "alomomola", "joltik", "galvantula", "ferroseed", "ferrothorn", "klink", "klang", "klinklang", "tynamo", "eelektrik", "eelektross", "elgyem", "beheeyem", "litwick", "lampent", "chandelure", "axew", "fraxure", "haxorus", "cubchoo", "beartic", "cryogonal", "shelmet", "accelgor", "stunfisk", "mienfoo", "mienshao", "druddigon", "golett", "golurk", "pawniard", "bisharp", "bouffalant", "rufflet", "braviary", "vullaby", "mandibuzz", "heatmor", "durant", "deino", "zweilous", "hydreigon", "larvesta", "volcarona", "cobalion", "terrakion", "virizion", "tornadus", "thundurus", "reshiram", "zekrom", "landorus", "kyurem", "keldeo", "meloetta", "genesect"];
+var kalos_names     = ["chespin", "quilladin", "chesnaught", "fennekin", "braixen", "delphox", "froakie", "frogadier", "greninja", "bunnelby", "diggersby", "fletchling", "fletchinder", "talonflame", "scatterbug", "spewpa", "vivillon", "litleo", "pyroar", "flabébé", "floette", "florges", "skiddo", "gogoat", "pancham", "pangoro", "furfrou", "espurr", "meowstic", "honedge", "doublade", "aegislash", "spritzee", "aromatisse", "swirlix", "slurpuff", "inkay", "malamar", "binacle", "barbaracle", "skrelp", "dragalge", "clauncher", "clawitzer", "helioptile", "heliolisk", "tyrunt", "tyrantrum", "amaura", "aurorus", "sylveon", "hawlucha", "dedenne", "carbink", "goomy", "sliggoo", "goodra", "klefki", "phantump", "trevenant", "pumpkaboo", "gourgeist", "bergmite", "avalugg", "noibat", "noivern", "xerneas", "yveltal", "zygarde", "diancie", "hoopa", "volcanion"];
+var pokemon_names   = kanto_names.concat(johto_names, hoenn_names, sinnoh_names, unova_names, kalos_names);
+
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+
+$(document).ready(function (){
+    var names = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven"];
+    for (var z = 0; z <= 11; z++)
+    {
+        var z_angle = 0.5 * (60 * (z - 3));
+        var z_length = 165;
+        z_angle = z_angle * (Math.PI / 180);
+
+        // Position hours
+        var x = 200 + (z_length * Math.cos(z_angle));
+        var y = 200 + (z_length * Math.sin(z_angle));
+        $("#"+names[z]).css("top", y - 25);
+        $("#"+names[z]).css("left", x - 30);
+        $(".hour").show();
+    }
+
+    window.setInterval(update, 60000);
+    update();
+});
+
+function update()
+{
+    var date = new Date();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var h_length = 100;
+    var m_length = 150;
+    var d_hours = hours;
+    var d_minutes = minutes;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    console.log(hours+":"+minutes);
+
+    if (hours >= 12)
+    {
+        pokemon = (hours - 12) * 60 + minutes + 1;
+        d_hours = hours - 12
+        ampm = " pm"
+    }
+    else
+    {
+        var pokemon = hours * 60 + minutes + 1;
+        ampm = " am"
+    }
+
+    if (hours == 0)
+        d_hours = 12;
+
+    $("#center").css("background-image", "url('/static/global/pokedex-media/pokemon/main-sprites/x-y/"+pokemon+".png')");
+
+    if (minutes < 10)
+        d_minutes = "0"+minutes;
+    else
+        d_minutes = ""+minutes;
+
+    d_name = pokemon_names[pokemon-1];
+    d_name = d_name.substring(0,1).toUpperCase() + d_name.substring(1);
+
+    $("#time").html(d_hours + ":" + d_minutes + ampm);
+    $("#num").html("#"+pokemon);
+    $("#name").html(d_name);
+
+
+    // Angle in degrees
+    var h_angle = 0.5 * (60 * (hours - 3) + minutes);
+    var m_angle = 6 * (minutes - 15);
+
+    // Angle in radians
+    h_angle = h_angle * (Math.PI / 180);
+    m_angle = m_angle * (Math.PI / 180);
+
+    // Draw the minutes
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "black";
+    var x = 200 + (m_length * Math.cos(m_angle));
+    var y = 200 + (m_length * Math.sin(m_angle));
+    ctx.beginPath();
+    ctx.moveTo(200,200);
+    ctx.lineTo(x,y);
+    ctx.stroke();
+
+    // Draw the hours
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = "blue";
+    var x = 200 + (h_length * Math.cos(h_angle));
+    var y = 200 + (h_length * Math.sin(h_angle));
+    ctx.beginPath();
+    ctx.moveTo(200,200);
+    ctx.lineTo(x,y);
+    ctx.stroke();
+}
+</script>
+{% endblock %}

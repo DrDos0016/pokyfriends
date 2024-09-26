@@ -1,0 +1,14 @@
+#zeta_canvas
+{
+    display:block;
+    margin:auto;
+}
+
+@font-face
+{
+    /* http://int10h.org/oldschool-pc-fonts/readme/ */
+    font-family: 'cp437';
+    src: url('/static/fonts/PxPlus_IBM_EGA_8x14.ttf');
+    font-weight: normal;
+    font-style: normal;
+}

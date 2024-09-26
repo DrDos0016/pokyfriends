@@ -1,0 +1,288 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Bingo Thingo{% endblock %}
+
+{% block css %}
+<style>
+* { box-sizing: border-box; }
+
+body
+{
+    margin:0px;
+    background:#DDD;
+}
+
+#bingo-card
+{
+    background:#FFF;
+    border:4px solid #000;
+    border-collapse:collapse;
+    font-family:monospace;
+    width:100%;
+    height:100%;
+}
+
+th
+{
+    background:#9BD7FF;
+    font-size:28pt;
+    max-height:80px;
+    font-variant-caps: small-caps;
+}
+
+.cell
+{
+    width:20%;
+    height:15%;
+    border:4px solid #000;
+    margin:0px;
+    text-align:center;
+}
+
+.hidden
+{
+    visibility:hidden;
+}
+
+.active
+{
+    outline:4px solid #FFD700;
+}
+
+.flex-root
+{
+    display:flex;
+    height:100%;
+    flex-direction:column;
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+}
+
+.cell .stamp
+{
+    flex:1;
+}
+
+.cell .text
+{
+    font-size:12px;
+    background:#FFA4FF;
+}
+
+#controls
+{
+    margin-left:10px;
+    margin-top:10px;
+    font-family:sans-serif;
+}
+
+#controls .int
+{
+    max-width:6ch;
+}
+
+#controls td + td
+{
+    padding-left:10px;
+}
+
+#bingo-footer
+{
+    height:30px;
+    font-size:10pt;
+    text-align:center;
+    font-family:monospace;
+    background:#000;
+    color:#FFF;
+    font-weight:bold;
+}
+
+#bingo-wrapper
+{
+    width:800px;
+    height:690px;
+    background:#0CF;
+    resize:both;
+    overflow:hidden;
+    padding:20px;
+    min-width:320px;
+    min-height:300px;
+    margin:auto;
+}
+
+#bingo-render
+{
+    min-width:300px;
+    min-height:100px;
+    overflow:auto;
+    margin:auto;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="bingo-wrapper">
+    <table id="bingo-card" class="hidden">
+        <tbody>
+            <tr><th colspan="5" id="bingo-title">Bingo-Thingo</th></tr>
+        </tbody>
+        <tfoot>
+            <tr><td colspan="5" id="bingo-footer">https://pokyfriends.com/tool/bingo-thingo/</td></tr>
+        </tfoot>
+    </table>
+</div>
+
+<table id="controls">
+    <tr>
+        <td><label>Cell Text: <div><input name="cell-text" value="" disabled> <input type="button" value="Apply" id="apply-text" disabled></div></label></td>
+        <td><label>Bingo Card Title: <div><input name="card-title" value=""> <input type="button" value="Apply" id="apply-title"></div></label></td>
+    </tr>
+    <tr>
+        <td><label><input type="button" value="Export Bingo Card As Image" id="export-card"><br>Crusty. Manual screenshots will look much nicer.</label></td>
+        <td><label><input type="button" value="Deselect Cell" id="deselect-cell"></label>
+    </tr>
+</table>
+<hr>
+<div id="bingo-render"><i>Image render will appear here</i></div>
+<hr>
+<p>Click on a cell to select it. From there you can paste an image to add it to the cell and use the input below the bingo card to add text to the bottom of the cell if needed.</p>
+
+<p>You can also drop images from your file browser directly onto a cell to add an image.</p>
+
+<p>All data is kept client-side. Nothing is submitted to the server at any time.</p>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/global/js/html2canvas.min.js"></script>
+<script>
+function init()
+{
+    // Create table
+    for (var row=0; row < 5; row++)
+    {
+        var template = "<tr>";
+        for (var col=0; col <5; col++)
+        {
+            template += CELL_TEMPLATE;
+            template = template.replace("%ROW%", row).replace("%COL%", col);
+        }
+        template += "</tr>\n";
+
+
+        document.querySelector("#bingo-card tbody").innerHTML += template;
+    }
+
+    // Mark Free Space by default
+    document.querySelector("#cell-2-2 .text").innerHTML = "FREE SPACE";
+
+    // Bind events
+    document.addEventListener("dragover", function(e) { e.preventDefault(); });
+    document.addEventListener("drop", function(e) { e.preventDefault(); });
+    document.querySelector("#apply-text").addEventListener("click", apply_text);
+    document.querySelector("#apply-title").addEventListener("click", apply_title);
+    document.querySelector("#export-card").addEventListener("click", export_card);
+    document.querySelector("#deselect-cell").addEventListener("click", deselect_cell);
+
+    let cells = document.querySelectorAll(".flex-root")
+    for (var x = 0; x < cells.length; x++)
+    {
+        cells[x].addEventListener("click", select_cell);
+        cells[x].addEventListener("drop", drop_image);
+        cells[x].addEventListener("dragover", select_cell);
+        cells[x].addEventListener("paste", paste_image);
+    }
+
+    // Display
+    document.querySelector("#bingo-card").classList.remove("hidden");
+}
+
+function select_cell(e)
+{
+    let active = document.querySelector(".active");
+    if (active)
+        active.classList.remove("active");
+
+    e.target.parentElement.classList.add("active");
+    let text = document.querySelector(".active .text").innerHTML;
+    document.querySelector("input[name=cell-text]").setAttribute("value", text);
+    document.querySelector("input[name=cell-text]").removeAttribute("disabled");
+    document.querySelector("#apply-text").removeAttribute("disabled");
+}
+
+function deselect_cell(e)
+{
+    let active = document.querySelector(".active");
+    if (active)
+        active.classList.remove("active");
+}
+
+function drop_image(e)
+{
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(e);
+    const dt = e.dataTransfer;
+    const file = dt.files[0];
+
+    var object_url = URL.createObjectURL(file);
+    document.querySelector(".active").setAttribute("style", "background-image:url('"+object_url+"')");
+}
+
+function paste_image(e)
+{
+    var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+    console.log(JSON.stringify(items)); // will give you the mime types
+    if (items)
+    {
+        console.log(items);
+        var item = items[0];
+        if (item.kind === 'file') {
+            var blob = item.getAsFile();
+            var reader = new FileReader();
+            reader.onload = function(event){
+                var object_url = event.target.result;
+                console.log(object_url);
+                document.querySelector(".active").setAttribute("style", "background-image:url('"+object_url+"')");
+            };
+            reader.readAsDataURL(blob);
+        }
+    }
+}
+
+function apply_size(e)
+{
+    let w = document.querySelector("input[name=card-width]").getAttribute("value");
+    let h = document.querySelector("input[name=card-height]").getAttribute("value");
+    document.querySelector("#bingo-card").setAttribute("style", `width:${w}px;height:${h}px;`);
+}
+
+function apply_title(e)
+{
+    let title = document.querySelector("input[name=card-title]").value;
+    document.querySelector("#bingo-title").innerHTML = title;
+}
+
+function apply_text(e)
+{
+    console.log("Applying cell text");
+    let text = document.querySelector("input[name=cell-text]").value;
+    document.querySelector(".active .text").innerHTML = text;
+}
+
+function export_card(e)
+{
+    if (document.querySelector("canvas"))
+        document.querySelector("canvas").remove();
+
+    html2canvas(document.querySelector("#bingo-card")).then(canvas => {
+        document.querySelector("#bingo-render").appendChild(canvas);
+    });
+}
+
+var CELL_TEMPLATE = '<td class="cell" id="cell-%ROW%-%COL%"><div class="flex-root"><div class="stamp"></div><div class="text"></div></div></td>';
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
+{% endblock %}

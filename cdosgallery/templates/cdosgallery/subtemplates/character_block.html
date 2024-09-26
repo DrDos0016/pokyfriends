@@ -1,0 +1,8 @@
+{% load static %}
+<a class="exhibit-thumb" href="{% url 'cdg_character_browse' character.slug %}">
+    <div class="thumb-wrapper">
+        <img src="{% static character.thumbnail %}">
+    </div>
+    <div class="title">{{character.name}}</div>
+    <div class="artist">{{character.species}}</div>
+</a>

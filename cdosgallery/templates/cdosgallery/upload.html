@@ -1,0 +1,27 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'gallery/css/gallery.css'  %}?{{TS}}">
+{% endblock %}
+
+{% block content %}
+<h1>Upload</h1>
+
+<form method="POST" enctype="multipart/form-data" id="upload-form">
+    {% csrf_token %}
+    <label><div>File:</div><input name="file" type="file"></label>
+    <label><div>Description:<br>(for exhibits with variants)</div><input name="description"></label>
+    <input type="submit" value="Upload">
+</form>
+
+<div style="text-align:center"><a href="/admin/gallery/exhibit/add/" target="_blank">Add Exhibit</a></div>
+
+{% if upload %}
+<div id="uploaded-image-frame">
+    <img src="{% static image.thumb_url %}" alt="Uploaded Image" title="Uploaded Image"><br>
+    {{request.FILES.0.name}}
+    {{image}}
+</div>
+{% endif %}
+{% endblock %}

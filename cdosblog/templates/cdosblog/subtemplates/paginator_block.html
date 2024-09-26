@@ -1,0 +1,26 @@
+{% load static %}
+<nav class="pagination block">
+    &bull;
+    <a href="{% url 'cdb_index' %}">Latest Posts</a> &bull;
+    <a href="{% url 'cdb_tag' %}">Posts By Tag</a> &bull;
+    <a href="{% url 'cdb_date' %}">Posts By Date</a> &bull;
+    <a href="{% url 'cdb_rss' %}">RSS Feeds <img src="{% static 'cdosblog/rss-logo.png' %}" class="rss-logo"></a> &bull;
+
+
+    {% if page_obj and page_obj.has_other_pages %}
+    <br>
+    <a href="?page={{page_obj.paginator.num_pages}}">Oldest</a> &bull;
+    {% if page_obj.has_next %}<a href="?page={{page_obj.next_page_number}}">Older</a>{% else %}
+    Older{% endif %} &bull;
+    <b>Page {{page_obj.number}} / {{page_obj.paginator.num_pages}}</b> &bull;
+    {% if page_obj.has_previous %}<a href="?page={{page_obj.previous_page_number}}">Newer</a>{% else %}
+    Newer{% endif %} &bull;
+    <a href="?page=1">Newest</a> &bull;
+    {% endif %}
+
+    {% if post %}
+    <br>
+    <a href="{% url 'cdb_post_previous' post.slug %}">Previous Post</a> &bull;
+    <a href="{% url 'cdb_post_next' post.slug %}">Next Post</a>
+    {% endif %}
+</nav>

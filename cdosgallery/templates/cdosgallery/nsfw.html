@@ -1,0 +1,20 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'gallery/css/gallery.css'  %}?{{TS}}">
+{% endblock %}
+
+{% block content %}
+<p>Please confirm that you are at least 18 years old and wish to see explicit media.</p>
+
+<form method="POST" action="{% url cdg_explicit_settings_submit %}">
+    {% csrf_token %}
+    <label>I am of age and wish to see explicit media. <input type="checkbox" name="ofage" value="18+"></label><br>
+    <button name="action" value="NSFW">Show me the goods</button>
+    <input type="hidden" value="{{request.GET.destination|default:'/gallery'}}" name="destination">
+</form>
+
+<hr>
+<a href="/gallery">Back to gallery</a>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "cdosblog/blog-main.html" %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %}{% if title %}{{title}}{% endif %} - C:\Dos\Blog\{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/blog.css'  %}?{{TS}}">
+{% endblock %}
+
+{% block blog_content %}
+<div class="block">
+<p>An RSS feed is available for all blog posts. Copy either the text or link below and add it to your RSS reader to receive blog posts as they are published."</p>
+
+<div class="c">
+    <input value="https://pokyfriends.com/blog/rss/dr-dos/" style="width:38ch;text-align:center;"><br>
+    <a href="/blog/rss/dr-dos/" style="font-size:28pt;font-family:monospace;text-decoration:none;">C:\Dos\Blog RSS Feed <img src="{% static 'cdosblog/rss-logo.png' %}"></a>
+</div>
+
+</div>
+{% endblock %}

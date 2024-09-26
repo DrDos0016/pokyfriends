@@ -1,0 +1,98 @@
+* { box-sizing: border-box; }
+
+a, a:visited { color: #00F; }
+
+body {
+    background:var(--pale-blue);
+    font-family:sans-serif;
+    font-size:14pt;
+    margin:0px auto 0px auto;
+}
+
+main {
+    max-width:1014px;
+    overflow:scroll;
+    margin:auto;
+    margin-top:5px;
+    margin-bottom:5px;
+    border:5px solid var(--border);
+    background-color:var(--lavender);
+    padding:5px;
+    min-height:70vh;
+}
+
+main img { max-width:100%; overflow:auto; }
+
+h1, h2, h3, h4, h5, h6 { font-family:"kanit"; }
+h1 { margin-top:0px; }
+
+#site-nav {
+    position:sticky;
+    top:0px;
+    background:var(--border);
+    z-index:999;
+    padding-bottom:5px;
+    margin:auto;
+}
+
+#site-nav ul {
+    font-family: "kanit";
+    list-style: none;
+    display:flex;
+    flex-wrap:wrap;
+    max-width:800px;
+    justify-content:space-around;
+    margin:auto;
+    padding:0px;
+    gap:4px;
+}
+
+#site-nav a { color:var(--off-white); text-decoration:none; font-size:10pt;}
+#site-nav .nav-text { text-align:center; width:64px;}
+#site-nav .icon { background:var(--hot-pink); width:50px; height:50px; margin:auto; font-size:28pt; text-align:center;}
+#sugar-img { width:50px; height:50px; }
+
+@media (max-width:799px) {
+    #site-nav ul { justify-content:flex-start; max-width:fit-content;}
+    #site-nav a { font-size:8pt;}
+    #site-nav .nav-text { width:48px; }
+    #site-nav .icon { width:32px; height:32px; font-size:14pt; }
+    #sugar-img { width:32px; height:32px; }
+}
+
+.retired-project
+{
+    max-width:90%;
+    margin:0px auto 5px auto;
+    border:5px dashed var(--border);
+    padding:10px;
+    font-family:monospace;
+    background-color:var(--off-white);
+    text-align:justify;
+}
+
+.retired-project p { margin:0px; }
+
+/* Variables */
+:root {
+    --border: #36001F;
+    --pink: #FF9DC6;
+    --hot-pink: #FF77B1;
+    --lavender: #E7BEEE;
+    --text: #36001F;
+    --off-white: #FAFAFA;
+    --pale-blue: #A5C7F5;
+}
+
+/* Fonts */
+@font-face
+{
+    font-family: 'kanit';
+    src: url('/static/global/font/Kanit-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.mono { font-family: monospace; }
+
+.c { text-align:center; }

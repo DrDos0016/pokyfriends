@@ -1,0 +1,17 @@
+{% extends "website/main.html" %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}C:\Dos\Blog\{% endblock %}
+
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/blog.css'  %}?{{TS}}">{% endblock %}
+
+{% block content %}
+    {% block blog_nav_top %}{% paginator_block page_obj %}{% endblock %}
+
+    {% block blog_content %}
+    <p>{% lorem 9 %}</p>
+    {% endblock %}
+
+    {% block blog_nav_bottom %}{% paginator_block page_obj %}{% endblock %}
+{% endblock %}

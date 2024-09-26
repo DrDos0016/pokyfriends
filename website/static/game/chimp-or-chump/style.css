@@ -1,0 +1,38 @@
+main
+{
+    background-color:#000;
+    color:#0f0;
+}
+
+main h1
+{
+
+    text-align:center;
+}
+
+#game
+{
+    margin:auto;
+    border:2px solid #0f0;
+}
+
+#gameframe
+{
+    width:100%;
+    text-align:center;
+    margin:auto;
+}
+
+main .content
+{
+    width:50%;
+    margin:auto;
+    border:2px solid #ff0;
+    margin-bottom:10px;
+    padding:5px;
+}
+
+main a:visited
+{
+    color:red;
+}

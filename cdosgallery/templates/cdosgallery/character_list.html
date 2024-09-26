@@ -1,0 +1,20 @@
+{% extends "cdosgallery/gallery-main.html" %}
+{% load static %}
+{% load gallery_tags %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}Gallery{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosgallery/gallery.css'  %}?{{TS}}">
+<style></style>
+{% endblock %}
+
+{% block header %}<h1>Gallery</h1>{% endblock %}
+
+{% block gallery_content %}
+<div class="gallery-list">
+    {% for character in character_list %}
+    {% character_block character %}
+    {% endfor %}
+</div>
+{% endblock %}

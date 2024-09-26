@@ -1,0 +1,15 @@
+{% extends "cdosblog/blog-main.html" %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %}{% if post.title %}{{post.title}} - {% endif %} C:\Dos\Blog\{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/blog.css'  %}?{{TS}}">
+{% endblock %}
+
+{% block blog_content %}
+<div class="block">
+    {% render_post post show_post=True %}
+</div>
+{% endblock %}

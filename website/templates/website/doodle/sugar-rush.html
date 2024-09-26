@@ -1,0 +1,267 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Sugar Rush{% endblock %}
+
+{% block meta %}
+<meta property="og:title" content="Sugar Rush - For IBM PC compatibles">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://pokyfriends.com/sugar-rush/preview.png">
+<meta property="og:url" content="https://pokyfriends.com/sugar-rush/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@dosmeow">
+<meta name="twitter:title" content="Sugar Rush - For IBM PC compatibles">
+<meta name="twitter:image" content="https://pokyfriends.com/sugar-rush/preview.png">
+{% endblock %}
+
+{% block css %}
+<style>
+@font-face {
+    font-family: "wyse";
+    src: url("/static/doodle/sugar-rush/Px437_Wyse700a-2y.ttf");
+}
+.wyse
+{
+    font-family:"wyse";
+}
+
+@font-face {
+    font-family: "bonanza";
+    src: url("/static/doodle/sugar-rush/bonanza-bros-big.ttf");
+}
+.bonanza
+{
+    font-family:"bonanza";
+}
+
+main
+{
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    image-rendering: pixelated;
+    background-image:url("/static/doodle/sugar-rush/beige.png");
+    min-height:50vh;
+}
+
+#content
+{
+    width:320px;
+    height:200px;
+    background:#715171;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    border-radius:4px;
+}
+
+#window
+{
+    width:300px;
+    display:flex;
+    flex:0 0 284px;
+    flex-wrap:wrap;
+    padding:4px 4px 4px 4px;
+    color:#FFDFBA;
+    background:#410031;
+}
+
+#image-border
+{
+    background:#410031;
+    margin-right:8px;
+    padding:4px;
+    width:128px;
+    height:128px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#image
+{
+    width:128px;
+    height:128px;
+}
+
+#heading
+{
+    text-align:left;
+    width:100%;
+    font-family:"wyse";
+
+}
+
+#difficulties
+{
+    font-family:"bonanza";
+    font-size:43%;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+}
+
+.bordered
+{
+    border-top:1px solid #FFBADF;
+    border-left:1px solid #FFBADF;
+    border-bottom:1px solid #FF829E;
+    border-right:1px solid #FF829E;
+}
+
+.difficulty:hover
+{
+    color:#FF829E;
+    cursor:pointer;
+}
+
+.difficulty.selected
+{
+    color:#FFBADF;
+    cursor:auto;
+}
+
+#opening
+{
+    background:#000;
+    color:#FFF;
+    font-family:"wyse";
+    width:320px;
+    height:200px;
+    text-align:center;
+    display:none;
+    flex-direction:column;
+    justify-content:space-evenly;
+    border-radius:4px;
+}
+
+.credits
+{
+    font-size:smaller;
+}
+
+main.title
+{
+    color:#FFBAEF;
+}
+
+#start
+{
+    color:#41FF00;
+    cursor:pointer;
+}
+
+main a
+{
+    color:#FF0;
+    text-decoration:none;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+var music = new Audio("/static/doodle/sugar-rush/jazz.mp3");
+music.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+
+var sfx_hover = new Audio("/static/doodle/sugar-rush/hover.mp3");
+var sfx_selected = new Audio("/static/doodle/sugar-rush/selected.mp3");
+
+    $(document).ready(function (){
+        // Calculate scale
+        var w = $("body").width();
+        var h = $("body").height();
+        var scale = 1;
+
+        if (w >= 1280 && h >= 800)
+            scale = 4;
+        else if (w >= 640 && h >= 400)
+            scale = 2;
+        console.log("SCALE", scale, "W/H", w, h);
+
+        $("#opening").css("transform", "scale("+scale+")");
+        $("#content").css("transform", "scale("+scale+")");
+        $("#opening").css("display", "flex");
+
+        $(".difficulty").hover(function() {
+            if ($(this).hasClass("selected"))
+                return false;
+
+            // Play sound
+            sfx_hover.play();
+        }, function (){ return false; });
+
+        $(".difficulty").click(function() {
+            if ($(this).hasClass("selected"))
+                return false;
+
+            // Select difficulty
+            $(".difficulty.selected").removeClass("selected");
+            $(this).addClass("selected");
+
+            // Play sound
+            sfx_hover.pause();
+            sfx_hover.currentTime = 0;
+            sfx_selected.play();
+
+            // Animate image
+            var speed = 600;
+            var new_image = "Dos" + $(this).data("diff") + ".png";
+            $("#image").animate({"width": "0px"}, speed, function (){
+                $("#image").attr("src", "/static/doodle/sugar-rush/" + new_image);
+
+                $("#image").animate({"width": "128px"}, speed, function (){
+                    console.log("Done animating");
+                    });
+            });
+        });
+
+        $("#start").click(function (){
+            $("#opening").hide();
+            $("#content").css("display", "flex");
+            music.play();
+        });
+
+    });
+</script>
+
+{% endblock %}
+
+{% block content %}
+<img src="/static/doodle/sugar-rush/Dos1.png" style="display:none">
+<img src="/static/doodle/sugar-rush/Dos2.png" style="display:none">
+<img src="/static/doodle/sugar-rush/Dos3.png" style="display:none">
+<img src="/static/doodle/sugar-rush/Dos4.png" style="display:none">
+
+<div id="content">
+    <div id="window" class="bordered">
+        <div id="heading">SELECT A DIFFICULTY</div>
+        <div id="image-border" class="bordered"><img src="/static/doodle/sugar-rush/Dos2.png" id="image"></div>
+        <div id="difficulties">
+            <div class="difficulty" data-diff="1">Scaredy Cat</div>
+            <div class="difficulty selected" data-diff="2">Feline Fine</div>
+            <div class="difficulty" data-diff="3">Claws To The Wall</div>
+            <div class="difficulty" data-diff="4">Impawsible</div>
+        </div>
+    </div>
+</div>
+
+<div id="opening">
+    <div class="title">"Sugar Rush"</div>
+    <div class="credits">
+        -- Credits -- <br>
+        - Fonts -<br>
+        <a href="https://www.splintered.co.uk/experiments/239/" target="_blank">Bonanza</a>,
+        <a href="https://int10h.org/oldschool-pc-fonts/fontlist/#wyse_gfx" target="_blank">Wyse WY-700</a><br>
+        - Art - <br>
+        <a href="https://twitter.com/rede4bed" target="_blank">Redwulf</a><br>
+        - Audio - <br>
+        <a href="https://www.youtube.com/playlist?list=PL7D70C4037DA3ADA4" target="_blank">Jazz Jackrabbit</a></br>
+    </div>
+    <div id="start">[START]</div>
+</div>
+{% endblock %}

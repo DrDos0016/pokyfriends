@@ -1,0 +1,35 @@
+{% extends "cdosgallery/gallery-main.html" %}
+{% load static %}
+{% load gallery_tags %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}Gallery{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosgallery/gallery.css'  %}?{{TS}}">
+<style>
+.artist-list
+{
+    max-height:70vh;
+    overflow:auto;
+    font-family:monospace;
+    list-style-type:"🎨";
+    border-bottom:1px dashed #000;
+}
+
+.artist-list li
+{
+    padding-left:10px;
+    height:3ch;
+}
+</style>
+{% endblock %}
+
+{% block header %}<h1>Gallery</h1>{% endblock %}
+
+{% block gallery_content %}
+<ul class="artist-list">
+{% for artist in artist_list %}
+    <li><a href="{% url 'cdg_artist_browse' artist.slug %}">{{artist}}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

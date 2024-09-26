@@ -1,0 +1,19 @@
+{% extends "website/game/zzt-base.html" %}
+{% load pokyfriends_tags %}
+
+{% block title %}Upsidetown{% endblock %}
+
+{% block zeta_config %}{% zeta_launcher "upsidetown.zip" "pokyfriends-zzt-upsidetown" engine="RecOfZZT.zip" launch_file="" commands="['UPSIDE.COM', '-i'], ['ZZT.EXE', 'UPSDETWN']"%}{% endblock %}
+
+{% block world_overview %}
+<h2>Upsidetown (2020)</h2>
+
+<p><i>Please note that this game runs on the Reconstruction of ZZT for legacy character set compatibility when automatically loading such files. ClassicZoo features will not be available.</i></p>
+{% endblock %}
+
+{% block links %}
+<ul>
+    <li><a href="https://museumofzzt.com/file/view/upsidetown/" target="_blank">Upsidetown</a> on the Museum of ZZT</li>
+    <li><a href="https://dr-dos.itch.io/upsidetown" target="_blank">Upsidetown</a> on Itch.io</li>
+</ul>
+{% endblock %}

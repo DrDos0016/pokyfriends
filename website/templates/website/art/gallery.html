@@ -1,0 +1,15 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}Gallery{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'art/gallery/gallery.css'  %}?{{TS}}">
+{% endblock %}
+
+{% block content %}
+<div id="gallery-wrapper">
+    <section id="years">
+    </section>
+</div>
+{% endblock %}

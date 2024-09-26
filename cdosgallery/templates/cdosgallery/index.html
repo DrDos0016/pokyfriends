@@ -1,0 +1,30 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}Gallery{% endblock %}
+{% block header %}<h1>Gallery</h1>{% endblock %}
+
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'art/gallery/gallery.css'  %}?{{TS}}">{% endblock %}
+
+{% block content %}
+    {% block gallery_nav %}
+    <details>
+        <summary>Filter Gallery</summary>
+        <nav id="gallery-nav-wrapper">
+            <div class="nav-category">
+                <div class="nav-category-heading">Character</div>
+            </div>
+            <div class="nav-category">
+                <div class="nav-category-heading">Artist</div>
+            </div>
+            <div class="nav-category">
+                <div class="nav-category-heading">Year</div>
+            </div>
+        </nav>
+    </details>
+    {% endblock %}
+
+    {% block gallery_content %}
+    <p>{% lorem 9 %}</p>
+    {% endblock %}
+{% endblock %}

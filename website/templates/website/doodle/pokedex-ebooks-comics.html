@@ -1,0 +1,44 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Pokédex Ebooks Comics{% endblock %}
+
+{% block opengraph %}{% endblock %}
+
+{% block css %}
+<style>
+#main a
+{
+    color:#00F;
+}
+
+#main img
+{
+    margin:auto;
+    margin-bottom:1em;
+    display:block;
+    border:10px solid #36001F;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="main">
+    <p>Illustrations of Pokedex Ebooks entries by <a href="https://twitter.com/trulyavaporeon" target="_blank">Vap</a></p>
+
+    <img src="{% static 'doodle/pokedex-ebooks-web/garchompfinal.jpg' %}">
+
+    <img src="{% static 'doodle/pokedex-ebooks-web/minunfinal.jpg' %}">
+
+    <img src="{% static 'doodle/pokedex-ebooks-web/snorfinal.jpg' %}">
+
+    <img src="{% static 'doodle/pokedex-ebooks-web/meowthfinal.jpg' %}">
+
+    <img src="{% static 'doodle/pokedex-ebooks-web/purloinfinal.jpg' %}">
+
+    <img src="{% static 'doodle/pokedex-ebooks-web/shucklefinal.jpg' %}">
+
+    <img src="{% static 'doodle/pokedex-ebooks-web/torchicfinal.jpg' %}">
+
+</div>
+{% endblock %}

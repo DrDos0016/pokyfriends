@@ -1,0 +1,198 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Street Fighter 6 Title Generator{% endblock %}
+
+{% block css %}
+<style>
+main
+{
+    font-family:monospace;
+}
+
+#controls
+{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+#workspace { box-sizing: initial; }
+
+.title-wrapper
+{
+    width:552px;
+    height:133px;
+    overflow:clip;
+    font-family:"bsans";
+    font-size:32px;
+    font-weight:bold;
+    color:#000;
+    -webkit-text-fill-color: #FFF;
+    -webkit-text-stroke: 1px;
+    border:20px solid #F0F;
+
+}
+
+.title-frame
+{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+
+    background-image:url("/static/doodle/street-fighter-6-title-generator/raw/ryu-gold.png");
+    background-size:contain;
+    background-repeat:no-repeat;
+
+    width:512px;
+    height:128px;
+}
+
+.title-text
+{
+    width:512px;
+    height:93px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding-left:14px;
+    padding-right:14px;
+    text-align:center;
+}
+
+@font-face
+{
+    font-family: 'bsans';
+    src: url('/static/doodle/street-fighter-6-title-generator/bsans.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#color-wrapper
+{
+    display:flex;
+    gap:10px;
+}
+
+#color-wrapper label
+{
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    width:100px;
+    height:30px;
+}
+
+
+input[name=size]
+{
+    width:4ch;
+    text-align:center;
+}
+
+.wrapper
+{
+    display:flex;
+    gap:10px;
+}
+
+select[name=character]
+{
+    width:25ch;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="controls">
+    <div id="color-wrapper">
+        <label style="background-color:#DAD9D9">
+            Gray
+            <input type="radio" name="color" value="gray">
+        </label>
+        <label style="background-color:#63C1C4">
+            Blue
+            <input type="radio" name="color" value="blue">
+        </label>
+        <label style="background-color:#B763C4">
+            Purple
+            <input type="radio" name="color" value="purple">
+        </label>
+        <label style="background-color:#E06271">
+            Red
+            <input type="radio" name="color" value="red">
+        </label>
+        <label style="background-color:#FFE661">
+            Gold
+            <input type="radio" name="color" value="gold" checked>
+        </label>
+    </div>
+    <div class="wrapper">
+        <div>
+            <select name="character">
+                <option value="aki">A.K.I.</option>
+                <option value="akuma">Akuma</option>
+                <option value="blanka">Blanka</option>
+                <option value="cammy">Cammy</option>
+                <option value="chun-li">Chun-Li</option>
+                <option value="deejay">Dee Jay</option>
+                <option value="dhalsim">Dhalsim</option>
+                <option value="ed">Ed</option>
+                <option value="ehonda">E. Honda</option>
+                <option value="guile">Guile</option>
+                <option value="jamie">Jamie</option>
+                <option value="jp">JP</option>
+                <option value="juri">Juri</option>
+                <option value="ken">Ken</option>
+                <option value="kimberly">Kimberly</option>
+                <option value="lily">Lily</option>
+                <option value="luke">Luke</option>
+                <option value="bison">M. Bison</option>
+                <option value="manon">Manon</option>
+                <option value="marisa">Marisa</option>
+                <option value="rashid">Rashid</option>
+                <option value="ryu" selected>Ryu</option>
+                <option value="zangief">Zangief</option>
+            </select>
+        </div>
+
+        <div><input name="text" value=""></div>
+        <div><input name="size" value="32"> px</div>
+        <div><input name="update" type="button" value="Update"></div>
+    </div>
+</div>
+<br>
+<div id="workspace">
+    <div class="title-wrapper">
+        <div class="title-frame">
+            <div class="title-text"><div>From Streets</div></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function update()
+{
+    console.log("UPDATING");
+
+    let color = document.querySelector("input[name=color]:checked").value;
+    let character = document.querySelector("select[name=character]").value;
+    let text = document.querySelector("input[name=text]").value;
+    let size = document.querySelector("input[name=size]").value;
+
+    let bg_image = `${character}-${color}.png`;
+
+
+    document.querySelector(".title-frame").style.backgroundImage = `url(/static/doodle/street-fighter-6-title-generator/raw/${bg_image})`;
+    document.querySelector(".title-text div").innerHTML = text;
+    document.querySelector(".title-text").style.fontSize = size + "px";
+
+
+}
+
+document.querySelector("input[name=update]").addEventListener("click", update);
+</script>
+{% endblock %}
+</html>

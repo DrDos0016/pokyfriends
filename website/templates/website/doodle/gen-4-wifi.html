@@ -1,0 +1,72 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block title %}Connecting to Nintendo Wi-Fi Connection... Please wait a moment...{% endblock %}
+
+{% block meta %}
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@dosmeow" />
+<meta name="twitter:title" content="Connecting to Nintendo Wi-Fi Connection..." />
+<meta name="twitter:description" content="Please wait a moment..." />
+<meta name="twitter:image" content="https://pokyfriends.com/static/project/wifi/top.png" />
+{% endblock %}
+
+{% block css %}
+<style>
+header h1
+{
+    font-size:20pt;
+    background-color:#5A7394;
+}
+main
+{
+    border-color:#5A7394;
+    background-color:#52B5E7;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+}
+
+#top, #bottom
+{
+    height:294px;
+    text-align:center;
+    flex-grow:0;
+}
+
+#top
+{
+    background-image:url("{% static 'doodle/gen-4-wifi/top.png' %}");
+    background-repeat:no-repeat;
+    background-position:center;
+}
+
+#bottom
+{
+    background-image:url("{% static 'doodle/gen-4-wifi/stretch.png' %}");
+}
+
+.overlay
+{
+    width:17px;
+    height:16px;
+    background-color:red;
+    text-align:center;
+    display:inline-block;
+    position:relative;
+    top:266px;
+    left:180px;
+    background-image:url("{% static 'doodle/gen-4-wifi/spin.gif' %}");
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<audio src="{% static 'doodle/gen-4-wifi/wifi-loop.mp3' %}" autoplay="True" loop="True">No support for audio tags!</audio>
+<div id="top">
+<div class="overlay"></div>
+</div>
+<div id="bottom">
+<img src="{% static 'doodle/gen-4-wifi/bottom.png' %}">
+</div>
+{% endblock %}

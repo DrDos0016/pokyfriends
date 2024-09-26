@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
+<title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
+{% block meta %}{% endblock %}
+{% block css %}{% endblock %}
+</head>
+
+<body>
+{% block navigation %}
+<nav id="site-nav">
+    <ul>
+        <li><a href="{% url 'index' %}"><div class="nav-text">Home</div><div class="icon"><img src="{% static 'global/sugar.png' %}" id="sugar-img"></div></a></li>
+        <li><a href="{% url 'project_list' 'game' %}"><div class="nav-text">Games</div><div class="icon">🕹️</div></a></li>
+        <li><a href="{% url 'project_list' 'bot' %}"><div class="nav-text">Bots</div><div class="icon">🤖</div></a></li>
+        <li><a href="{% url 'project_list' 'website' %}"><div class="nav-text">Websites</div><div class="icon">🌐</div></a></li>
+        <li><a href="{% url 'project_list' 'doodle' %}"><div class="nav-text">Doodles</div><div class="icon">🎀</div></a></li>
+        <li><a href="{% url 'project_list' 'tool' %}"><div class="nav-text">Tools</div><div class="icon">🔧</div></a></li>
+        <li><a href="{% url 'project_list' 'art' %}"><div class="nav-text">Art</div><div class="icon">🎨</div></a></li>
+        <li><a href="{% url 'project_list' 'blog' %}"><div class="nav-text">Blog</div><div class="icon">📔</div></a></li>
+        <li><a href="{% url 'project_list' 'misc' %}"><div class="nav-text">Misc.</div><div class="icon">📦</div></a></li>
+        <li><a href="#"><div class="nav-text">Top</div><div class="icon">🔝</div></a></li>
+    </ul>
+</nav>
+{% endblock %}
+
+<main>
+{% block content %}
+{% endblock %}
+</main>
+<script src="{% static 'global/js/jquery-3.7.1.min.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+
+</html>

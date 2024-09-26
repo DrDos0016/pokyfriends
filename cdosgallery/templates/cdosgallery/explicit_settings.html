@@ -1,0 +1,42 @@
+{% extends "cdosgallery/gallery-main.html" %}
+{% load static %}
+{% load gallery_tags %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}Gallery{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosgallery/gallery.css'  %}?{{TS}}">
+<style>
+form
+{
+    margin:auto;
+    max-width:500px;
+    text-align:center;
+    border:5px solid var(--border);
+    padding:5px;
+    background:var(--hot-pink);
+}
+
+form div
+{
+    margin-top:5px;
+}
+
+p { text-align:center }
+</style>
+{% endblock %}
+
+{% block header %}<h1>Gallery</h1>{% endblock %}
+
+{% block gallery_content %}
+<p><b>The page you have requested contains explicit media.</b></p>
+
+<form method="POST" action="{% url 'cdg_explicit_settings_submit' %}">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{request.GET.next}}">
+    <label><input type="checkbox" name="explicit_confirmation" value="confirmed"> I am of age and wish to view explicit media.</label>
+    <div>
+        <input type="submit" value="Confirm Settings">
+    </div>
+</form>
+{% endblock %}

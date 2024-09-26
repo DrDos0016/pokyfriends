@@ -1,0 +1,16 @@
+<nav class="pagination">
+    <a href="{% url 'cdg_index' %}">Browse All</a> &bull;
+    <a href="{% url 'cdg_artist' %}">Browse By Artist</a> &bull;
+    <a href="{% url 'cdg_character' %}">Browse By Character</a> &bull;
+    <a href="{% url 'cdg_year' %}">Browse By Year</a> &bull;
+    {% if page_obj and page_obj.has_other_pages %}
+    <br>
+    <a href="?page=1">Newest</a> &bull;
+    {% if page_obj.has_previous %}<a href="?page={{page_obj.previous_page_number}}">Newer</a>{% else %}
+    Newer{% endif %} &bull;
+    <b>Page {{page_obj.number}} / {{page_obj.paginator.num_pages}}</b> &bull;
+    {% if page_obj.has_next %}<a href="?page={{page_obj.next_page_number}}">Older</a>{% else %}
+    Older{% endif %} &bull;
+    <a href="?page={{page_obj.paginator.num_pages}}">Oldest</a> &bull;
+    {% endif %}
+</nav>

@@ -1,0 +1,137 @@
+{% extends "cdosgallery/gallery-main.html" %}
+{% load static %}
+{% load gallery_tags %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}Gallery{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosgallery/gallery.css'  %}?{{TS}}">
+<style>
+.picture-frame
+{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    max-width:fit-content;
+    margin:5px auto 5px auto;
+    text-align:center;
+}
+
+.picture-frame img
+{
+    height:100%;
+    max-height:50vh;
+    background-color:#FFF;
+    padding:5px;
+    border:5px solid var(--border);
+}
+
+h1
+{
+    font-style:oblique;
+    text-align:center;
+    margin:0px;
+    padding:0px;
+}
+
+.exhibit-citation
+{
+    text-align:center;
+    font-size:smaller;
+    margin-bottom:5px;
+}
+
+.exhibit-plaque
+{
+    background-color:var(--hot-pink);
+    max-width:700px;
+    margin:auto;
+    border-radius:10px;
+    border:3px solid var(--border);
+}
+
+
+.exhibit-desc { max-width: 700px; margin:auto; width:100%;}
+
+.exhibit-data
+{
+    margin:auto;
+}
+
+.exhibit-data tr th
+{
+    text-align:left;
+}
+
+.exhibit-data tr > *
+{
+    border-bottom:1px dashed #000;
+}
+
+.exhibit-images
+{
+    display:flex;
+    justify-content:center;
+}
+
+.exhibit-images.thumbs
+{
+    height:180px;
+}
+
+.exhibit-images.thumbs .picture-frame img
+{
+    max-height:120px;
+}
+</style>
+{% endblock %}
+
+{% block header %}<h1>Gallery</h1>{% endblock %}
+
+{% block gallery_content %}
+<figure class="picture-frame">
+    <a href="{% static main.static_image %}" target="_blank"><img src="{% static main.static_image %}"></a>
+</figure>
+
+<div class="exhibit-plaque">
+    <h1>{{exhibit.title}}</h1>
+    <div class="exhibit-citation">{{exhibit.artist}} ({{exhibit.date.year|default:"Unknown"}})</div>
+</div>
+
+<div class="exhibit-desc">{{exhibit.description|safe|linebreaks}}</div>
+
+{% if exhibit.images.count > 1 %}<div class="exhibit-images thumbs">
+    {% for i in exhibit.images.all %}
+    <figure class="picture-frame">
+        <a href="{% url 'cdg_exhibit_view_image' exhibit.slug forloop.counter %}">
+            <img src="{% static i.thumbnail %}"><br>
+            {{i.description}}
+        </a>
+    </figure>
+    {% endfor %}
+</div>{% endif %}
+
+<table class="exhibit-data">
+    <tr><th>Title</th><td>{{exhibit.title}}</td></tr>
+    <tr><th>Date (approx.)</th><td><a href="{% url 'cdg_year_browse' exhibit.date.year|default:'unkown' %}">{{exhibit.date|default:"Unknown"}}</a></td></tr>
+    <tr><th>Rating</th><td>{{exhibit.rating}}</td></tr>
+    <tr><th>Artist</th><td><a href="{% url 'cdg_artist_browse' exhibit.artist.slug %}">{{exhibit.artist}}</td></tr>
+    {% with exhibit.characters.all as characters %}
+    <tr>
+        <th>Character{{characters|pluralize}}</th>
+        <td>
+            {% for character in characters %}<a href="{% url 'cdg_character_browse' character.slug %}">{{character.name}}<br>{% endfor %}
+        </td>
+    </tr>
+    {% endwith %}
+    {% with exhibit.sources.all as sources %}
+    <tr>
+        <th>Sources</th>
+        <td>
+            {% for source in sources %}<a href="{{source.url}}" target="_blank">{{source.site|default:source.url}}<br>{% endfor %}
+        </td>
+    </tr>
+    {% endwith %}
+</table>
+{% endblock %}

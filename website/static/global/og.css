@@ -1,0 +1,231 @@
+/* Variables */
+:root {
+    --border: #36001F;
+    --pink: #FF9DC6;
+    --hot-pink: #FF77B1;
+    --lavender: #E7BEEE;
+    --text: #36001F;
+    --off-white: #FAFAFA;
+    --pale-blue: #A5C7F5;
+}
+
+/* Basic Elements and Classes */
+a[target=_blank]
+{
+    padding-right:16px;
+    background:url("/static/image/external-link.png");
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+a.noext[target=_blank]
+{
+    padding-right:0;
+    background:none;
+}
+
+body
+{
+    font-family:sans-serif;
+    color:var(--text);
+    font-size:14pt;
+    margin:0;
+    display:grid;
+    grid-template-areas:
+    "nav header"
+    "nav main";
+    grid-template-columns:500px auto;
+    grid-template-rows:auto 1fr;
+}
+
+h1, h2, h3, h4, h5, h6 { font-variant-caps: small-caps; }
+
+.l { text-align:left; }
+.c { text-align:center; }
+.r { text-align:right; }
+/* End Basic Elements */
+
+/* Site components */
+#grid-logo { grid-area:logo; }
+#logo img { max-width: 100%; }
+#logo a { display:block; }
+
+#grid-nav
+{
+    grid-area:nav;
+    align-self:start;
+    max-width:500px;
+    height:100vh;
+    position:sticky;
+    top:0px;
+    display:flex;
+    flex-direction:column;
+}
+
+#projects
+{
+    border:10px solid var(--border);
+    border-top:0px;
+    margin:0px 10px 10px 10px;
+    max-width:480px;
+    overflow:auto;
+}
+
+#category-icons
+{
+    display:flex;
+    justify-content:space-evenly;
+    align-items:center;
+    background:var(--border);
+    line-height:48px;
+    margin:0px 10px 0px 10px;
+}
+
+#category-icons a
+{
+    display:block;
+    text-align:center;
+    flex:1;
+}
+
+.bg-pink-1 { background:var(--hot-pink); }
+.bg-pink-2 { background:var(--pink); }
+
+#projects h2
+{
+    text-align:center;
+    background:var(--text);
+    color:var(--off-white);
+    margin:0;
+    letter-spacing:0.30em;
+}
+
+nav .project
+{
+    display:flex;
+    padding:5px 20px 5px 20px;
+    grid-gap:5px;
+    font-size:larger;
+}
+
+nav .project + .project { border-top:2px solid var(--border); }
+nav .project:hover { background-color:var(--pale-blue); }
+nav .project .date { flex:0 0 80px; }
+nav .project .title { flex:1; text-align:center;}
+nav .project .info { flex:0 0 80px; text-align:right;}
+nav a { color:var(--off-white); text-decoration:none; }
+nav .project:hover a:hover { text-decoration:underline; color:#0000FF; }
+
+header
+{
+    grid-area:header;
+    border-top:10px solid #FFF;
+    margin-right:10px;
+    background:var(--border);
+    position:sticky;
+    top:0px;
+    height:85px;
+}
+
+h1
+{
+    font-size:4vw;
+    text-align:center;
+    color:var(--off-white);
+    margin:0;
+}
+
+main
+{
+    grid-area:main;
+    background-color:var(--lavender);
+    border:10px solid var(--border);
+    border-top:0px;
+    margin-top:0px;
+    margin-right:10px;
+    margin-bottom:10px;
+    padding:10px;
+}
+
+main a { color:#00F; }
+main img { max-width:95%; }
+
+.retired-notice
+{
+    font-weight:bold;
+    text-align:center;
+    margin:auto;
+    margin-bottom:4px;
+    border:10px dashed var(--border);
+    border-left-style:solid;
+    border-right-style:solid;
+    max-width:75%;
+    padding:5px;
+    background-color:#FFF;
+
+}
+/* End Site components */
+
+/* Low Res */
+@media (max-width:1280px) {
+    body
+    {
+        grid-template-columns:300px auto;
+    }
+
+    nav h2 { font-size:smaller; }
+    nav .project {
+        font-size:medium;
+        flex-wrap:wrap;
+    }
+
+
+    nav .project .title { order: 1; flex: 1 0 100%; text-align: center; }
+    nav .project .date { order: 2; flex: 1; text-align: center; }
+    nav .project .info { order: 3; flex: 1; text-align: center; }
+}
+
+@media (max-width:1023px) {
+    body
+    {
+        grid-template-areas:
+        "header"
+        "main"
+        "nav";
+
+        grid-template-columns:auto;
+        grid-template-rows: auto;
+    }
+
+    body > * { margin:auto; }
+
+    header
+    {
+        width:100%;
+        margin:auto;
+        border-top:0px;
+    }
+
+    main
+    {
+        margin:0;
+        margin-bottom:10px;
+    }
+
+    #grid-nav
+    {
+        max-width:100%;
+        height:auto;
+        width:100%;
+    }
+
+    #projects
+    {
+        width:auto;
+        max-width:100%;
+    }
+
+    #logo { order: 3; width: 50px; height: 50px; margin:auto; }
+
+}
+/* End Low Res */

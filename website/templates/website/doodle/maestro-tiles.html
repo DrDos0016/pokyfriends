@@ -1,0 +1,98 @@
+{% extends "website/main.html" %}
+{% load static %}
+
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'doodle/maestro-tiles/style.css' %}">{% endblock %}
+
+{% block title %}Maestro Tiles{% endblock %}
+{% block header %}<h1>Maestro Tiles</h1>{% endblock %}
+
+
+{% block content %}
+<div class="c"><canvas id="canvas" width="640" height="480"></canvas></div>
+<div id="loading">
+    <div>
+        <img src="{% static 'doodle/maestro-tiles/gfx/loading.gif' %}"><br>
+        L O A D I N G
+    </div>
+</div>
+
+<hr>
+<div class="invisible">
+<img src="{% static 'doodle/maestro-tiles/gfx/a.png' %}" id="gfx-a">
+<img src="{% static 'doodle/maestro-tiles/gfx/b.png' %}" id="gfx-b">
+<img src="{% static 'doodle/maestro-tiles/gfx/c.png' %}" id="gfx-c">
+<img src="{% static 'doodle/maestro-tiles/gfx/d.png' %}" id="gfx-d">
+<img src="{% static 'doodle/maestro-tiles/gfx/e.png' %}" id="gfx-e">
+<img src="{% static 'doodle/maestro-tiles/gfx/f.png' %}" id="gfx-f">
+<img src="{% static 'doodle/maestro-tiles/gfx/g.png' %}" id="gfx-g">
+
+<img src="{% static 'doodle/maestro-tiles/gfx/note-a.png' %}" id="gfx-note-a">
+<img src="{% static 'doodle/maestro-tiles/gfx/note-b.png' %}" id="gfx-note-b">
+<img src="{% static 'doodle/maestro-tiles/gfx/note-c.png' %}" id="gfx-note-c">
+<img src="{% static 'doodle/maestro-tiles/gfx/note-d.png' %}" id="gfx-note-d">
+<img src="{% static 'doodle/maestro-tiles/gfx/note-e.png' %}" id="gfx-note-e">
+<img src="{% static 'doodle/maestro-tiles/gfx/note-f.png' %}" id="gfx-note-f">
+<img src="{% static 'doodle/maestro-tiles/gfx/note-g.png' %}" id="gfx-note-g">
+<img src="{% static 'doodle/maestro-tiles/gfx/note-played.png' %}" id="gfx-note-played">
+
+<img src="{% static 'doodle/maestro-tiles/gfx/staff.png' %}" id="gfx-staff">
+<img src="{% static 'doodle/maestro-tiles/gfx/bar.png' %}" id="gfx-bar">
+<img src="{% static 'doodle/maestro-tiles/gfx/end.png' %}" id="gfx-end">
+<img src="{% static 'doodle/maestro-tiles/gfx/back.png' %}" id="gfx-back">
+<img src="{% static 'doodle/maestro-tiles/gfx/forward.png' %}" id="gfx-forward">
+
+<img src="{% static 'doodle/maestro-tiles/gfx/wood.png' %}" id="gfx-wood">
+<img src="{% static 'doodle/maestro-tiles/gfx/curtain.png' %}" id="gfx-curtain">
+<img src="{% static 'doodle/maestro-tiles/gfx/player.png' %}" id="gfx-player">
+
+<audio src="{% static 'doodle/maestro-tiles/sfx/a.wav' %}" id="sfx-a"></audio>
+<audio src="{% static 'doodle/maestro-tiles/sfx/b.wav' %}" id="sfx-b"></audio>
+<audio src="{% static 'doodle/maestro-tiles/sfx/c.wa' %}v" id="sfx-c"></audio>
+<audio src="{% static 'doodle/maestro-tiles/sfx/d.wav' %}" id="sfx-d"></audio>
+<audio src="{% static 'doodle/maestro-tiles/sfx/e.wav' %}" id="sfx-e"></audio>
+<audio src="{% static 'doodle/maestro-tiles/sfx/f.wav' %}" id="sfx-f"></audio>
+<audio src="{% static 'doodle/maestro-tiles/sfx/g.wav' %}" id="sfx-g"></audio>
+<audio src="{% static 'doodle/maestro-tiles/sfx/applause.mp3' %}" id="sfx-applause"></audio>
+</div>
+
+<h1>Maestro Tiles</h1>
+
+<p>
+Your objective is to play the song displayed below by placing note tiles and then walking on top of them to play their music note. Once you've started playing the song, you'll no longer be able to alter the tiles on stage!
+</p>
+
+<p>In a more complete game, there would be a scoring system, likely based on the number of tiles placed and how tightly packed together they were. There would also be scoring penalties for taking too long to go from one note to the next. Replays would also be important to have.
+It would also be nice to have the notes played vary based on the song itself to allow the same 7 tiles to do things like change pitch or instruments.</p>
+
+<h2>Controls</h2>
+<div class="controls">
+Select Note Tile - Click on the squares in the bottom row, or use the 1-7 keys.<br>
+Place Note Tile - Click on the appropriate space. If a tile is already there it will be erased instead.<br>
+Scroll Song - Click on the &lt; or &gt; buttons; or use the Q and E keys. Advances by 9 notes.<br>
+Practice Mode - Click on a note in the song itself and you'll jump to that segment. While practicing you can add and remove tiles while playing the song to better optimize your layout.<br>
+Move Performer - WASD<br>
+</div>
+
+<h2>Issues</h2>
+<p>When you make a mistake in practice mode, the song always jumps back to the beginning and you have to manually scroll forward to your practice entry point.</p>
+<p>Erasing a tile the player is standing on (visually) erases the player</p>
+<p>Audio in the browser is definitely not what it was in 2016 so this sounds a lot worse than it should today.</p>
+
+<h2>More Songs</h2>
+<p>Just add a question mark followed by the letters a-g to the url! (ex: "?abcdefg") You can also use x for a rest.</p>
+<br>
+<a href="?cdcdfxcdcdfxgagbcxcagffdc">Town of ZZT - House of Blues</a>
+
+<div class="footer">
+&mdash; Created by Dr. Dos, 2016-05-06 &mdash;
+</div>
+
+<!--
+http://ayene-chan.deviantart.com/art/RPG-Maker-Wooden-Floor-316114650
+http://www.soundjay.com/applause-sounds-1.html
+-->
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'doodle/maestro-tiles/maestro-tiles.js' %}"></script>
+{% endblock %}

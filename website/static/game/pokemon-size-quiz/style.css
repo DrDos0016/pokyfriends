@@ -1,0 +1,309 @@
+﻿@font-face
+{
+    /* https://fonts.google.com/specimen/Wendy+One */
+    font-family: 'Wendy One';
+    src: url('/static/game/pokemon-size-quiz/WendyOne-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.c
+{
+    text-align:center;
+}
+
+main h2, main h1
+{
+    font-family: 'Wendy One', sans-serif;
+    border-bottom:2px dotted #36001F;
+}
+
+#pokemon_name
+{
+    font-family: 'Wendy One', sans-serif;
+    font-size:32pt;
+    color:#FFD700;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+    letter-spacing:.04em;
+    margin-bottom:3px;
+    text-transform:capitalize;
+    text-align:center;
+}
+
+#quiz_area
+{
+    display:flex;
+}
+
+#quiz_area > div + div
+{
+    margin-left:0.5em;
+}
+
+#quiz
+{
+    border:10px solid #36001F;
+    flex:2;
+    flex-basis:260px;
+    max-width:300px;
+    text-align:center;
+}
+
+#keypad
+{
+    display:none;
+}
+
+#stats
+{
+    flex:1;
+}
+
+#notes
+{
+    flex:1;
+}
+
+.list
+{
+    background-color:#FF9DC6;
+    padding:8px;
+    white-space:nowrap;
+    display:none;
+    border:10px solid #36001F
+}
+
+.list p
+{
+    white-space:normal;
+}
+
+.list img
+{
+    border:1px dashed #000;
+    display:inline-block;
+    width:130px;
+    height:120px;
+}
+
+input[type=text]
+{
+    border:1px solid #000;
+    margin:2px;
+    font-family: 'Wendy One', sans-serif;
+    font-size:24pt;
+    color:#FFD700;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+    letter-spacing:.04em;
+    width:4em;
+}
+
+input[type=button], input[type=submit]
+{
+    border:1px solid #000;
+    background:#70B04A;
+    font-family: 'Wendy One', sans-serif;
+    font-size:24pt;
+    color:#FFD700;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+    letter-spacing:.04em;
+    min-width:4em;
+    max-width:80%;
+}
+
+input[name=name]
+{
+    width:300px;
+}
+
+#hist-list
+{
+    margin-top:1em;
+}
+
+#history
+{
+    text-align:center;
+    font-family:monospace;
+    overflow-x:scroll;
+    width:100%;
+}
+
+#history.compare
+{
+    width:75%;
+}
+
+.hist-frame
+{
+    margin:4px;
+    display:inline-block;
+}
+
+#pokemon_image
+{
+    width:260px;
+    height:240px;
+    margin-top:0.5em;
+}
+
+.label
+{
+    font-weight:bold;
+}
+
+.fr
+{
+    float:right;
+}
+
+.data
+{
+    text-align:left;
+    margin-bottom:1em;
+}
+
+#sidebar
+{
+    display:flex;
+    justify-content:space-between;
+}
+
+#sidebar label
+{
+    display:block;
+}
+
+.flex-block
+{
+    flex:1;
+    margin:1em;
+}
+
+
+.choice
+{
+    width:100%;
+}
+
+#metric
+{
+    display:none;
+    font-family: 'Wendy One', sans-serif;
+    font-size:24pt;
+    color:#FFD700;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+    letter-spacing:.04em;
+    text-align:center;
+    width:1em;
+    margin:10px 2px 0 2px;
+}
+
+.pokefont
+{
+    font-family: 'Wendy One', sans-serif;
+    font-size:24pt;
+    color:#FFD700;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+    letter-spacing:.04em;
+}
+
+.final_stats
+{
+    font-family:monospace;
+    font-size:12pt;
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.final_stats .pokefont, #avg_off_div .pokefont
+{
+    font-size:72pt;
+}
+
+.final_stats .left
+{
+    flex:1 0 24%;
+    text-align:center;
+}
+
+#avg_off_div
+{
+    flex:4 0 100%;
+    text-align:center;
+}
+
+input[name=link]
+{
+    background-color:#ccc;
+    border:2px solid #888;
+    padding:2px;
+    width:80%;
+    text-align:center;
+    font-size:16pt;
+}
+
+#p1off, #p2off
+{
+    width:40%;
+    margin:auto;
+    margin-top:5px;
+    text-align:center;
+}
+
+.block a.another
+{
+    color:#00FFD7;
+    text-decoration:none;
+}
+
+@media (max-width: 799px)
+{
+    #quiz
+    {
+        width:100%;
+        max-width:100%;
+        flex-basis:100%;
+    }
+
+    #keypad
+    {
+        display:block;
+    }
+
+    #keypad button
+    {
+        width:20%;
+        height:4em;
+    }
+
+    #keypad button.wide
+    {
+        width:40%;
+    }
+
+    #final_stats .pokefont
+    {
+        font-size:18pt;
+    }
+}

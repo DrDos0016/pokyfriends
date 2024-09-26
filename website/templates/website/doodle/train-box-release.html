@@ -1,0 +1,197 @@
+{% extends "website/main.html" %}
+{% load static %}
+{% load pokyfriends_tags %}
+
+{% block title %}Train Box Release{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'doodle/train-box-release/tbr.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="main">
+    <div id="primary" class="block">
+        <div class="wrapper">
+        {% for p in pokemon %}
+            <div class="col pokemon" data-count="{{forloop.counter}}">
+                <div class="img">
+                    <div class="number">#{{p.number}}</div>
+                    <div class="picture"><img src="{% static 'global/pokedex-media/pokemon/main-sprites/x-y/'|add:p.number|add:'.png' %}" alt="{{p.number}}"></div>
+                    <div class="name">{{p.name}}</div>
+                </div>
+                <br>
+                <label name="train"><input type="radio" name="poke{{forloop.counter}}" value="train"> Train</label>
+                <label name="box"><input type="radio" name="poke{{forloop.counter}}" value="box"> Box</label>
+                <label name="release"><input type="radio" name="poke{{forloop.counter}}" value="release"> Release</label>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="controls">
+            <input type="button" value="Confirm" id="confirm">
+            {% csrf_token %}
+            <input name="streak" type="hidden" value="{{request.GET.streak|default:0}}">
+        </div>
+    </div>
+</div>
+
+<div id="sidebar">
+    <div class="block options">
+        <h3>Quick Picks</h3>
+        <select id="quickpick">
+            <option value="NONE">Choose a Trio...</option>
+            <optgroup label="Starters">
+                <option value="1/4/7">Kanto Starters</option>
+                <option value="152/155/158">Johto Starters</option>
+                <option value="252/255/258">Hoenn Starters</option>
+                <option value="387/390/393">Sinnoh Starters</option>
+                <option value="495/498/501">Unova Starters</option>
+                <option value="650/653/656">Kalos Starters</option>
+            </optgroup>
+            <optgroup label="Legendaries">
+                <option value="144/145/146">Legendary Birds</option>
+                <option value="243/244/245">Legendary Beasts</option>
+                <option value="377/378/379">Legendary Titans</option>
+                <option value="382/383/384">Weather Trio</option>
+                <option value="480/481/482">Lake Guardians</option>
+                <option value="483/484/487">Creation Trio</option>
+                <option value="638/639/640">Swords of Justice</option>
+                <option value="641/642/645">Forces of Nature</option>
+                <option value="643/644/646">Tao Trio</option>
+                <option value="716/717/718">Mortality Trio</option>
+            </optgroup>
+            <optgroup label="Etc.">
+                <option value="134/135/136">Classic Eeveelutions</option>
+                <option value="138/140/142">Kanto Fossils</option>
+                <option value="511/513/515">Elemental Monkeys</option>
+            </optgroup>
+        </select>
+        <br>
+        <a href="/train-box-release/">Random</a> &bull; <s>Custom</s>
+    </div>
+
+    <div id="recent" style="display:none">
+        <h3>Recent T-B-R Trios</h3>
+        {% for r in recent %}
+            {% ifchanged %}<a href="/train-box-release/{{r.trio}}">{{r.images|safe}}</a>{% endifchanged %}
+        {% endfor %}
+    </div>
+
+    {% retired_project %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+var poke1 = {{pokemon.0.number}};
+var poke2 = {{pokemon.1.number}};
+var poke3 = {{pokemon.2.number}};
+$(document).ready(function (){
+    $("#confirm").prop("disabled", false);
+
+    $("#quickpick").change(function (){
+        if ($(this).val() == "NONE")
+            return false;
+
+        var pokes = $(this).val().split("/");
+
+        window.location = "/doodle/train-box-release/?p=" + pokes[0] + "&p=" + pokes[1] + "&p=" + pokes[2];
+    });
+
+    $("label").click(function (e){
+        var name = $(this).attr("name");
+
+        $(this).parent().children("label").each(function (){
+            $(this).removeClass("selected");
+        });
+
+        $("input[value="+name+"]").each(function (){
+            if ($(this).prop("checked") && $(this).val() == name)
+            {
+                console.log("Unchecking", name);
+                $(this).prop("checked", false);
+                $(this).parent().removeClass("selected");
+                $(this).parent().parent().find(".img").css("background-color", "#807870");
+            }
+        })
+
+        $(this).find("input[value="+name+"]").prop("checked", true);
+        $(this).addClass("selected");
+        $(this).parent().find(".img").css("background-color", $(this).css("background-color"));
+        e.preventDefault();
+    });
+
+    $("#confirm").click(function (){
+        var choices = [];
+        choices.push($("input[name=poke1]:checked").val());
+        choices.push($("input[name=poke2]:checked").val());
+        choices.push($("input[name=poke3]:checked").val());
+        choices.sort();
+
+        if (JSON.stringify(choices) != JSON.stringify(["box", "release", "train"]))
+            return false;
+
+        // Good to submit
+        console.log("Good to submit!");
+        $("input[name=poke1]:not(:checked)").parent().hide();
+        $("input[name=poke2]:not(:checked)").parent().hide();
+        $("input[name=poke3]:not(:checked)").parent().hide();
+
+        $(this).val("Submitting...");
+        $(this).css("background-color", "#98D8D8");
+        $(this).attr("disabled", "disabled");
+
+        send_data();
+    });
+
+    function send_data()
+    {
+        $("#primary").fadeOut(1000, redir);
+        /*
+        $.ajax({
+            "url":"/train-box-release/ajax/submit",
+            "method":"POST",
+            "data":{
+                "csrfmiddlewaretoken":$("input[name=csrfmiddlewaretoken]").val(),
+                "choice1":$("input[name=poke1]:checked").val(),
+                "choice2":$("input[name=poke2]:checked").val(),
+                "choice3":$("input[name=poke3]:checked").val(),
+                "poke1":poke1,
+                "poke2":poke2,
+                "poke3":poke3,
+                }
+        }).done(function (data){
+            if (data == "SUCCESS")
+            {
+                var redir = "/train-box-release/"+poke1+"/"+poke2+"/"+poke3+"/results?c1="+$("input[name=poke1]:checked").val()+"&c2="+$("input[name=poke2]:checked").val()+"&c3="+$("input[name=poke3]:checked").val();
+                if ($("input[name=streak]").val() > 0 && $("input[name=poke1]:checked").val() == "train")
+                    redir += "&streak="+(parseInt($("input[name=streak]").val())+1);
+                window.location = redir;
+            }
+            else
+            {
+                alert("ERROR: AJAX call returned failure.");
+                window.location.reload();
+            }
+        }).fail(function (data){
+            alert("ERROR: AJAX call failed.");
+            window.location.reload();
+        });
+        */
+    }
+
+    function redir()
+    {
+        var p1 = $("input[name=poke1]:checked").val();
+        var p2 = $("input[name=poke2]:checked").val();
+        var p3 = $("input[name=poke3]:checked").val();
+
+        if (p1 == "train")
+            window.location = "/doodle/train-box-release?p=" + poke1;
+        if (p2 == "train")
+            window.location = "/doodle/train-box-release?p=" + poke2;
+        if (p3 == "train")
+            window.location = "/doodle/train-box-release?p=" + poke3;
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,994 @@
+pico-8 cartridge // http://www.pico-8.com
+version 16
+__lua__
+function _init()
+ seed = {flr(rnd(8))+1, flr(rnd(8)+1), flr(rnd(8)+1), flr(rnd(8)+1)}
+ //printh("debug seed is on!")
+ //seed = {6,3,6,3}
+ seed2spr = {35, 37, 39, 41, 16, 17, 32, 33}
+ mode = "title"
+ action = "pickplayers" 
+ tick = 1
+ sel = 1
+ selected = 0
+ selcolor = 0
+ players = -1
+ p1sona = -1
+ p2sona = -1
+ turn = 1
+ p1remaining = 24
+ p2remaining = 24
+ 
+ q_sel = 1
+ v_sel = 1
+ q2 = 0
+ 
+ qs = {
+  "so, your species is…",
+  "is your fur…",
+  "are you into…",
+  "is your orientation…",
+  "between your legs you have…",
+  "do you wear a collar~",
+  "are you winking @ me~",
+  "owo! you're…"
+ }
+ 
+ vars = {
+  {"…a fox? ^_^", "…a bunny!", "…a kitty~", "…a raccoon?",},
+  {"…silky and orange!", "…soft and white~", "…fluffy and yellow", "…fuzzy and brown!"},
+  {"…stompy macro rampages!!", "…being bound and gagged~", "…worshipping soft paws~", "…my gaping maw?"},
+  {"…gay~", "…bi~", "…ace~"},
+  {"…a thick drippy cock!", "…a nice wet pussy~", "…a sensitive [nil] spot~"},
+  {},
+  {},
+  {}
+ }
+ 
+ aiqs = {
+  q1={1, 2, 3, 4},
+  q2={1, 2, 3, 4},
+  q3={1, 2, 3, 4},
+  q4={1, 2, 3},
+  q5={1, 2, 3},
+  q6={1},
+  q7={1}
+ }
+ 
+ qsleft = {1,2,3,4,5,6,7}
+ 
+ names = {
+  fox={"foxy", "glitz", "jam", "peanut", "scruff", "cherry"},
+  bunny={"flopsy", "ears", "mint", "vanila", "cross", "xyzzy"},
+  cat={"candy", "sugar", "spice", "toona", "pico", "napalm"},
+  raccoon={"rack", "nukey", "jigen", "cosine", "pat", "ringz"}
+ }
+ 
+ t_clrs = {14, 8, 2, 14, 8, 2, 14, 8, 2}
+ t_poses = {120, 121, 122, 122, 122, 121, 120, 120}
+ t_letters = {"j", "a", "m", " ", "i", "i", "i", " "}
+end
+
+function make_panels()
+ panels = {}
+
+ species = {"fox", "bunny", "cat", "raccoon"}
+ species_sprite = {2, 4, 6, 8}
+ species_counts = {6, 6, 6, 6}
+ fur = {"orange", "white", "yellow", "brown"}
+ fur_counts = {6, 6, 6, 6}
+ kinks = {"size", "bdsm", "paws", "vore"}
+ kink_sprite = {16, 17, 32, 33}
+ kink_counts = {6, 6, 6, 6}
+ sexualities = {"gay", "bi", "ace"}
+ bg = {10, 12, 14}
+ sex_counts = {8, 8, 8}
+ bits = {"dick", "puss", "null"}
+ bit_sprite = {51, 52, 53}
+ bit_counts = {8, 8 ,8}
+ collars = {1, 0}
+ collar_counts = {8, 16}
+ winks = {1, 0}
+ wink_counts = {6, 18}
+ 
+ for i=1,24 do
+		panel = {species="",	fur="", kink="",	sex="", bits="", collar=0, winking=0, p1flipped=0, p2flipped=0, flipon={}}
+	 while 1 do -- species
+	  temp = flr(rnd(4)) + 1
+	  if species_counts[temp] != 0 then
+	   species_counts[temp] -= 1
+	   panel["species"] = species[temp]
+	   panel["sprite"] = species_sprite[temp]
+	   break
+	  end
+	 end
+
+  // name	 
+  rndname = flr(rnd(#names[panel["species"]]))+1
+  panel["name"] = "" .. names[panel["species"]][rndname]
+  del(names[panel["species"]], panel["name"])
+	  
+	 while 1 do -- fur
+	  temp = flr(rnd(4)) + 1
+	  if fur_counts[temp] != 0 then
+	   fur_counts[temp] -= 1
+	   panel["fur"] = fur[temp]
+	   break
+	  end
+	 end
+
+	 while 1 do -- kink
+	  temp = flr(rnd(4)) + 1
+	  if kink_counts[temp] != 0 then
+	   kink_counts[temp] -= 1
+	   panel["kink"] = kinks[temp]
+	   panel["ksprite"] = kink_sprite[temp]
+	   break
+	  end
+	 end
+	 
+	 while 1 do -- sexuality
+	  temp = flr(rnd(3)) + 1
+	  if sex_counts[temp] != 0 then
+	   sex_counts[temp] -= 1
+	   panel["sex"] = sexualities[temp]
+	   panel["bg"] = bg[temp]
+	   break
+	  end
+	 end
+	 
+	 while 1 do -- bits
+	  temp = flr(rnd(3)) + 1
+	  if bit_counts[temp] != 0 then
+	   bit_counts[temp] -= 1
+	   panel["bits"] = bits[temp]
+	   panel["bsprite"] = bit_sprite[temp]
+	   break
+	  end
+	 end
+
+	 while 1 do -- collar
+	  temp = flr(rnd(2)) + 1
+	  if collar_counts[temp] != 0 then
+	   collar_counts[temp] -= 1
+	   panel["collar"] = collars[temp]
+	   break
+	  end
+	 end
+	 
+	 while 1 do -- wink
+	  temp = flr(rnd(2)) + 1
+	  if wink_counts[temp] != 0 then
+	   wink_counts[temp] -= 1
+		   panel["wink"] = winks[temp]
+	   break
+	  end
+	 end
+
+ 	panels[i] = panel
+ end
+ return panels
+end
+
+function draw_panels()
+ rectfill(0,0,102,96,0)
+
+ // draw panels
+ kinks = {16, 17, 32, 33}
+ idx = 1
+	for y=0,3 do
+	 for x=0,5 do
+   draw_panel(panels[idx], x, y)
+  	idx += 1
+  end
+ end
+ return
+end
+
+function draw_panel(panel, x, y)
+ if panel.p1flipped == 1 then
+  rectfill(x*17 + 1, y*24 + 1, x*17 + 17, y*24 + 24, 0)
+	 spr(69, x*17+1, y*24+1, 2, 3)  
+ else
+	 spr(panel.bg, x*17 + 1, y*24, 2, 3)
+
+		// fur
+		if panel.fur == "orange" then
+		 pal(1, 9)
+		 pal(2, 5)
+		 pal(3, 4)
+		 pal(4, 10)
+		elseif panel.fur == "white" then
+		 pal(1, 7)
+		 pal(2, 2)
+		 pal(3, 14)
+		 pal(4, 15)
+		elseif panel.fur == "yellow" then
+		 pal(1, 10)
+		 pal(2, 1)
+		 pal(3, 4)
+		 pal(4, 9)
+		elseif panel.fur == "brown" then
+		 pal(2, 1)
+		 pal(1, 4)
+		 pal(3, 14)
+		 pal(4, 5)
+		end
+ 	spr(panel.sprite, x*17+1,y*24+9, 2,2)
+ 	if panel.wink == 1 then
+ 		spr(panel.sprite + 32, x*17+1,y*24+9)
+ 	end
+ 	pal()
+
+ 	spr(panel.ksprite, x*17+1,y*24+1)
+ 	spr(panel.bsprite, x*17+9,y*24+1)
+ 	if panel.collar == 1 then
+ 		spr(1, x*17+5,y*24+17)
+ 	end
+ end  	
+	rect(x*17,y*24,x*17+17,y*24+24, 0)
+end
+
+function sidebar(selected)
+ p = panels[selected+1]
+ ospr = {gay=48, bi=49, ace=50}
+ fclr = {orange=9, white=7, yellow=10, brown=4}
+ ftxt = {orange="orng", white="wht", yellow="yelo", brown="brwn"}
+ rectfill(103,0,127,96,0)
+ print(p.name, 104, 1, 12)
+ spr(p.sprite + 33, 112,7)
+ line(103,15,128,15,5)
+
+ print("fur", 104, 17, 3)
+ circfill(108,26, 2, fclr[p.fur])
+ print(ftxt[p.fur], 113,24, 12)
+ line(103,32,128,32,5)
+
+ 
+ print("sexlty", 104, 34, 3)
+ spr(ospr[p.sex], 104,40)
+ print(p.sex, 113,43, 12)
+ line(103,49, 128,49,5)
+
+ print("bits", 104, 51, 3)
+ spr(p.bsprite, 104,56)
+ print(p.bits, 113, 58, 12)
+ line(103,64,128,64,5)
+ 
+ print("kink", 104, 66, 3)
+ spr(p.ksprite, 104,72)
+ print(p.kink, 113, 75, 12)
+ line(103,81,128,81,5)
+ 
+ c = 5
+ if p.collar == 1 then c = 12 end
+ print("collar", 104, 83, c)
+ if c == 5 then line(102,85,127,85) end
+ 
+ c = 5
+ if p.wink == 1 then c = 12 end
+ print("wink", 109, 90, c) 
+ if c == 5 then line(107,92,125,92) end
+
+end
+
+function draw()
+ sidebar(selected)
+  
+ // bottom
+ drawchat()
+end
+
+function title()
+ rectfill(0,0,127,127,1)
+ //circfill(32,32, 8, 10)
+ //circfill(96,32, 8, 10)
+ spr(138, 30,5, 4, 4,1)
+ spr(138, 68,5, 4, 4)
+ spr(142, 57,20, 2, 2)
+ spr(192, 15,62, 3, 3)
+ spr(195, 35,62, 4, 4)
+ spr(200, 65,62, 8, 4)
+
+ if sel == 1 then
+  print("★ you x ai ★", 36, 92, 10)
+  print("   you x p2   ", 36, 100, 5)
+ elseif sel == 2 then
+  print("   you x ai   ", 36, 92, 5)
+  print("★ you x p2 ★", 36, 100, 10)
+ end
+ 
+ species_sprite = {2, 4, 6, 8}
+ fur = {"orange", "white", "yellow", "brown"} 
+ 
+ if not panel or tick % 30 == 0 then
+  s = species_sprite[flr(rnd(4)) + 1]
+  f = fur[flr(rnd(4)) + 1]   
+  c = 0
+  w = 0
+  if rnd() > 0.5 then
+   w = 1
+  end
+  if rnd() > 0.8 then
+   c = 1
+  end
+  panel = {sprite=s, fur=f, bg=136, collar=c, wink=w}
+ end
+ draw_panel(panel, 3.3, 1.5) 
+ rect(56,36,73,60,2)
+
+ if action == "pickseed" then
+  rectfill(36, 92, 100, 106, 1)
+  print("set seed with arrows", 27, 86, 7)
+  print("you x partner must play", 21, 92, 7)
+  print("with the same seed", 31, 98, 7)
+  spr(seed2spr[seed[1]], 33, 110)
+  spr(seed2spr[seed[2]], 51, 110)
+  spr(seed2spr[seed[3]], 69, 110)
+  spr(seed2spr[seed[4]], 87, 110)
+  rect(31+(selected * 18),107,43+(selected * 18),119,9)
+ end
+
+ spr(54, 1, 119)
+ for i=1,7 do
+  print(t_letters[i], 10+((i-1) * 4), t_poses[i], t_clrs[i])
+ end
+
+ if tick % 10 == 0 then 
+  add(t_clrs, t_clrs[1])
+  del(t_clrs, t_clrs[1])
+ end
+ if tick % 2 == 0 then
+  add(t_poses, t_poses[1])
+  del(t_poses, t_poses[1])
+ end
+ 
+ print("@dosmeow", 96,122, 6)
+end
+
+function picksona()
+ if btnp(0) then
+  if selected % 6 == 0 then
+   selected += 6
+  end
+   selected -= 1
+ elseif btnp(1) then
+  if selected % 6 == 5 and selected > 0 then
+   selected -= 6
+  end
+   selected += 1
+ elseif btnp(3) then
+  selected += 6
+  if selected > 23 then
+   selected = selected - 24
+  end
+ elseif btnp(2) then
+  selected -= 6
+  if selected < 0 then
+   selected = selected + 24
+  end
+ elseif btnp(5) then
+  p1sona = selected + 1
+  
+  // ai-sona
+  if players == 1 then
+	  p2sona = flr(rnd(23)) + 1
+   action="guess"
+  else
+   action="free"
+   selected = 0
+  end
+ end
+ 
+ if btnp(0) or btnp(1) or btnp(2) or btnp(3) then
+  sfx(0)
+ end
+end
+
+function guess()
+ if q2 == 0 then
+  if btnp(1) then
+   q_sel += 1
+  elseif btnp(0) then
+   q_sel -= 1
+  elseif btnp(5) then
+   if q_sel < 6 then
+    q2 = 1
+   elseif q_sel < 8 then
+    submit(1)
+   else
+    action = "finalguess"
+    selected = 0
+   end
+  end
+ else // 2nd half
+  if btnp(4) then
+   v_sel=1
+   q2=0
+  elseif btnp(1) then
+   v_sel += 1
+  elseif btnp(0) then
+   v_sel -= 1
+  elseif btnp(5) then
+   submit(1)
+  end
+ end
+ 
+ // clamp
+ if q_sel > 8 then
+  q_sel = 1
+ elseif q_sel < 1 or p1remaining == 1 then
+  q_sel = 8
+ end
+ 
+ if v_sel > #vars[q_sel] then
+  v_sel = 1
+ elseif v_sel < 1 then
+  v_sel = #vars[q_sel]
+ end
+end
+
+function submit(player)
+ // sona should match other player
+ if player == 1 then
+  sona = p2sona
+  flipattr = "p1flipped"
+ else
+  sona = p1sona
+  flipattr = "p2flipped"
+ end
+ 
+ g = q_sel .. "-" .. v_sel
+ //printh(q_sel .. "-" .. v_sel)
+ 
+ ans = false
+ if g == "1-1" and panels[sona].species == "fox" then ans = true end
+ if g == "1-2" and panels[sona].species == "bunny" then ans = true end
+ if g == "1-3" and panels[sona].species == "cat" then ans = true end
+ if g == "1-4" and panels[sona].species == "raccoon" then ans = true end
+ if g == "2-1" and panels[sona].fur == "orange" then ans = true end
+ if g == "2-2" and panels[sona].fur == "white" then ans = true end
+ if g == "2-3" and panels[sona].fur == "yellow" then ans = true end
+ if g == "2-4" and panels[sona].fur == "brown" then ans = true end
+ if g == "3-1" and panels[sona].kink == "size" then ans = true end
+ if g == "3-2" and panels[sona].kink == "bdsm" then ans = true end
+ if g == "3-3" and panels[sona].kink == "paws" then ans = true end
+ if g == "3-4" and panels[sona].kink == "vore" then ans = true end
+ if g == "4-1" and panels[sona].sex == "gay" then ans = true end
+ if g == "4-2" and panels[sona].sex == "bi" then ans = true end
+ if g == "4-3" and panels[sona].sex == "ace" then ans = true end
+ if g == "5-1" and panels[sona].bits == "dick" then ans = true end
+ if g == "5-2" and panels[sona].bits == "puss" then ans = true end
+ if g == "5-3" and panels[sona].bits == "null" then ans = true end
+ if g == "6-1" and panels[sona].collar == 1 then ans = true end
+ if g == "7-1" and panels[sona].wink == 1 then ans = true end
+ 
+ toflip = getflips()
+ 
+ reallyflip = {}
+ for i=1, #toflip do
+  if panels[toflip[i]][flipattr] == 0 then
+   add(reallyflip, toflip[i])
+  end
+ end
+ 
+ if player == 1 then
+  action="flip"
+  selected=0
+ else  
+  while #reallyflip != 0 do
+   //sfx(3)
+   p2remaining -= 1
+   panels[reallyflip[1]].p2flipped=1
+   del(reallyflip, reallyflip[1])
+  end
+  
+  // remove q
+  qkey = "q" .. tostr(q_sel)
+  if ans == true then
+   del(qsleft, q_sel)		 
+  else
+   del(aiqs[qkey], v_sel)
+  end
+  
+  action="guess"
+  selected=0
+ end
+end
+
+function getflips()
+ toflip = {}
+ criteria = {"species", "fur", "kink", "sex", "bits", "collar", "wink"}
+ left = criteria[q_sel]
+ r_crit = {
+  {"fox", "bunny", "cat", "raccoon"},
+  {"orange", "white", "yellow", "brown"},
+  {"size", "bdsm", "paws", "vore"},
+  {"gay", "bi", "ace"},
+  {"dick", "puss", "null"},
+  {1, 0},
+  {1, 0}
+ }
+ right = r_crit[q_sel][v_sel]
+ for i=1,24 do
+  if panels[i][left] == right and ans == false then
+   add(toflip, i)
+  end
+  if panels[i][left] != right and ans == true then
+   add(toflip, i)
+  end
+ end
+ return toflip
+end
+
+function flop()
+ if #reallyflip != 0 then
+  selected = reallyflip[1] - 1
+ else
+  action="p2"
+ end
+ 
+ if btnp(5) then
+  sfx(3)
+  p1remaining -= 1
+  panels[reallyflip[1]].p1flipped=1
+  del(reallyflip, reallyflip[1])
+ end
+end
+
+function free()
+ if btnp(0) then
+  if selected % 6 == 0 then
+   selected += 6
+  end
+   selected -= 1
+ elseif btnp(1) then
+  if selected % 6 == 5 and selected > 0 then
+   selected -= 6
+  end
+   selected += 1
+ elseif btnp(3) then
+  selected += 6
+  if selected > 23 then
+   selected = selected - 24
+  end
+ elseif btnp(2) then
+  selected -= 6
+  if selected < 0 then
+   selected = selected + 24
+  end
+ elseif btnp(5) then
+  if panels[selected + 1].p1flipped == 0 then
+   panels[selected + 1].p1flipped = 1
+  else
+   panels[selected + 1].p1flipped = 0
+  end
+ end
+
+ if btnp(0) or btnp(1) or btnp(2) or btnp(3) or btnp(5) then
+  sfx(0)
+ end
+
+end
+
+function ai()
+ if p2remaining == 1 then
+  lose()
+  return
+ end
+ 
+ // rnd q
+ preq = p2remaining
+ while true do
+  q_sel = qsleft[flr(rnd(#qsleft)) + 1]
+  v_sel = flr(rnd(#aiqs["q" .. q_sel])) + 1
+ 
+  //printh("ai " .. q_sel .. "-" .. v_sel)
+  submit(2)
+  
+  owoqs = {
+   q1v1="r u a cute foxy~",
+   q1v2="r u a kinky bun~",
+   q1v3="r u a yiffy kitten~",
+   q1v4="r u a sexy raccoon~",
+   q2v1="got soft orange fur?",
+   q2v2="ur fur fluffy + white~",
+   q2v3="do u have yellow fur~",
+   q2v4="is ur fur brown~",  
+   q3v1="r u yiffy for macro~~",  
+   q3v2="do u like bdsmaybe~",  
+   q3v3="may i kiss ur pawsies~",
+   q3v4="r u my next meal rawr~",    
+   q4v1="honk if ur a gay furry",
+   q4v2="r u bi and open?",
+   q4v3="not a king but an ace~",
+   q5v1="got a cock to stuf me~",
+   q5v2="can i breed ur pussy~",
+   q5v3="*rubs ur [nil] zone*",
+   q6v1="got a collar yet pet~",
+   q7v1="r u winking @ me uwu",
+  }
+  
+  owoq = owoqs["q"..tostr(q_sel).."v"..tostr(v_sel)]
+  
+  if p2remaining < preq then
+   break
+  end
+ end
+ 
+ q_sel = 1
+ v_sel = 1
+ q2 = 0
+ action="response"
+end
+
+function response()
+ if btnp(5) then
+  action = "guess"
+ end
+end
+
+function finalguess()
+ if btnp(0) then
+  if selected % 6 == 0 then
+   selected += 6
+  end
+   selected -= 1
+ elseif btnp(1) then
+  if selected % 6 == 5 and selected > 0 then
+   selected -= 6
+  end
+   selected += 1
+ elseif btnp(3) then
+  selected += 6
+  if selected > 23 then
+   selected = selected - 24
+  end
+ elseif btnp(2) then
+  selected -= 6
+  if selected < 0 then
+   selected = selected + 24
+  end
+ elseif btnp(5) then
+  if selected + 1 != p2sona then
+   sfx(4)
+   action="p2"
+  else
+   sfx(5)
+   mode="gameover"
+   action="victory"
+  end
+    
+ end
+ 
+ if btnp(0) or btnp(1) or btnp(2) or btnp(3) then
+  sfx(0)
+ end
+end
+
+function setseed()
+ seedprod = seed[1] * seed[2] * seed[3] * seed[4]
+ //printh("seed #" .. seedprod)
+ srand(seedprod)
+ selected = 0
+ mode = "play"
+ action = "picksona"
+ panels = make_panels()
+end
+
+function lose()
+ sfx(6)
+ mode="gameover"
+ action="lose"
+end
+
+function drawchat()
+ rectfill(0,97,127,127,1)
+ print("🅾️▤▤▤▤▤▤▤▤▤▤▤▤▤▤  ", 0,98, 12)
+ print("▥                            ▥", 0, 104)
+ print("▥                            ▥", 0, 110)
+ print("▥                            ▥", 0, 116)
+ print("🅾️▤▤▤▤▤▤▤▤▤▤▤▤▤▤  ", 0,122)
+ if players == 1 then
+  print(p1remaining, 120,98,14)
+  print(p2remaining, 120,122,10)
+ end
+end
+
+function _update()
+ if mode == "title" then
+  if action == "pickplayers" then
+   if btnp(2) then
+    sel = 1
+    sfx(0)
+   end
+   if btnp(3) then
+    sel = 2
+    sfx(0)
+   end
+   if btnp(5) then
+    players = sel
+    if sel == 2 then
+     action="pickseed"
+     return
+    else
+				 setseed()
+     return
+    end
+    
+   end
+  end
+  
+  if action == "pickseed" then
+   if btnp(0) then
+    selected -= 1
+   elseif btnp(1) then
+    selected += 1
+   end
+    
+   if selected > 3 then
+    selected = 0
+   elseif selected < 0 then
+    selected = 3
+   end
+   
+   if btnp(2) then
+    seed[selected + 1] -= 1
+   elseif btnp(3) then
+    seed[selected + 1] += 1
+   end
+    
+   for i=1,4 do
+    if seed[i] > 8 then
+     seed[i] = 1
+    elseif seed[i] < 1 then
+     seed[i] = 8
+    end
+   end
+   
+   if btnp(5) then
+    setseed()
+   end
+  end
+ elseif mode == "play" then
+  if action == "picksona" then
+   picksona()
+  elseif action == "free" then
+   free()
+  elseif action == "guess" then
+   guess()
+  elseif action == "flip" then
+   flop()
+  elseif action == "p2" then
+   ai()
+  elseif action == "response" then
+   response()
+  elseif action == "finalguess" then
+   finalguess()
+  end
+  
+ end
+ 
+ tick += 1
+ if tick > 300 then
+  tick = 1
+ end
+end 
+
+function _draw()
+ //printh("frame start: action= " .. action)
+ if tick % 8 == 0 then
+  selcolor = (selcolor + 1) % 2
+ end
+
+ if mode == "title" then
+  title()
+ end
+ if mode == "play" then
+  draw()
+  draw_panels()
+  
+  if action == "picksona" then
+   print("choose your fursona using", 8, 104, 10)
+   print("⬅️⬆️⬇️➡️ and press ❎ to", 8, 110, 10)
+   print("to chat w/ a yiffy friend!", 8, 116, 10)
+   x = (selected % 6) * 17
+   y = flr(selected / 6) * 24
+   rect(x, y, x + 17, y + 24, selcolor + 9)
+  end
+  
+  if action == "guess" then
+   print("<owo> ask me anything", 8, 104, 10)
+   print("sweetie~", 8, 110, 10)
+   rectfill(8, 116, 118, 120, 2)
+   
+   if q2 == 1 then
+    print(vars[q_sel][v_sel], 8, 116, 14)
+   else
+    print(qs[q_sel], 8, 116, 14)
+   end
+  end
+  
+  if action == "flip" or action == "finalguess" or action == "free" then
+		 if action == "free" then
+    rectfill(8,100,118,124,1)
+		  print("talk with your partner and", 8, 107, 10)
+		  print("toggle panels with ❎", 8, 113, 10)
+		  print("you are", 8, 101, 14)
+		  print(panels[p1sona].name .. " the " .. panels[p1sona].species, 40, 101, 12)
+		  print("winner picks who tops~  owo", 8, 119, 14)
+		 elseif action == "flip" then
+ 		 if ans == true then
+  		 print("<owo> that's right!", 8, 104, 10)
+  		 print("<owo> we're really hitting", 8, 110)
+  		 print("<owo> it off~", 8, 116)
+  		else
+  		 print("<owo> nuuuuuu~", 8, 104, 10)
+  		 print("<owo> maybe one of my other", 8, 110)
+  		 print("<owo> ocs, but not this one~", 8, 116)  		
+  		end
+		 end
+		 draw_panels()
+   x = (selected % 6) * 17
+   y = flr(selected / 6) * 24
+   rect(x, y, x + 17, y + 24, selcolor + 9)
+  end
+  
+  if action == "response" then
+   drawchat()
+   print("<owo> " .. owoq, 8, 104, 10)
+   if ans == true then
+ 		 print("<you> ░y-yeah░", 8, 110, 14)
+ 		 print("<owo> proof ur a cutie~ uwu", 8, 116, 10)
+   else
+ 		 print("<you> sorry, nope!", 8, 110, 14)
+ 		 print("<owo> okies! that's valid~", 8, 116, 10)
+   end
+  end
+ end
+ if mode == "gameover" then
+  drawchat()
+
+  if action == "lose" then
+   print("<owo> i know you~ uwu", 8, 104, 10)
+   print("<owo> i follow your ad acct~", 8, 110)
+   print("<owo> ur " .. panels[p1sona].name .. "!!!!", 8, 116)
+  elseif action == "victory" then
+   print("<owo> that's me~ uwu", 8, 104, 10)
+		 print("<owo> i know we just met but", 8, 110)
+		 print("<owo> let's split a commish!", 8, 116)
+  end
+
+ end
+end
+__gfx__
+00000000000000001100000000001100000000000000000000111000000011100440000000004400888888888888888822222222222222225555555555555555
+00000000000000001111000000001100011110000111110001131000000113104444400000044440888888888888888822222222222222225555555555555555
+00000000000000001331100000011110013311111113311001331100000133114433111111143340888888888888888822222222222222225555555555555555
+00000000000000001333111110113310013311111111331013333114441133310431111111111340999999999999999922222222222222225555555555555555
+00000000000000000111111111133310113101111110131111111111411111110111144444411110999999999999999922222222222222225555555555555555
+00000000008f88000011121112111310131011211210133111441121121144110114442442444110999999999999999922222222222222225555555555555555
+00000000000000000011121112111110131011211211013114411121121114410444442442444440aaaaaaaaaaaaaaaa22222222222222226666666666666666
+00000000000000000011121112111100131011111111013111111111111111110441144114411440aaaaaaaaaaaaaaaa22222222222222226666666666666666
+00033050000dd0000011111111111100131011133111013101114411314411100111111111111110aaaaaaaaaaaaaaaa22222222222222226666666666666666
+000333500dd00dd00011111144443100111011111111013100144113131441000111111144211110bbbbbbbbbbbbbbbbdddddddddddddddd6666666666666666
+03003513d000000d0001111144441100110001111111011100011111111110000011111114111100bbbbbbbbbbbbbbbbdddddddddddddddd6666666666666666
+00333335d008800d0000111111111000110000111110001000001111111100000001111111110000bbbbbbbbbbbbbbbbdddddddddddddddd6666666666666666
+60033515dd8888dd0000001110000000000000011000000000000001100000000000001110000000bbbbbbbbbbbbbbbbdddddddddddddddd7777777777777777
+60350355000880000000001110000000000000011000000000000001100000000000001110000000ccccccccccccccccdddddddddddddddd7777777777777777
+65356315000000000000111111100000000001111110000000000111111000000000111111100000ccccccccccccccccdddddddddddddddd7777777777777777
+65356355000000000000111111100000000001111110000000000111111000000000111111100000cccccccccccccccc11111111111111117777777777777777
+0000000000ffff0011000000090009000000000077007700001110000a000a000440000004000400cccccccccccccccc11111111111111117777777777777777
+440404400ffffff01111000009909900011110000700700001131000a4a0a4a0444440004e404e40dddddddddddddddd11111111111111117777777777777777
+4e4e4e40ff7227ff1331100000999000013311110777700001331100aaa9aaa04433111144444440dddddddddddddddd11111111111111112222222222222222
+44444440f272272f1333111109494900013311110727270013333114091a19000431111105151500dddddddddddddddd11111111111111112222222222222222
+04eee400f222222f011111110999aa2011310111077e7700111111110aa4aa000111144405545500dddddddddddddddd11111111111111112222222222222222
+044e4400f288882f001112110999aa001310112107777700114422110a9a9a000114442404441400222222222222222211111111111111112222222222222222
+004440000ff88ff0001121210099900013101212007770001442112100aaa0000444424200444000222222222222222211111111111111112222222222222222
+0000000000ffff000011111100000000131011110000000011111111000000000441144100000000222222222222222211111111111111112222222222222222
+8888888822222222555555550000000000000000000000000bb070b0000000000000000000000000000000000000000000000000000000000000000000000000
+99999999222222225555555500000ee00000ee0000000000bb8b7bbb000000000000000000000000000000000000000000000000000000000000000000000000
+aaaaaaaa22222222666666660000eee0000ee2e0000010102888b888000000000000000000000000000000000000000000000000000000000000000000000000
+bbbbbbbbdddddddd66666666000eee00000e22e00000010088288828000000000000000000000000000000000000000000000000000000000000000000000000
+ccccccccdddddddd77777777044ee000000e2ee00000101088882888000000000000000000000000000000000000000000000000000000000000000000000000
+111111111111111177777777044400000000ee000000000008288880000000000000000000000000000000000000000000000000000000000000000000000000
+dddddddd111111112222222200440000000000000000000000882800000000000000000000000000000000000000000000000000000000000000000000000000
+22222222111111112222222200000000000000000000000000088000000000000000000000000000000000000000000000000000000000000000000000000000
+00aaa90000000000000000000000000000000000dddddddddddddddd00000000ccc99c5c00000000ccc99cccccc99c5cc99ccc5cccc99c5c0000000000000000
+aaaaaaa900000000000000000777700007777700d50505050505050d00000000ccc9994c00000000ccc9994cccc9994cc9994c5cccc9994c0000000000000000
+aaa9aaa9000000000000000007ee7777777ee770d05050505050505d00000000c9cc951900000000c9cc9cc9c9cc95199c9cc515c9cc95190000000000000000
+aaa9aaa9000000000000000007ee77777777ee70d50505050505050d00000000cc99999500000000cc99999ccc99999599999955cc9999950000000000000000
+aaa9aaa9000000000000000077e7077777707e77d05050505050505d000000006cc99515000000006cc99ccc6cc99515bb9bb5156cc995150000000000000000
+aaa9aaa900000000000000007e70772772707ee7d50505050505050d000000006c95c95500000000659cc96c6c95c955b999b5556c95c9550000000000000000
+aaaaaaa900000000000000007e707727727707e7d05050505050505d0000000065956915000000006596596c65956915b9b9b515659569150000000000000000
+00aaa90000000000000000007e707777777707e7d50505050505050d0000000065956955000000006596596c6595695599699555659569550000000000000000
+0000000000000000000000007e70777ee77707e7d05050505050505d000000000444444444aaaa44000000000000000000000000000000000000000000000000
+00000000900000000000000077707777777707e7d50505050505050d000000000444444444aaaa44000000000000000000000000000000000000000000000000
+aa9a9aa990000000000000007700077777770777d05050505050505d0000000004442444444aa444000000000000000000000000000000000000000000000000
+aa9a9aa990000000000000007700007777700070d50505050505050d000000000444244444488444000000000000000000000000000000000000000000000000
+aaaaaaa990000000000000000000000770000000d05050505050505d000000000440004444088044000000000000000000000000000000000000000000000000
+0aaaaa9090000000000000000000000770000000d50505050505050d000000000440004444008044000000000000000000000000000000000000000000000000
+0000000090000000000000000000077777700000d05050505050505d000000000440004444000044000000000000000000000000000000000000000000000000
+0000000000000000000000000000077777700000d50505050505050d000000000440004444000044000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000d05050505050505d000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000d50505050505050d000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000d05050505050505d000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000d50505050505050d000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000d05050505050505d000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000d50505050505050d000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000dddddddddddddddd000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+9900000000009900000000000000000000aaa0000000aaa005500000000055000000000000000000000000000000000000000000000000000000000000000000
+999900000000990007777000077777000aa4a000000aa4a0555550000005555000000000000000000000000000000aaaaaaa0000000000000000000000000000
+922990000009999007ee7777777ee7700a44aa00000a44aa55ee44444445ee50000000000000000000000000000aaaaaaaaaaa00000000000000000000000000
+922299999099229007ee77777777ee70a4444aa999aa444a05e4444444444e500000000000000000000000000aaaaaaaaaaaaaa00000000000aa000000000000
+099999999992229077e7077777707e77aaaaaaaa9aaaaaaa0444455555544440000000000000000000000000aaaaaaaaaaaaaaaa000000000aaa0000000000aa
+00999499949992907e70772772707ee7aa99aa1aa1aa99aa0445551551555440000000000000000000000000aaaaaaaaaaaaaaaaa00000000aaa0000000000aa
+00999499949999907e707727727707e7a99aaa1aa1aaa99a055555155155555000000000000000000000000aaaaaaaaaaaaaaaaaaa0000000aa00000aa0000aa
+00999499949999007e707777777707e7aaaaaaaaaaaaaaaa05544554455445500000000000000000000000aaaaaaaaaaaaaaaaaaaa000000aaa0000aaa000aaa
+00999999999999007e70777ee77707e70aaa99aa4a99aaa004444444444444400000000000000000000000aaaaaaaaaaaaaaaaaaaaa00000aaa00aaaaa00aaa0
+00999999aaaa290077707777777707e700a99aa4a4a99a0004444444551444400000000000000000000000aaaaaaaaaaaaaaaaaaaaa00000aaaaaaaaaa0aaaa0
+00099999aaaa99007700077777770777000aaaaaaaaaa00000444444454444000000000000000000000000aaaaaaaaaaaaaaaaaaaaa000000aaaaa00aaaaaa00
+000099999999900077000077777000700000aaaaaaaa000000044444444400000000000000000000000000aaaaaaaaaaaaaaaaaaaaa00000000000000aaaa000
+000000999000000000000007700000000000000aa000000000000044400000000000000000000000000000aaaaaaaaaaaaaaaaaaaaa000000000000000000000
+000000999000000000000007700000000000000aa000000000000044400000000000000000000000000000aaaaaaaaaaaaaaaaaaaaa000000000000000000000
+0000999999900000000007777770000000000aaaaaa0000000004444444000000000000000000000000000aaaaaaaaaaaaaaaaaaaaa000000000000000000000
+0000999999900000000007777770000000000aaaaaa0000000004444444000000000000000000000000000aaaaaaa99aaaaaaaaaaaa000000000000000000000
+9900000090009000000000007700770000aaa0000a000a00055000000400040000000000000000000000000aaaaa9999aaaaaaaaaaa000000000000000000000
+999900009909900007777000070070000aa4a000a4a0a4a0555550004e404e4000000000000000000000000aaaaa9999aaaaaaaaaa0000000000000000000000
+922990000999000007ee7777077770000a44aa00aaa9aaa055ee444444444440000000000000000000000000aaaa9999aaaaaaaaaa0000000000000000000000
+922299999494900007ee777707272700a4444aa9091a190005e4444405151500000000000000000000000000aaaa9999aaaaaaaaa00000000000000000000000
+09999999999aa20077e70777077e7700aaaaaaaa0aa4aa00044445550554550000000000000000000000000000aaa999aaaaaaaa000000000000000000000000
+00999499999aa0007e70772707777700aa9911aa0a9a9a000445551504441400000000000000000000000000000aaaaaaaaaaaa0000000000000000000000000
+00994949099900007e70727200777000a991aa1a00aaa000055551510044400000000000000000000000000000000aaaaaaaaa00000000000000000000000000
+00999999000000007e70777700000000aaaaaaaa000000000554455400000000000000000000000000000000000000aaaaaaa000000000000000000000000000
+5555555500000ee00000ee0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+555555550000eee0000ee2e000001010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+66666666000eee00000e22e000000100000ee0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+66666666044ee000000e2ee00000101000ee2e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+77777777044400000000ee000000000000e22e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+7777777700440000000000000000000000e2ee000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+22222222000000000000000000000000000ee0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+22222222000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000eeeeee00000000000000000000000000000000000000eeeeee00000000000
+000000000000000000000000000000000000000000ee000000000000000000000ee000e0e000000000000000000000000000000000000eee0000ee0000000000
+0000000000000000000000000000000000000000000ee0000000000000000000e0000ee00e00000000000e00000000000000000000000e0000000ee000000000
+00000000000000000000000000000000ee0000000000e0000000000000000000e000ee0000e000000000ee00000000000000000000000e00000000e000000000
+0000000eee000000000e00000000000e0ee00000000ee0000000000000000000e00ee000000e000000eee000ee0000000000000000000e0ee00000ee00000000
+000000e000ee00000000e0000000000e00e00000000e00000000000000000000eeee0000000eee00eee0000eeee000000000000000000eee000000ee00000000
+000000e00000e0000000e0000000000e00e000000000000000000000000000000000000000000eeee000000ee0e00000000000000000000000000ee000000000
+000000e0ee00e00000000e000000000e00e000000000000000000000000000000000000000000ee00e00000e00e000000000000000000000000eee0000000000
+000000eee000e00000000e00000000e00e000000000000000000000000000000000000000000e0000000000e00ee000000000000000000000eee000000000000
+000000ee0000e000e0000e00000000e00e000000000000000000000000000000000000000000e0000000000e000e00000000000000000000ee00000000000000
+000000000000e00ee0000e00000000e0e000000000000000000000000000000000000000000e00000000000e000e0000000000000000000ee000000000000000
+00000000000e000e00000e00000000e0e000000000000000000000000000000000000000000e00000000000e00e00000000000000000000e0000000000000000
+00000000000e00ee00000e00000000eeee00000000000000e0000000000000000000000000e000000000000e0ee00000e00000000000000ee000000000000000
+00000000000e00e00000e000000000eeee00000000000000e0000000000000000000000000e000000000000eeeee00000000000000000000ee00000000000000
+000000000ee00ee00000e000000000ee0ee0000ee00000eee0000000000000000000000000e000000000000ee00e0000e0000000000000000ee0000000000000
+000000000e000ee0000e0000000000ee00e000eeee0eee00e0000000000000000000000eeee000000000000e000e0000e0000ee0000000000ee0000000000000
+000000000e00ee00000e000000000ee000e000eeeeee0e00e0000000000000000000000e0eee0000000000ee000e000ee000e0e0000000000e00000000000000
+00000000e0ee0e0000e0000000000e0000e00ee0ee000ee0e0000000000000000000000eee0eee0000000e0e000e00ee000ee0e000e000000000000000000000
+0000000e0e000e000e000000000eee0000e00e00e00000eee00000ee0000000000000000ee000eee000ee00e000e0eee00ee0ee0ee00000000e0000000000000
+0000000eee000e00e00000000eee0000000ee0eee000000ee0000ee00000000000000000e0000000eeee000e000ee00e0eeeeeeee00000000ee0000000000000
+0000000000000eee0000000000000000000000ee000000000eeee0000000000000000000000000000000000e000e000ee0000000000000000ee0000000000000
+__sfx__
+000500000c0502a2001b050010000f000302000b100182001420001300112000e2000c2000c2000a20019200092000a2000c2000c3000f2001930016200192001e20020200232002620027200000000000000000
+00050000393503b3503c35039300393503b3503c350022000120000000263002c3002f3002b3002d3003320000000393003b3003c300000000000000000000000000000000000000000000000000000000000000
+00030000180001b0001e0002200029000330003d000250002300020000193501b3501c35020350253502d3503735001300013001b0001800015000150001600017000180001a0001b0001d0001e0001f00020000
+000300001d35015350153500e45005450144500510011500105000e5000d5001730015300153000e4000540014400000000000000000000000000000000000000000000000000000000000000000000000000000
+000500000d2500d25007250072500410003250022502d10001200012002d100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000700002c5502e5502f5501300035550375503955019000030500405006050090500c050100501405019050210502905030050380503d050010000b0000a0000a000120001e00010500145002d5002e5002f500
+000c00000625006250012500125005250052500125001250012500120001200012000120001200000001260000000077000000000000000000000000000000000000000000000000000000000000000000000000
+0004000000000071500b1501125016250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+__music__
+04 41424344
+
