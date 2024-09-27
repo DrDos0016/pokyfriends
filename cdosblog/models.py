@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
@@ -103,3 +105,8 @@ class Post(models.Model):
 
     def get_preview_image_url(self):
         return "/static/{}preview{}".format(self.get_static_path(), self.preview_extension)
+
+    def has_preview_image(self):
+        if os.path.isfile("/home/drdos/pokyfriends/cdosblog/static/" + self.get_static_path() + "preview" + self.preview_extension):
+            return True
+        return False
