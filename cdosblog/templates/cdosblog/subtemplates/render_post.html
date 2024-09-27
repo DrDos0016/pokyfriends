@@ -17,7 +17,7 @@
             {% endif %}
         </div>
         <div class="post-preview-image">
-            <img src="{{post.get_preview_image_url}}">
+            {% if post.has_preview_image %}<img src="{{post.get_preview_image_url}}">{% else %}<img src="/static/global/pokyfriends-logo.png">{% endif %}
         </div>
     </header>
     {% if show_post %}
