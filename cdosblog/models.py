@@ -84,7 +84,7 @@ class Post(models.Model):
     tags            = models.ManyToManyField("Tag")
     account         = models.CharField(max_length=32, default="dr-dos")
     preview_extension = models.CharField(max_length=5, default=".png")
-    django_add_ons = models.CharField(choices=DJANGO_ADD_ON_CHOICES, null=True, max_length=32, help_text="Additional template tag/filter libraries to include")
+    django_add_ons = models.CharField(choices=DJANGO_ADD_ON_CHOICES, null=True, blank=True, max_length=32, help_text="Additional template tag/filter libraries to include")
 
     class Meta:
         app_label = "cdosblog"
@@ -107,6 +107,7 @@ class Post(models.Model):
         return "/static/{}preview{}".format(self.get_static_path(), self.preview_extension)
 
     def has_preview_image(self):
-        if os.path.isfile("/home/drdos/pokyfriends/cdosblog/static/" + self.get_static_path() + "preview" + self.preview_extension):
+        file_path = "/home/drdos/projects/pokyfriends/cdosblog/static/" + self.get_static_path() + "preview" + self.preview_extension
+        if os.path.isfile(file_path):
             return True
         return False
