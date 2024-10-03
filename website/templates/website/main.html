@@ -1,12 +1,13 @@
 {% load static %}
+{% load pokyfriends_tags %}
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
 <title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
-{% block meta %}{% endblock %}
+{% block meta %}{% meta_tags title="Pokyfriends - Landing" %}{% endblock %}
 {% block css %}{% endblock %}
 </head>
 
@@ -32,7 +33,18 @@
 {% block content %}
 {% endblock %}
 </main>
+
+{% block footer %}
+<div class="c">
+    <sub>&mdash; Pokyfriends &mdash;</sub>
+    {% if request.GET.debug or DEBUG %}
+    <div style="display:flex;justify-content:center;max-width:fit-content;margin:auto;"><img id="meta-preview-image" src="" style="background-color:#AAA;height:150px;border:1px solid #000;"><table id="meta-tags" style="max-width:800px;margin:auto;background:#FFF;font-size:10pt;"></table></div>
+    {% endif %}
+</div>
+{% endblock %}
+
 <script src="{% static 'global/js/jquery-3.7.1.min.js' %}"></script>
+{% if request.GET.debug or DEBUG %}<script src="{% static 'global/js/debug.js' %}"></script>{% endif %}
 {% block scripts %}{% endblock %}
 </body>
 
