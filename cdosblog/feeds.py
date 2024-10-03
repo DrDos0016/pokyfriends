@@ -20,8 +20,8 @@ class Base_Feed(Feed):
 
 
 class Blog_Feed(Base_Feed):
-    title = "C:\Dos\Blog - Latest Blog Posts"
-    link = "/dr-dos/"
+    title = "C:\Dos\Blog"
+    link = "/blog/"
     description = "Dr. Dos's Blog"
 
     def items(self):
