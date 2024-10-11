@@ -1,0 +1,3 @@
+import os
+
+REMOTE_ADDR_HEADER = os.environ.get("POKY_REMOTE_ADDR_HEADER", "REMOTE_ADDR")
