@@ -5,9 +5,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="/static/global/favicon.png">
 <link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
 <title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
-{% block meta %}{% meta_tags title="Pokyfriends - Landing" %}{% endblock %}
+{% block meta %}{% meta_tags %}{% endblock %}
 {% block css %}{% endblock %}
 </head>
 
@@ -38,7 +39,7 @@
 <div class="c">
     <sub>&mdash; Pokyfriends &mdash;</sub>
     {% if request.GET.debug or DEBUG %}
-    <div style="display:flex;justify-content:center;max-width:fit-content;margin:auto;"><img id="meta-preview-image" src="" style="background-color:#AAA;height:150px;border:1px solid #000;"><table id="meta-tags" style="max-width:800px;margin:auto;background:#FFF;font-size:10pt;"></table></div>
+    <div style="background-color:#AAA;display:flex;justify-content:center;max-width:fit-content;margin:auto;text-align:left;border:1px solid #000;"><img id="meta-preview-image" src="" style="height:150px"><table id="meta-tags" style="max-width:800px;margin:auto;background:#FFF;font-size:10pt;"></table></div>
     {% endif %}
 </div>
 {% endblock %}

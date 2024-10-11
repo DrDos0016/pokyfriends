@@ -1,11 +1,14 @@
 from datetime import datetime
 
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
+from website.settings import REMOTE_ADDR_HEADER
+
 # Create your views here.
-from .models import Post, Tag
+from .models import Like, Post, Tag
 
 
 class Post_List_View(ListView):
@@ -78,3 +81,22 @@ def quick_and_dirty_nav(request, slug, direction):
 def quick_and_dirty_rss_landing(request):
     context = {"title": "RSS Feeds"}
     return render(request, "cdosblog/quick-and-dirty-rss-landing.html", context)
+
+
+def post_like(request):
+    """ Action performed when user clicks to like a blog post """
+    pk = request.GET.get("pk", 0)
+    post = Post.objects.filter(pk=pk).first()
+
+    if not post:
+        return JsonResponse({"success": 0})
+
+    #print("IP HEADER", REMOTE_ADDR_HEADER)
+
+    like, created = Like.objects.update_or_create(post_id=pk, ip=request.META.get(REMOTE_ADDR_HEADER))
+    if created:
+        post.likes += 1
+        post.save()
+
+    return JsonResponse({"success": 1, "total_likes": post.likes})
+

@@ -64,7 +64,7 @@ class Post(models.Model):
 
     title           = models.CharField(max_length=100)
     author = "Dr. Dos"
-    slug            = models.SlugField(max_length=100)
+    slug            = models.SlugField(max_length=100, default="Handled by Save()")
     icon = models.ForeignKey("Icon", null=True, blank=True, on_delete=models.SET_NULL)
     current_mood = models.CharField(max_length=100, blank=True)
     current_music = models.CharField(max_length=250, blank=True)
@@ -111,3 +111,8 @@ class Post(models.Model):
         if os.path.isfile(file_path):
             return True
         return False
+
+class Like(models.Model):
+    ip = models.GenericIPAddressField()
+    datetime = models.DateTimeField(auto_now=True)
+    post = models.ForeignKey("Post", null=True, blank=True, on_delete=models.SET_NULL)

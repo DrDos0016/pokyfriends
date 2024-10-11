@@ -37,7 +37,11 @@ class Project_List_View(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = self.object_list[0].get_category_display()
+        title = self.object_list[0].get_category_display()
+        if title in ["Art", "Misc."]:
+            context["title"] = "Pokyfriends - " + title
+        else:
+            context["title"] = "Pokyfriends - " + title + "s"
         return context
 
 class Project_Detail_View(DetailView):

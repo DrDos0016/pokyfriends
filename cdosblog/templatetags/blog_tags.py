@@ -1,8 +1,14 @@
 from django import template
 from django.template import Context, Template
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+@register.simple_tag
+def likes_widget(post):
+    plural = "s" if post.likes != 1 else ""
+    output = '<button class="likes-widget" data-slug="{{post.slug}}" title="Click to like this post"><img src="/static/global/favicon.png"> <div class="likes-count">{}</div> likes</button>'.format(post.likes, plural)
+    return mark_safe(output)
 
 @register.inclusion_tag("cdosblog/subtemplates/paginator_block.html", takes_context=True)
 def paginator_block(context, page_obj):
