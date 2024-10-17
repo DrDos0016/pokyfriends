@@ -1,0 +1,3 @@
+{% load static %}
+{% load blog_tags %}
+<a href="{% static static_path %}" target="_blank" class="thumb-link {{display}}"{% if centered %} style="margin-left:auto;margin-right:auto;"{% endif %}><img src="{% static static_path %}" alt="{{alt}}" title="{{title}}" style="width:{{w}};height:{{h}}"></a>
