@@ -43,8 +43,9 @@ class Tag(models.Model):
         return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.name)
 
 class Post(models.Model):
-    (PRIVACY_PUBLIC, PRIVACY_UNLISTED, PRIVACY_PASSWORD, PRIVACY_PRIVATE) = (1, 2, 3, 4)
+    (PRIVACY_DRAFT, PRIVACY_PUBLIC, PRIVACY_UNLISTED, PRIVACY_PASSWORD, PRIVACY_PRIVATE) = (0, 1, 2, 3, 4)
     PRIVACY_CHOICES = (
+        (PRIVACY_DRAFT, "Draft"),
         (PRIVACY_PUBLIC, "Public"),
         (PRIVACY_UNLISTED, "Unlisted"),
         (PRIVACY_PASSWORD, "Password Protected"),
@@ -65,7 +66,7 @@ class Post(models.Model):
     title           = models.CharField(max_length=100)
     author = "Dr. Dos"
     slug            = models.SlugField(max_length=100, default="Handled by Save()")
-    icon = models.ForeignKey("Icon", null=True, blank=True, on_delete=models.SET_NULL)
+    icon = models.ForeignKey("Icon", default=1, on_delete=models.SET_DEFAULT)
     current_mood = models.CharField(max_length=100, blank=True)
     current_music = models.CharField(max_length=250, blank=True)
     summary         = models.CharField(max_length=250)

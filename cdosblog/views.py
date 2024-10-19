@@ -3,12 +3,14 @@ from datetime import datetime
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 
 from website.settings import REMOTE_ADDR_HEADER
 
 # Create your views here.
-from .models import Like, Post, Tag
+from .models import Like, Post, Tag, Icon
+from .forms import Post_Form
 
 
 class Post_List_View(ListView):
@@ -100,3 +102,32 @@ def post_like(request):
 
     return JsonResponse({"success": 1, "total_likes": post.likes})
 
+
+
+class Post_Create_View(CreateView):
+    model = Post
+    form_class = Post_Form
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["icons"] = Icon.objects.all()
+        return context
+
+    def form_valid(self, form):
+        # Set user information
+        form.instance.user = self.request.user
+
+        # Check for a duplicate slug
+        slug = slugify(self.request.POST.get("title"))
+        if Collection.objects.duplicate_check(slug):
+            form.add_error("title", "The requested collection title is already in use.")
+            return self.form_invalid(form)
+
+        form.process(user=self.request.user)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("collection_manage_contents", kwargs={"slug": self.object.slug})

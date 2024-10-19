@@ -10,6 +10,7 @@ urlpatterns = [
     path("tag/<slug:tag_slug>/", Post_List_View.as_view(), name="cdb_tag"),
     path("date/", quick_and_dirty_date_list, name="cdb_date"),
     path("date/<int:year>/", Post_List_View.as_view(), name="cdb_year"),
+    path("post/form/create/", Post_Create_View.as_view(), name="cdb_form_create"),
     path("post/<slug:slug>/", Post_Detail_View.as_view(), name="cdb_post"),
     path("post/<slug:slug>/previous/", quick_and_dirty_nav, {"direction": "previous"}, name="cdb_post_previous"),
     path("post/<slug:slug>/next/", quick_and_dirty_nav, {"direction": "next"}, name="cdb_post_next"),
