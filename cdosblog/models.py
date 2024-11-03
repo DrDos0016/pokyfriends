@@ -4,6 +4,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 
+import markdown
+
 # Create your models here.
 class Icon(models.Model):
     title = models.CharField(max_length=100)
@@ -112,6 +114,12 @@ class Post(models.Model):
         if os.path.isfile(file_path):
             return True
         return False
+
+    def render_content(self):
+        if self.schema == Post.SCHEMA_MARKDOWN:
+            return markdown.markdown(self.content)
+        else:
+            return self.content
 
 class Like(models.Model):
     ip = models.GenericIPAddressField()

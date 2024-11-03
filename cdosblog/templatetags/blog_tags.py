@@ -32,6 +32,8 @@ def render_post(context, post, show_post=False):
             template = Template(TEMPLATE_HEADER + (add_ons) + post.content)
             sub_context = Context({"path": post.get_static_path()})
             context["parsed"] = template.render(sub_context)
+        elif post.schema == post.SCHEMA_MARKDOWN:
+            context["parsed"] = post.render_content()
         else:
             context["parsed"] = post.content
     return context
