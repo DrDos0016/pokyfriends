@@ -1,6 +1,7 @@
 * { box-sizing: border-box; }
 
 a, a:visited { color: #00F; }
+a[target=_blank] { padding-right:16px; background:url("/static/global/external-link.png"); background-position:top right; background-repeat:no-repeat; }
 
 body {
     background:var(--pale-blue);
