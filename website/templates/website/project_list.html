@@ -1,8 +1,9 @@
 {% extends "website/main.html" %}
 {% load static %}
+{% load pokyfriends_tags %}
 
-{% block css %}
-{% endblock %}
+{% block meta %}{% meta_tags description="A chronological list of games by Dr. Dos" %}{% endblock %}
+
 
 {% block content %}
 <h1>{{title}}</h1>

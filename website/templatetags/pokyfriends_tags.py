@@ -3,14 +3,22 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag("website/subtemplate/meta.html", takes_context=True)
-def meta_tags(context, author=None, description=None, kind=None, url=None, title=None, image=None):
+def meta_tags(context, title=None, description=None, image=None, url=None, author=None, kind=None):
+    if context.get("project"):
+        p = context["project"]
+        (title, description, image) = (p.title, p.description, p.preview_image)
+
+    image_path = image if image else "/static/og_image/pokyfriends.gif"
+    if not image_path.startswith("http") and not image_path.startswith("/"):  # Translate plain filenames to standard directory
+        image_path = "/static/og_image/{}".format(image)
+
     og_context = {}
     og_context["og_author"] = author if author else "Dr. Dos"
     og_context["og_description"] = description if description else "No description"
     og_context["og_type"] = kind if kind else "website"
     og_context["og_url"] = url if url else context["request"].build_absolute_uri()
     og_context["og_title"] = title if title else context.get("title", "Pokyfriends")
-    og_context["og_image"] = image if image else "https://pokyfriends.com/static/global/pokyfriends-logo.png"
+    og_context["og_image"] = "{}://{}{}".format(context["request"].scheme, context["request"].get_host(), image_path)
     return og_context
 
 

@@ -3,14 +3,6 @@
 
 {% block title %}BK Mario Maker{% endblock %}
 
-{% block meta %}
-<link rel="shortcut icon" href="{% static 'tool/bk-mario-maker/favicon.png' %}">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="author" content="Dr. Dos">
-<meta name="description" content="A Mario Maker Construction Tools Randomizer - Create and compete with a limited toolset">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-{% endblock %}
-
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'tool/bk-mario-maker/style.css' %}">
 {% endblock %}
@@ -24,8 +16,6 @@
 </head>
 
 <div id="main">
-    <div class="ad"></div>
-
     <div id="game">
         <h1>Game</h1>
         <div class="game-choice" data-game="smb"><img src="{% static 'tool/bk-mario-maker/banner-smb.png' %}" alt="Super Mario Bros."></div>

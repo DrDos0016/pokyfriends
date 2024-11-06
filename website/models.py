@@ -22,6 +22,7 @@ class Project(models.Model):
     date = models.DateField(blank=True, null=True, default=None)
     show_date = models.BooleanField(default=True)
     description = models.TextField(default="", blank=True)
+    preview_image = models.CharField(max_length=255, blank=True, default="pokyfriends.gif")
 
     def __str__(self):
         output = "Project [{}]: {}".format(self.id, self.title)
