@@ -24,6 +24,9 @@ class Project(models.Model):
     description = models.TextField(default="", blank=True)
     preview_image = models.CharField(max_length=255, blank=True, default="pokyfriends.gif")
 
+    class Meta:
+        ordering = ["title"]
+
     def __str__(self):
         output = "Project [{}]: {}".format(self.id, self.title)
         return output
