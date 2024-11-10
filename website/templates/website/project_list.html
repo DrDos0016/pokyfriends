@@ -9,7 +9,11 @@
 <h1>{{title}}</h1>
 
 {% for project in projects %}
-<h2>{% if project.show_date %}({% if project.date.year == 1970 %}????{% else %}{{project.date.year}}{% endif %}){% endif %} <a href="{{project.get_absolute_url}}"{% if project.external_url %} target="_blank"{% endif %}>{{project.title}}</a></h2>
+<div class="project-block{% if not project.preview_image %} no-preview{% endif %}">
+    {% if project.preview_image %}<img src="{% static 'og_image/'|add:project.preview_image %}">{% endif %}
+    <h2>{% if project.show_date %}({% if project.date.year == 1970 %}????{% else %}{{project.date.year}}{% endif %}){% endif %} <a href="{{project.get_absolute_url}}"{% if project.external_url %} target="_blank"{% endif %}>{{project.title}}</a></h2>
+    <div>{{project.description}}</div>
+</div>
 {% endfor %}
 
 {% endblock %}

@@ -97,3 +97,24 @@ h1 { margin-top:0px; }
 .mono { font-family: monospace; }
 
 .c { text-align:center; }
+
+.project-block {
+    display:grid;
+    grid-template-areas:
+    "thumb heading"
+    "thumb summary";
+    grid-template-rows: auto auto;
+    grid-template-columns: 325px 1fr;
+}
+.project-block.no-preview
+{
+    grid-template-areas: "heading"
+    "summary";
+    grid-template-columns:1fr;
+}
+
+
+.project-block img { grid-area:thumb; max-height:200px; }
+.project-block h2 { grid-area:heading; }
+.project-block > div { grid-area:summary; }
+.project-block.no-preview > div { margin-left:5vw; }
