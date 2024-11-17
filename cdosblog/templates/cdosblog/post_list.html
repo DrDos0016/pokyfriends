@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block blog_content %}
-{% if request.user.is_staff %}{% include "cdosblog/subtemplates/staff-block.html" %}{% endif %}
 {% for post in post_list %}
 <div class="block">
     {% render_post post %}
