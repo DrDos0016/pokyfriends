@@ -1,0 +1,34 @@
+{% extends "cdosblog/blog-main.html" %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %}{% if title %}{{title}} - {% endif %}C:\Dos\Blog\{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/blog.css'  %}?{{TS}}">
+{% endblock %}
+
+{% block blog_content %}
+{% if request.user.is_staff %}{% include "cdosblog/subtemplates/staff-block.html" %}{% endif %}
+
+<div class="block">
+<table>
+<tr>
+    <th>PK</th>
+    <th>Account</th>
+    <th>Title</th>
+    <th>Date</th>
+    <th>Schema</th>
+    <th>Password</th>
+</tr>
+{% for post in post_list %}<tr>
+    <td>{{post.pk}}</td>
+    <td>{{post.account}}</td>
+    <td><a href="{{post.get_absolute_url}}">{{post.title}}</a></td>
+    <td>{{post.date|date:"Y-m-d h:i:s"}}</td>
+    <td>{{post.schema}}</td>
+    <td>{{post.password|default:"N/A"}}</td>
+    <td>{{post.privacy}}</td>
+</tr>{% endfor %}
+</div>
+{% endblock %}

@@ -8,6 +8,7 @@
 
 {% block content %}
     {% block blog_nav_top %}{% paginator_block page_obj %}{% endblock %}
+    {% block blog_admin %}{% if request.user.is_staff %}{% include "cdosblog/subtemplates/staff-block.html" %}{% endif %}{% endblock %}
 
     {% block blog_content %}
     <p>{% lorem 9 %}</p>

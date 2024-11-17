@@ -16,7 +16,7 @@
             <div class="post-likes"><div class="label">Likes:</div><div>{% if show_post %}{% likes_widget post %}{% else %}{{post.likes}}{% endif %}</div></div>
             {% if post.source %}<div class="post-source"><div class="label">Source:</div><div> <a href="{{post.source}}" target="_blank">{{post.source}}</a></div></div>{% endif %}
             {% if request.user.is_staff %}
-            <div class="post-admin"><div class="label">Admin:</div><div> <a href="/admin/cdosblog/post/{{post.pk}}/change/">Edit Post #{{post.pk}}</a></div></div>
+            <div class="post-admin"><div class="label">Admin:</div><div> <a href="/admin/cdosblog/post/{{post.pk}}/change/">Admin Post #{{post.pk}}</a> | <a href="{% url 'cdb_form_edit' post.pk %}">Edit Post #{{post.pk}}</a></div></div>
             {% endif %}
         </div>
         <div class="post-preview-image">

@@ -11,6 +11,7 @@
 {% block blog_content %}
 <div class="block">
     {% render_post post show_post=True %}
+    {% if show_password_form %}{% include 'cdosblog/subtemplates/password-protected-post-form.html' %}{% endif %}
 </div>
 {% endblock %}
 

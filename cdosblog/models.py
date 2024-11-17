@@ -1,5 +1,7 @@
 import os
 
+from datetime import datetime
+
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
@@ -44,7 +46,22 @@ class Tag(models.Model):
     def get_link(self):
         return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.name)
 
+
+class Post_Queryset(models.QuerySet):
+    def reach(self, *args, **kwargs):
+        """ Return the requested object if it exists, returning None if it doesn't """
+        try:
+            return self.get(*args, **kwargs)
+        except self.model.DoesNotExist:
+            return None
+
+    def public(self):
+        return self.filter(privacy=Post.PRIVACY_PUBLIC)
+
+
 class Post(models.Model):
+    objects = Post_Queryset.as_manager()
+
     (PRIVACY_DRAFT, PRIVACY_PUBLIC, PRIVACY_UNLISTED, PRIVACY_PASSWORD, PRIVACY_PRIVATE) = (0, 1, 2, 3, 4)
     PRIVACY_CHOICES = (
         (PRIVACY_DRAFT, "Draft"),
@@ -65,18 +82,18 @@ class Post(models.Model):
         ("zzt_tags", "ZZT Tags (scroll, zzt_img)"),
     )
 
-    title           = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
     author = "Dr. Dos"
-    slug            = models.SlugField(max_length=100, default="Handled by Save()")
+    slug = models.SlugField(max_length=100, default="-")
     icon = models.ForeignKey("Icon", default=1, on_delete=models.SET_DEFAULT)
     current_mood = models.CharField(max_length=100, blank=True)
     current_music = models.CharField(max_length=250, blank=True)
-    summary         = models.CharField(max_length=250)
-    css             = models.TextField(default="", blank=True)
-    content         = models.TextField()
-    source          = models.URLField(default="", blank=True)
-    privacy         = models.IntegerField(choices=PRIVACY_CHOICES, default=PRIVACY_PUBLIC)
-    schema          = models.IntegerField(choices=SCHEMA_CHOICES, default=SCHEMA_HTML)
+    summary = models.CharField(max_length=250)
+    css = models.TextField(default="", blank=True)
+    content = models.TextField()
+    source = models.URLField(default="", blank=True)
+    privacy = models.IntegerField(choices=PRIVACY_CHOICES, default=PRIVACY_PUBLIC)
+    schema = models.IntegerField(choices=SCHEMA_CHOICES, default=SCHEMA_HTML)
     password = models.CharField(max_length=32, default="", blank=True)
     warnings = models.CharField(max_length=250, blank=True)
     date = models.DateTimeField()
@@ -84,8 +101,8 @@ class Post(models.Model):
     revision_date = models.DateTimeField(help_text="Date article content was last revised", default=None, null=True, blank=True)
     revision_details = models.TextField(help_text="Reference for revisions made to the article", default="", blank=True)
     likes = models.IntegerField(default=0)
-    tags            = models.ManyToManyField("Tag")
-    account         = models.CharField(max_length=32, default="dr-dos")
+    tags = models.ManyToManyField("Tag")
+    account = models.CharField(max_length=32, default="dr-dos")
     preview_extension = models.CharField(max_length=5, default=".png")
     django_add_ons = models.CharField(choices=DJANGO_ADD_ON_CHOICES, null=True, blank=True, max_length=32, help_text="Additional template tag/filter libraries to include")
 
@@ -120,6 +137,27 @@ class Post(models.Model):
             return markdown.markdown(self.content)
         else:
             return self.content
+
+    def lock(self, full=False):
+        """ Blanks out fields for password protected posts where no password has been entered yet """
+        self.current_mood = "Blank."
+        self.current_music = "4'33\""
+        self.revision_date = None
+        self.revision_details = ""
+        self.content = ""
+        # Additional content removal for private posts
+        if full:
+            self.title = "Untitled"
+            self.author = "None"
+            self.slug = "blank"
+            self.warnings = ""
+            self.date = datetime.utcnow()
+            self.modification_date = None
+            self.revision_date = None
+            self.revision_details = ""
+            # TODO: Tags still leak
+
+
 
 class Like(models.Model):
     ip = models.GenericIPAddressField()
