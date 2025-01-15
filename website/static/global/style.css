@@ -118,3 +118,4 @@ h1 { margin-top:0px; }
 .project-block h2 { grid-area:heading; }
 .project-block > div { grid-area:summary; }
 .project-block.no-preview > div { margin-left:5vw; }
+.project-block + .project-block { margin-top:5px; margin-bottom:5px; border-top:1px dotted var(--border); }

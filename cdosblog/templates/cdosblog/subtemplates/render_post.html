@@ -8,11 +8,14 @@
         </div>
         <div class="post-meta-info">
             <div class="post-date"><div class="label">Date:</div><div> {{post.date}}</div></div>
+            {% if post.revision_date %}
+            <div class="post-date"><div class="label">Last Edited:</div><div> {{post.revision_date}}</div></div>
+            {% endif %}
             <div class="post-tags"><div class="label">Tags:</div><div>
             {% for tag in post.tags.all %}{{tag.get_link}}{% if not forloop.last %}, {% endif %}
             {% empty %}<i>None</i>
             {% endfor %}</div></div>
-            {% if warnings %}<div class="post-content-warnings"><div class="label">Warnings:</div><div> {{warnings}}</div></div>{% endif %}
+            {% if post.warnings %}<div class="post-content-warnings"><div class="label">Warnings:</div><div> {{post.warnings}}</div></div>{% endif %}
             <div class="post-likes"><div class="label">Likes:</div><div>{% if show_post %}{% likes_widget post %}{% else %}{{post.likes}}{% endif %}</div></div>
             {% if post.source %}<div class="post-source"><div class="label">Source:</div><div> <a href="{{post.source}}" target="_blank">{{post.source}}</a></div></div>{% endif %}
             {% if request.user.is_staff %}
@@ -26,7 +29,11 @@
     {% if show_post %}
     {{post.css|safe}}
     <section class="post-content">
-        {{parsed|safe}}
+        {% if post.revision_details %}<p><i>{{post.revision_date}} Post Update:</i><ul><li>{{post.revision_details}}</li></ul>{% endif %}
+        {% if post.warnings %}<details class="cw"><summary>Content Warning:<br>{{post.warnings}}<br>Click to view full post</summary>
+            {{parsed|safe}}
+        </details>
+        {% else %}{{parsed|safe}}{% endif %}
     </section>
     <footer>
         <div class="current-mood">{% if post.current_mood %}Current Mood: {{post.current_mood}}{% endif %}</div>

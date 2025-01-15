@@ -17,3 +17,23 @@ class Post_Form(ModelForm):
         widgets = {
             "icon": Blog_Icon_Widget(),
         }
+
+        helpt_ext = {"css" : "<style> tags are auto added if missing"}
+
+class Update_Post_Form(Post_Form):
+
+    class Meta:
+        model = Post
+        fields= [
+            "title", "icon", "css", "content", "privacy", "schema", "password", "warnings",
+            "summary",
+            "current_mood", "current_music",
+            "tags", "account", "django_add_ons",
+            "revision_date", "revision_details",
+        ]
+
+        widgets = {
+            "icon": Blog_Icon_Widget(),
+        }
+
+        helpt_ext = {"css" : "<style> tags are auto added if missing"}

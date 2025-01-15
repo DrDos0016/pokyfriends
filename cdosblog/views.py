@@ -13,7 +13,7 @@ from website.settings import REMOTE_ADDR_HEADER
 
 # Create your views here.
 from .models import Like, Post, Tag, Icon
-from .forms import Post_Form
+from .forms import Post_Form, Update_Post_Form
 
 
 class Post_List_View(ListView):
@@ -155,6 +155,7 @@ class Post_Create_View(CreateView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
+        print("FORM VALID")
         post = form.save(commit=False)
         post.date = datetime.utcnow()
 
@@ -170,4 +171,4 @@ class Post_Create_View(CreateView):
 
 class Post_Edit_View(UpdateView):
     model = Post
-    form_class = Post_Form
+    form_class = Update_Post_Form

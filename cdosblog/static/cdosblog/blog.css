@@ -216,3 +216,18 @@ body.image-overlay-open
     overflow:hidden;
 }
 /* End Image Overlay Widget */
+.cw > summary
+{
+    font-weight:bold;
+    margin:auto;
+    list-style: none;
+    width:50vw;
+    max-width:700px;
+    border:5px dashed #000;
+    background-color:#0CF;
+    padding:5px 20px 5px 20px;
+    text-align:center;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+.cw[open] > summary { display:none; }
