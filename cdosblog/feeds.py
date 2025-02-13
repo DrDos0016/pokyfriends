@@ -25,7 +25,7 @@ class Blog_Feed(Base_Feed):
     description = "Dr. Dos's Blog"
 
     def items(self):
-        return Post.objects.all().order_by("-date")[:25]
+        return Post.objects.public().order_by("-date")[:25]
 
     def item_pubdate(self, item):
         return item.date
