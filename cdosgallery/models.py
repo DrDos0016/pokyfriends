@@ -46,6 +46,16 @@ class Exhibit(models.Model):
         else:
             return "X"
 
+    def get_citation(self):
+        if self.date:
+            year = self.date.year
+        return f"{self.title} by {self.artist.name}{year}"
+
+    def get_preview_image(self):
+        if self.rating == "Explicit":
+            return "/static/og_image/pokyfriends.gif"
+        return "/static/" + self.thumbnail()
+
 
 class Artist(models.Model):
     name = models.CharField(max_length=50)

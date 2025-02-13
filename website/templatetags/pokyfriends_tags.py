@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag("website/subtemplate/meta.html", takes_context=True)
-def meta_tags(context, title=None, description=None, image=None, url=None, author=None, kind=None):
+def meta_tags(context, title=None, description="", image=None, url=None, author=None, kind=None):
     if context.get("project"):
         p = context["project"]
         (title, description, image) = (p.title, p.description, p.preview_image)
@@ -12,9 +12,13 @@ def meta_tags(context, title=None, description=None, image=None, url=None, autho
     if not image_path.startswith("http") and not image_path.startswith("/"):  # Translate plain filenames to standard directory
         image_path = "/static/og_image/{}".format(image)
 
+    # Clamp description
+    if len(description) > 150:
+        description = description[:147] + "..."
+
     og_context = {}
     og_context["og_author"] = author if author else "Dr. Dos"
-    og_context["og_description"] = description if description else "No description"
+    og_context["og_description"] = description  # Blank if unset
     og_context["og_type"] = kind if kind else "website"
     og_context["og_url"] = url if url else context["request"].build_absolute_uri()
     og_context["og_title"] = title if title else context.get("title", "Pokyfriends")

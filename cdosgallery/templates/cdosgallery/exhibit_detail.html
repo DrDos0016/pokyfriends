@@ -1,8 +1,10 @@
 {% extends "cdosgallery/gallery-main.html" %}
 {% load static %}
 {% load gallery_tags %}
+{% load pokyfriends_tags %}
 
-{% block title %}{% if title %}{{title}} - {% endif %}Gallery{% endblock %}
+{% block title %}{{exhibit.get_citation}} - Gallery{% endblock %}
+{% block meta %}{% meta_tags title=exhibit.get_citation author=exhibit.artist.name description=exhibit.description image=exhibit.get_preview_image %}{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'cdosgallery/gallery.css'  %}?{{TS}}">
