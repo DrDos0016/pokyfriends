@@ -15,4 +15,5 @@
     {% endblock %}
 
     {% block gallery_nav_bottom %}{% paginator_block page_obj %}{% endblock %}
+    <div class="c mono" style="font-size:8pt;margin-top:16px;">Mature content is currently: <a href="{% url 'cdg_explicit_settings' %}">{% if request.session.show_explicit_media %}Revealed{% else %}Hidden{% endif %}</a></div>
 {% endblock %}

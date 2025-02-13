@@ -1,5 +1,5 @@
 {% load static %}
-<a class="exhibit-thumb" href="{{exhibit.get_absolute_url}}">
+<a class="exhibit-thumb{% if exhibit.rating == 'Explicit' %} explicit{% endif %}" href="{{exhibit.get_absolute_url}}">
     <div class="thumb-wrapper">
         <img src="{% static exhibit.thumbnail %}">
     </div>

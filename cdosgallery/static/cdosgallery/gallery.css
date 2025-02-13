@@ -61,6 +61,9 @@ a.exhibit-thumb:visited { color:var(--text); }
     padding:5px;
 }
 
+.exhibit-thumb.explicit img { border-color:var(--hot-pink); }
+.exhibit-thumb.explicit .title::before { content:"🔞 "; }
+
 .exhibit-thumb .thumb-wrapper
 {
     flex:0;

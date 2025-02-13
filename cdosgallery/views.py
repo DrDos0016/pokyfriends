@@ -10,26 +10,38 @@ from .models import Artist, Character, Exhibit
 class Gallery_Browse_View(ListView):
     model = Exhibit
     paginate_by = 25
+    
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        
+        self.show_explicit = request.session.get("show_explicit_media", False)
+        print("setup")
 
     def get_queryset(self):
-        qs = Exhibit.objects.all().order_by("-date", "-id")
+        qs = Exhibit.objects.all()
+        if not self.show_explicit:
+            qs = qs.exclude(rating=Exhibit.EXPLICIT)
+        qs = qs.order_by("-date", "-id")
         return qs
 
 class Gallery_Browse_Artist_View(Gallery_Browse_View):
     def get_queryset(self):
-        qs = Exhibit.objects.filter(artist__slug=self.kwargs["slug"]).order_by("-date", "-id")
+        qs = super().get_queryset()
+        qs = qs.filter(artist__slug=self.kwargs["slug"]).order_by("-date", "-id")
         return qs
 
 
 class Gallery_Browse_Character_View(Gallery_Browse_View):
     def get_queryset(self):
-        qs = Exhibit.objects.filter(characters__slug=self.kwargs["slug"]).order_by("-date", "-id")
+        qs = super().get_queryset()
+        qs = qs.filter(characters__slug=self.kwargs["slug"]).order_by("-date", "-id")
         return qs
 
 class Gallery_Browse_Year_View(Gallery_Browse_View):
     def get_queryset(self):
         year = self.kwargs["year"] if self.kwargs["year"] != "unknown" else None
-        qs = Exhibit.objects.filter(date__year=year).order_by("-date", "-id")
+        qs = super().get_queryset()
+        qs = qs.filter(date__year=year).order_by("-date", "-id")
         return qs
 
 
@@ -46,6 +58,8 @@ class Character_Browse_View(ListView):
 
     def get_queryset(self):
         qs = Character.objects.all().order_by("order", "name")
+        if not self.request.session.get("show_explicit_media", False):
+            qs = qs.exclude(name__in=["Fate", "Fortune"])  # Sorry boys
         return qs
 
 
@@ -54,7 +68,12 @@ class Year_Browse_View(TemplateView):
 
     def get_context_data(self):
         context = super().get_context_data()
-        context["years"] = list(range(datetime.now().year, 2005, -1))
+        reference_obj = Exhibit.objects.all().order_by("-date").first()
+        if reference_obj:
+            most_recent_year_of_art = reference_obj.date.year
+        else:
+            most_recent_year_of_art = datetime.now().year
+        context["years"] = list(range(most_recent_year_of_art, 2005, -1))
         context["years"].append("unknown")
         return context
 
@@ -90,5 +109,7 @@ class Explicit_Settings_Submit_View(RedirectView):
         if self.request.POST.get("explicit_confirmation") == "confirmed":
             self.request.session.set_expiry(0)
             self.request.session["show_explicit_media"] = True
-            return self.request.POST.get("next", "/art/gallery/")
+        else:
+            self.request.session.set_expiry(0)
+            self.request.session["show_explicit_media"] = False
         return reverse("cdg_index")

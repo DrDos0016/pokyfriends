@@ -22,6 +22,8 @@ form div
     margin-top:5px;
 }
 
+form label { display: block; text-align:left; }
+
 p { text-align:center }
 </style>
 {% endblock %}
@@ -29,12 +31,12 @@ p { text-align:center }
 {% block header %}<h1>Gallery</h1>{% endblock %}
 
 {% block gallery_content %}
-<p><b>The page you have requested contains explicit media.</b></p>
-
 <form method="POST" action="{% url 'cdg_explicit_settings_submit' %}">
     {% csrf_token %}
+    <div><b>Explicit Media Settings</b></div>
     <input type="hidden" name="next" value="{{request.GET.next}}">
-    <label><input type="checkbox" name="explicit_confirmation" value="confirmed"> I am of age and wish to view explicit media.</label>
+    <label><input type="radio" name="explicit_confirmation" value="confirmed" {% if request.session.show_explicit_media %}checked{% endif %}> I am of age and wish to view explicit media.</label>
+    <label><input type="radio" name="explicit_confirmation" value="denied" {% if not request.session.show_explicit_media %}checked{% endif %}> I do not wish to view explicit media.</label>
     <div>
         <input type="submit" value="Confirm Settings">
     </div>
