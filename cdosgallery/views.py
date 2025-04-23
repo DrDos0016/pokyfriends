@@ -1,19 +1,22 @@
 from datetime import datetime
+from django.core.exceptions import PermissionDenied
 
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import TemplateView, RedirectView
 from django.views.generic import DetailView, ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 
 from .models import Artist, Character, Exhibit
+from .forms import Gallery_Upload_Form
 
 class Gallery_Browse_View(ListView):
     model = Exhibit
     paginate_by = 25
-    
+
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        
+
         self.show_explicit = request.session.get("show_explicit_media", False)
         print("setup")
 
@@ -113,3 +116,32 @@ class Explicit_Settings_Submit_View(RedirectView):
             self.request.session.set_expiry(0)
             self.request.session["show_explicit_media"] = False
         return reverse("cdg_index")
+
+
+class Upload_View(FormView):
+    model = Exhibit
+    form_class = Gallery_Upload_Form
+    template_name = "cdosgallery/upload.html"
+
+    def setup(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise PermissionDenied()
+        super().setup(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        return context
+
+    def form_invalid(self, form):
+        print("Bad form")
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        print("FORM VALID")
+        post = form.save(commit=False)
+        post.save()
+        return redirect(post.get_absolute_url())
+        #return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("collection_manage_contents", kwargs={"slug": self.object.slug})

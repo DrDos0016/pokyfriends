@@ -14,5 +14,6 @@ urlpatterns = [
     path("year/", Year_Browse_View.as_view(), name="cdg_year"),
     path("view/<slug:slug>/", Exhibit_View.as_view(), name="cdg_exhibit_view"),
     path("view/<slug:slug>/<int:image>/", Exhibit_View.as_view(), name="cdg_exhibit_view_image"),
+    path("upload/", Upload_View.as_view(), name="cdg_upload"),
     path("year/<slug:year>/", Gallery_Browse_Year_View.as_view(), name="cdg_year_browse")
 ]
