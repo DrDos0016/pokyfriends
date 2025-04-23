@@ -116,3 +116,7 @@ class Image(models.Model):
 class Source(models.Model):
     url = models.URLField(max_length=255)
     site = models.CharField(max_length=100, blank=True, default="")
+
+    def __str__(self):
+        ellip = "..." if len(self.url) > 50 else ""
+        return "[{}] - {}{}".format(self.site, self.url[:50], ellip)
