@@ -18,8 +18,6 @@ class Post_Form(ModelForm):
             "icon": Blog_Icon_Widget(),
         }
 
-        helpt_ext = {"css" : "<style> tags are auto added if missing"}
-
 class Update_Post_Form(Post_Form):
 
     class Meta:
@@ -36,4 +34,8 @@ class Update_Post_Form(Post_Form):
             "icon": Blog_Icon_Widget(),
         }
 
-        helpt_ext = {"css" : "<style> tags are auto added if missing"}
+        help_text = {"css" : "<style> tags are auto added if missing"}
+
+    def clean_summary(self):
+        summary = self.cleaned_data.get("summary", "No summary")
+        return summary
