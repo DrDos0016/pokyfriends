@@ -147,7 +147,7 @@ class Post_Create_View(CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["icons"] = Icon.objects.all()
+        context["icons"] = Icon.objects.all().order_by("title")
         return context
 
     def form_invalid(self, form):
