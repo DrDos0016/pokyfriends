@@ -7,7 +7,7 @@ class CDosUpload_Upload_Form(forms.Form):
     DESTINATION_CHOICES = (("auto", "Automatic"), ("current", "Current Directory"), ("image", "Image Directory"))
     POST_PROCESSING_CHOICES =(("optipng", "Optimize PNG"), ("nospaces", "Replace Spaces"))
     IMAGE_EXTENSIONS = ["JPG", "JPEG", "GIF", "PNG", "WEBP", "BMP"]
-    PATH_FOR_IMAGES = "/home/drdos/projects/pokyfriends/i/"
+    PATH_FOR_IMAGES = "/home/drdos/projects/pokyfriends/i.pokyfriends/"
 
     use_required_attribute = False
     attrs = {"method": "POST"}

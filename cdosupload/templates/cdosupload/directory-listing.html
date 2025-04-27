@@ -8,6 +8,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
 <title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
 <style>
+    body { margin:1ch; }
+
     h1
     {
         font-size:18pt;
@@ -74,6 +76,8 @@
 </head>
 
 <body>
+&bull; {% for k, v in available_directories.items %}<a href="?dir={{k}}">/{{k}}/</a> &bull; {% endfor %}
+
 <div class="faux-table cycle-bg">
     <div class="fr header-row">
         <h1><div id="http-path">{{root_url}}</div><div id="phys-path">{{path}}</div></h1>
@@ -85,16 +89,16 @@
         {% if request.user.is_staff %}<div class="fh ops">Ops.</div>{% endif %}
     </div>
     <div class="fr directory-row"><div class="basename"><a href="?">Top Level</a></div></div>
-    {% if subdir %}<div class="fr directory-row"><div class="basename"><a href="?subdir={{parent_dir|default:''}}">..</a></div></div>{% endif %}
+    {% if subdir %}<div class="fr directory-row"><div class="basename"><a href="?dir={{dir}}&subdir={{parent_dir|default:''}}">..</a></div></div>{% endif %}
     {% for file in files %}
     {% if file.directory %}
-    <div class="fr directory-row"><div class="basename"><a href="?subdir={% if request.GET.subdir %}{{request.GET.subdir}}/{% endif %}{{file.basename}}">{{file.basename}}/</a></div></div>
+    <div class="fr directory-row"><div class="basename"><a href="?dir={{dir}}&subdir={% if request.GET.subdir %}{{request.GET.subdir}}/{% endif %}{{file.basename}}">{{file.basename}}/</a></div></div>
     {% else %}
-    <div class="fr">
-        <div class="basename"><a href="{{file.url}}">{{file.basename}}</a></div>
+    <div class="fr file-row">
+        <div class="basename"><a href="{{file.url}}" target="_blank">{{file.basename}}</a></div>
         <div class="mtime" title="{{file.stat.st_mtime}}">{{file.mtime}}</div>
         <div class="size" title="{{file.stat.st_size}}">{{file.stat.st_size|filesizeformat}}</div>
-        {% if request.user.is_staff %}<div class="ops"><a href="?op=del&filename={{file.basename}}">Delete</a></div>{% endif %}
+        <div class="ops">N/A</div>
     </div>
     {% endif %}
     {% endfor %}

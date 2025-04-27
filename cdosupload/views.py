@@ -17,17 +17,21 @@ class Directory_Listing_View(FormView):
     template_name = "cdosupload/directory-listing.html"
     form_class = CDosUpload_Upload_Form
 
-    def __init__(self):
-        self.root = "/home/drdos/projects/pokyfriends/dos"
-        self.root_url = "https://pokyfriends.com/dos/"
-        self.subdir = ""
-        self.form_was_successful = False
+    AVAILABLE_DIRECTORIES = {
+        "dos": {"root": "/home/drdos/projects/pokyfriends/dos", "root_url": "https://pokyfriends.com/dos/"},
+        "images": {"root": "/home/drdos/projects/pokyfriends/i.pokyfriends", "root_url": "https://i.pokyfriends.com/"},
+    }
+
 
     def setup(self, request, *args, **kwargs):
         if not request.user.is_staff:
             raise PermissionDenied()
         super().setup(request, *args, **kwargs)
         self.success_url = request.get_full_path()
+        self.dir = request.GET.get("dir", "dos")
+        directory_info = self.AVAILABLE_DIRECTORIES[self.dir]
+        self.root = directory_info["root"]
+        self.root_url = directory_info["root_url"]
         self.subdir = request.GET.get("subdir", "")
         self.path = os.path.join(self.root, self.subdir)
         self.parent = os.path.normpath(os.path.join(self.path, ".."))
@@ -70,6 +74,8 @@ class Directory_Listing_View(FormView):
         if self.subdir:
             context["root_url"] = context["root_url"] + self.subdir + "/"
         context["upload_errors"] = self.upload_errors
+        context["available_directories"] = self.AVAILABLE_DIRECTORIES
+        context["dir"] = self.dir
 
         return context
 
