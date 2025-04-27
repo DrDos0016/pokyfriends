@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="/static/global/favicon.png">
+<link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
+<title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
+<style>
+    h1
+    {
+        font-size:18pt;
+        text-align:left;
+        width:100%;
+        margin:0px;
+        background-color:#6AF;
+        padding-left:1ch;
+    }
+    #phys-path { font-size:12pt; }
+
+    .faux-table
+    {
+        border:1px solid #000;
+        margin:1ch;
+        font-family:monospace;
+        display:flex;
+        flex-direction:column;
+        flex-wrap:wrap;
+    }
+
+    .fr {display: flex; flex-wrap:wrap; }
+    .fr > div {flex: 1; padding:0.25ch 0.5ch 0.25ch 0.5ch; }
+
+    .fh { font-variant-caps:small-caps; height:28px;}
+
+    .faux-table.cycle-bg > .fr:nth-child(odd) { background-color:#EFF; }
+    .faux-table.cycle-bg > .fr:nth-child(even) { background-color:#AFF; }
+    .faux-table.cycle-bg > .fr.directory-row:nth-child(odd) { background-color:#FEF; }
+    .faux-table.cycle-bg > .fr.directory-row:nth-child(even) { background-color:#FAF; }
+
+    .fr > div.basename { flex:4; }
+    .fr > div.mtime { flex:4 0; }
+    .fr > div.size { flex:1 0; }
+    .fr > div.ops { flex:1 0; }
+
+    form
+    {
+        display:flex;
+        width:90vw;
+        margin:auto;
+        flex-wrap:wrap;
+    }
+
+    .fr.header-row { order:-99; }
+    .fr.directory-row { order:-1; }
+    .fr.directory-row > div { min-width:100%; }
+
+    #upload-form
+    {
+        display:flex;
+        flex-wrap:wrap;
+        max-width:640px;
+    }
+
+    #upload-form > div { display:flex; flex-wrap:wrap; }
+    #upload-form label { display:flex; flex:1 0 100%; justify-content:space-between; }
+
+    @media (max-width:799px) {
+        .fr { flex-direction:column; }
+        .fr > div.ops { text-align:right; }
+    }
+</style>
+</head>
+
+<body>
+<div class="faux-table cycle-bg">
+    <div class="fr header-row">
+        <h1><div id="http-path">{{root_url}}</div><div id="phys-path">{{path}}</div></h1>
+    </div>
+    <div class="fr header-row">
+        <div class="fh basename">Filename</div>
+        <div class="fh mtime">Mod. Date</div>
+        <div class="fh size">Filesize</div>
+        {% if request.user.is_staff %}<div class="fh ops">Ops.</div>{% endif %}
+    </div>
+    <div class="fr directory-row"><div class="basename"><a href="?">Top Level</a></div></div>
+    {% if subdir %}<div class="fr directory-row"><div class="basename"><a href="?subdir={{parent_dir|default:''}}">..</a></div></div>{% endif %}
+    {% for file in files %}
+    {% if file.directory %}
+    <div class="fr directory-row"><div class="basename"><a href="?subdir={% if request.GET.subdir %}{{request.GET.subdir}}/{% endif %}{{file.basename}}">{{file.basename}}/</a></div></div>
+    {% else %}
+    <div class="fr">
+        <div class="basename"><a href="{{file.url}}">{{file.basename}}</a></div>
+        <div class="mtime" title="{{file.stat.st_mtime}}">{{file.mtime}}</div>
+        <div class="size" title="{{file.stat.st_size}}">{{file.stat.st_size|filesizeformat}}</div>
+        {% if request.user.is_staff %}<div class="ops"><a href="?op=del&filename={{file.basename}}">Delete</a></div>{% endif %}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<form method="POST" enctype="multipart/form-data" id="upload-form">
+{% csrf_token %}
+{{form.as_div}}
+<label><input type="submit" value="Upload File"></label>
+{% comment %}
+    <div class="upload-fields">
+        <label>File: <input type="file" name="file"></label>
+        <label>Alternate Name: <input name="new_name"></label>
+        <label>Destination: <select name="destination">
+            <option value="AUTO">Automatic</option>
+            <option value="current">Current Directory</option>
+            <option value="i">Image Directory</option>
+        </select>
+        </label>
+        <label>TODO Optipng (.PNG only): <input name="optipng" type="checkbox" checked></label>
+        <label>TODO Strip Spaces: <input name="stripspaces" type="checkbox" checked></label>
+        <label>Overwrite Existing Files: <input name="overwrite" type="checkbox"></label>
+        <label><input type="submit" value="Upload File"></label>
+    </div>
+{% endcomment %}
+</form>
+</body>
+
+</html>
