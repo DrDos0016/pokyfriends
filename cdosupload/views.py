@@ -59,7 +59,15 @@ class Directory_Listing_View(FormView):
             else:
                 files_with_data.append(info)
 
-        self.files = files_with_data
+        sort = self.request.GET.get("sort", "name")
+        sort_dir = "desc"if sort.startswith("-") else "asc"
+        if sort == "date":
+            self.files = sorted(files_with_data, key=lambda k: k["mtime"], reverse=(sort_dir == "desc"))
+        elif sort == "size":
+            self.files = sorted(files_with_data, key=lambda k: k["stat"].st_size, reverse=(sort_dir == "desc"))
+        else:  # name
+            self.files = sorted(files_with_data, key=lambda k: k["basename"].lower(), reverse=(sort_dir == "desc"))
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

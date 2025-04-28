@@ -83,9 +83,9 @@
         <h1><div id="http-path">{{root_url}}</div><div id="phys-path">{{path}}</div></h1>
     </div>
     <div class="fr header-row">
-        <div class="fh basename">Filename</div>
-        <div class="fh mtime">Mod. Date</div>
-        <div class="fh size">Filesize</div>
+        <div class="fh basename">Filename <a href="?dir={{dir}}&subdir={{request.GET.subdir}}&sort=name">🞁</a><a href="?dir={{dir}}&subdir={{request.GET.subdir}}&sort=-name">🞃</a></div>
+        <div class="fh mtime">Mod. Date <a href="?dir={{dir}}&subdir={{request.GET.subdir}}&sort=date">🞁</a><a href="?dir={{dir}}&subdir={{request.GET.subdir}}&sort=-date">🞃</a></div>
+        <div class="fh size">Filesize <a href="?dir={{dir}}&subdir={{request.GET.subdir}}&sort=size">🞁</a><a href="?dir={{dir}}&subdir={{request.GET.subdir}}&sort=-size">🞃</a></div>
         {% if request.user.is_staff %}<div class="fh ops">Ops.</div>{% endif %}
     </div>
     <div class="fr directory-row"><div class="basename"><a href="?">Top Level</a></div></div>
