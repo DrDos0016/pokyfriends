@@ -6,73 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="/static/global/favicon.png">
 <link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
+<link rel="stylesheet" type="text/css" href="{% static 'cdosupload/cdosupload.css'  %}?{{TS}}">
 <title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
-<style>
-    body { margin:1ch; }
-
-    h1
-    {
-        font-size:18pt;
-        text-align:left;
-        width:100%;
-        margin:0px;
-        background-color:#6AF;
-        padding-left:1ch;
-    }
-    #phys-path { font-size:12pt; }
-
-    .faux-table
-    {
-        border:1px solid #000;
-        margin:1ch;
-        font-family:monospace;
-        display:flex;
-        flex-direction:column;
-        flex-wrap:wrap;
-    }
-
-    .fr {display: flex; flex-wrap:wrap; }
-    .fr > div {flex: 1; padding:0.25ch 0.5ch 0.25ch 0.5ch; }
-
-    .fh { font-variant-caps:small-caps; height:28px;}
-
-    .faux-table.cycle-bg > .fr:nth-child(odd) { background-color:#EFF; }
-    .faux-table.cycle-bg > .fr:nth-child(even) { background-color:#AFF; }
-    .faux-table.cycle-bg > .fr.directory-row:nth-child(odd) { background-color:#FEF; }
-    .faux-table.cycle-bg > .fr.directory-row:nth-child(even) { background-color:#FAF; }
-
-    .fr > div.basename { flex:4; }
-    .fr > div.mtime { flex:4 0; }
-    .fr > div.size { flex:1 0; }
-    .fr > div.ops { flex:1 0; }
-
-    form
-    {
-        display:flex;
-        width:90vw;
-        margin:auto;
-        flex-wrap:wrap;
-    }
-
-    .fr.header-row { order:-99; }
-    .fr.directory-row { order:-1; }
-    .fr.directory-row > div { min-width:100%; }
-
-    #upload-form
-    {
-        display:flex;
-        flex-wrap:wrap;
-        max-width:640px;
-    }
-
-    #upload-form > div { display:flex; flex-wrap:wrap; }
-    #upload-form label { display:flex; flex:1 0 100%; justify-content:space-between; }
-
-    @media (max-width:799px) {
-        .fr { flex-direction:column; }
-        .fr > div.ops { text-align:right; }
-    }
-</style>
 </head>
 
 <body>

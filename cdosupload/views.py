@@ -61,12 +61,16 @@ class Directory_Listing_View(FormView):
 
         sort = self.request.GET.get("sort", "name")
         sort_dir = "desc"if sort.startswith("-") else "asc"
+        if sort.startswith("-"):
+            sort = sort[1:]
         if sort == "date":
             self.files = sorted(files_with_data, key=lambda k: k["mtime"], reverse=(sort_dir == "desc"))
         elif sort == "size":
             self.files = sorted(files_with_data, key=lambda k: k["stat"].st_size, reverse=(sort_dir == "desc"))
         else:  # name
             self.files = sorted(files_with_data, key=lambda k: k["basename"].lower(), reverse=(sort_dir == "desc"))
+
+        self.files = sorted(self.files, key=lambda k: k["directory"])
 
 
     def get_context_data(self, **kwargs):
