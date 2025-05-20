@@ -33,7 +33,7 @@
         <div class="basename"><a href="{{file.url}}" target="_blank">{{file.basename}}</a></div>
         <div class="mtime" title="{{file.stat.st_mtime}}">{{file.mtime}}</div>
         <div class="size" title="{{file.stat.st_size}}">{{file.stat.st_size|filesizeformat}}</div>
-        <div class="ops">N/A</div>
+        {% if request.user.is_staff %}<div class="ops">{% for op in files.ops %}<a href="{{op.url}}">&bull;{{op.operation}}</a> &bull;{% endfor %}</div>{% endif %}
     </div>
     {% endif %}
     {% endfor %}
