@@ -1,0 +1,6 @@
+<div class="custom-widget blog-tags-widget">
+    <div><input name="{{widget.name}}" placeholder="#new tag, #new tag 2, #new tag 3" style="width:100%" value="{{tags_str}}"></div>
+    <div class="scrolling-list flex-column mono">{% for tag in tags %}
+        <div class="tag-shortcut">#{{tag.name}}</div>
+    {% endfor %}</div>
+</div>

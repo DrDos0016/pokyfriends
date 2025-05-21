@@ -1,3 +1,5 @@
+import re
+
 from datetime import datetime
 
 
@@ -152,6 +154,7 @@ class Post_Create_View(CreateView):
 
     def form_invalid(self, form):
         print("Bad form")
+        print(repr(form.errors))
         return super().form_invalid(form)
 
     def form_valid(self, form):
@@ -162,7 +165,20 @@ class Post_Create_View(CreateView):
         if post.css and not post.css.startswith("<style>"):
             post.css = "<style>\n{}</style>\n".format(post.css)
 
+        # Adding tags
+        #TODO: Why is this a stringified list at first
+        print(form.cleaned_data)
+        tag_list = form.cleaned_data.get("tags_str").replace("['", "").replace("']", "").split(",")
+
         post.save()
+        post.tags.clear()
+        for tag_name in tag_list:
+            tag_name = tag_name[1:].strip()
+            if not tag_name:
+                continue
+            tag, created = Tag.objects.get_or_create(name=tag_name.replace("#", ""))
+            post.tags.add(tag)
+
         return redirect(post.get_absolute_url())
         #return super().form_valid(form)
 
@@ -172,3 +188,10 @@ class Post_Create_View(CreateView):
 class Post_Edit_View(UpdateView):
     model = Post
     form_class = Update_Post_Form
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        # TODO Prob has a better spot
+        # Get tags (related to the model) and pass them into the context of the widget that needs that info
+        context["form"]["tags_str"].field.widget.tags_str = context["form"].instance.get_tags_string
+        return context

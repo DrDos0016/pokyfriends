@@ -9,8 +9,6 @@
 {% endblock %}
 
 {% block blog_content %}
-{% if request.user.is_staff %}{% include "cdosblog/subtemplates/staff-block.html" %}{% endif %}
-
 <div class="block">
 <table>
 <tr>
@@ -26,9 +24,9 @@
     <td>{{post.account}}</td>
     <td><a href="{{post.get_absolute_url}}">{{post.title}}</a></td>
     <td>{{post.date|date:"Y-m-d h:i:s"}}</td>
-    <td>{{post.schema}}</td>
+    <td>{{post.get_schema_display}}</td>
     <td>{{post.password|default:"N/A"}}</td>
-    <td>{{post.privacy}}</td>
+    <td>{{post.get_privacy_display}}</td>
 </tr>{% endfor %}
 </div>
 {% endblock %}

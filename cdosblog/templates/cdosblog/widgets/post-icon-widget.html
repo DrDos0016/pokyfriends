@@ -1,6 +1,11 @@
+{% load static %}
 <div class="custom-widget">
-    <div style="display:flex;align-items:flex-start;gap:2ch; max-width:300px;">
-    <img src="" style="width:100px;height:100px;flex:0 0 100px;" name="{{widget.name}}-image">
+    <div style="display:flex;align-items:flex-start;gap:5px;overflow:auto;">
+    {% for i in icons %}
+    <img src="{{i.get_absolute_url}}" style="width:64px;height:64px;flex:0 0 64px;" name="{{widget.name}}-image" data-pk="{{forloop.counter0}}">
+    {% endfor %}
+    </div>
+    <div style="displayX:none">
     {% include "django/forms/widgets/select.html" %}
     </div>
 </div>

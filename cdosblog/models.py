@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 
 import markdown
@@ -88,12 +89,12 @@ class Post(models.Model):
     icon = models.ForeignKey("Icon", default=1, on_delete=models.SET_DEFAULT)
     current_mood = models.CharField(max_length=100, blank=True)
     current_music = models.CharField(max_length=250, blank=True)
-    summary = models.CharField(max_length=250)
+    summary = models.CharField(max_length=250, blank=True, default="")
     css = models.TextField(default="", blank=True)
     content = models.TextField()
     source = models.URLField(default="", blank=True)
     privacy = models.IntegerField(choices=PRIVACY_CHOICES, default=PRIVACY_PUBLIC)
-    schema = models.IntegerField(choices=SCHEMA_CHOICES, default=SCHEMA_HTML)
+    schema = models.IntegerField(choices=SCHEMA_CHOICES, default=SCHEMA_MARKDOWN)
     password = models.CharField(max_length=32, default="", blank=True)
     warnings = models.CharField(max_length=250, blank=True)
     date = models.DateTimeField()
@@ -156,6 +157,16 @@ class Post(models.Model):
             self.revision_date = None
             self.revision_details = ""
             # TODO: Tags still leak
+
+    def get_schema_as_string(self):
+        return "X"
+
+    @cached_property
+    def get_tags_string(self):
+        output = ""
+        for tag in self.tags.all().order_by("name"):
+            output += "#" + tag.name + ", "
+        return output
 
 
 
