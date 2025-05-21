@@ -19,5 +19,8 @@ class Blog_Tags_Widget(forms.CheckboxSelectMultiple):
         context = super().get_context(name, value, attrs)
         print("Calling all tags")
         context["tags"] = Tag.objects.all()
-        context["tags_str"] = self.tags_str
+        if hasattr(self, "tags_str"):
+            context["tags_str"] = self.tags_str
+        else:
+            context["tags_str"] = ""
         return context
