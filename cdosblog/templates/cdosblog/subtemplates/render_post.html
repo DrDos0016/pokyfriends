@@ -22,9 +22,9 @@
             <div class="post-admin"><div class="label">Admin:</div><div> <a href="/admin/cdosblog/post/{{post.pk}}/change/">Admin Post #{{post.pk}}</a> | <a href="{% url 'cdb_form_edit' post.pk %}">Edit Post #{{post.pk}}</a></div></div>
             {% endif %}
         </div>
-        <div class="post-preview-image">
-            {% if post.has_preview_image %}<img src="{{post.get_preview_image_url}}">{% else %}<img src="/static/global/pokyfriends-logo.png">{% endif %}
-        </div>
+        {% if post.has_preview_image %}<div class="post-preview-image">
+            <img src="{{post.get_preview_image_url}}">
+        </div>{% endif %}
     </header>
     {% if show_post %}
     {{post.css|safe}}

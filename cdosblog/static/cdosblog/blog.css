@@ -35,6 +35,15 @@ main
 .blog-post header {
     display:grid;
     grid-template-areas:
+    "heading heading"
+    "summary summary"
+    "icon meta";
+    grid-template-rows: auto auto;
+    grid-template-columns: 100px auto;
+}
+
+.blog-post header:has(.post-preview-image) {
+    grid-template-areas:
     "heading heading thumb"
     "summary summary thumb"
     "icon meta thumb";
