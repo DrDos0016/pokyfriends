@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 
@@ -116,10 +117,20 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
+        if self.privacy != self.PRIVACY_PASSWORD:
+            self.password = ""
+        if self.css and not self.css.startswith("<style>"):
+            self.css = "<style>\n" + self.css + "</style>\n"
         super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return "/blog/post/{}/".format(self.slug)
+
+    def get_admin_url(self):
+        return "/admin/cdosblog/post/{}/change/".format(self.pk)
+
+    def get_edit_url(self):
+        return reverse("cdb_form_edit", args=[self.pk])
 
     def get_static_path(self):
         return "cdosblog/{}/{}/{}/".format(self.account, self.date.year, self.slug)

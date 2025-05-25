@@ -10,10 +10,9 @@ class Post_Form(ModelForm):
     class Meta:
         model = Post
         fields= [
-            "title", "icon", "css", "content", "schema", "privacy", "password", "warnings",
-            "summary",
-            "current_mood", "current_music",
-            "account", "django_add_ons",
+            "account",
+            "title", "content", "current_mood", "current_music", "icon", "summary", "tags_str", "warnings",
+            "privacy", "password", "schema", "css", "django_add_ons",
         ]
 
         widgets = {
@@ -23,7 +22,6 @@ class Post_Form(ModelForm):
         help_texts = {
             "css" : "&lt;style&gt; tags optional.",
             "warnings": "If set, post is wrapped in a &lt;details&gt; tag. Value set will be displayed as entered in the &lt;summary&gt;",
-            "summary": "Now optional",
         }
 
     def clean_tags_str(self):
@@ -35,12 +33,12 @@ class Update_Post_Form(Post_Form):
 
     class Meta:
         model = Post
-        fields = [
-            "title", "icon", "css", "content", "privacy", "schema", "password", "warnings",
-            "summary",
-            "current_mood", "current_music",
-            "account", "django_add_ons",
+        fields= [
+            "account",
+            "title", "content",
             "revision_date", "revision_details",
+            "current_mood", "current_music", "icon", "summary", "tags_str", "warnings",
+            "privacy", "password", "schema", "css", "django_add_ons",
         ]
 
         widgets = {

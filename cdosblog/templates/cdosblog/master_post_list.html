@@ -13,6 +13,7 @@
 <table>
 <tr>
     <th>PK</th>
+    <th>Edit</th>
     <th>Account</th>
     <th>Title</th>
     <th>Date</th>
@@ -20,7 +21,8 @@
     <th>Password</th>
 </tr>
 {% for post in post_list %}<tr>
-    <td>{{post.pk}}</td>
+    <td><a href="{{post.get_admin_url}}">{{post.pk}}</a></td>
+    <td><a href="{{post.get_edit_url}}">Edit</a></td>
     <td>{{post.account}}</td>
     <td><a href="{{post.get_absolute_url}}">{{post.title}}</a></td>
     <td>{{post.date|date:"Y-m-d h:i:s"}}</td>
@@ -28,5 +30,6 @@
     <td>{{post.password|default:"N/A"}}</td>
     <td>{{post.get_privacy_display}}</td>
 </tr>{% endfor %}
+</table>
 </div>
 {% endblock %}

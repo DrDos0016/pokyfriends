@@ -80,7 +80,7 @@ main
 }
 
 
-.blog-post .post-summary { font-style: oblique; margin-top:10px; border-bottom:5px double #000; margin-bottom:5px; }
+.blog-post .post-summary { font-style: oblique; border-bottom:5px double #000; margin-bottom:5px; }
 .blog-post .post-author { font-family: monospace; }
 .blog-post .post-date { font-family: monospace; }
 .blog-post .post-tags { font-family: monospace; }
@@ -88,7 +88,7 @@ main
 .blog-post .post-content-warnings { font-family: monospace; }
 
 .blog-post .label { display:inline-block; width:10ch;}
-.blog-post .label + div { flex:1;  text-align:right; }
+.blog-post .label + div { flex:1; }
 
 .blog-post .post-meta-lower { display: flex; }
 .blog-post .post-meta-info { display: flex; flex-direction:column; font-size: smaller; }
