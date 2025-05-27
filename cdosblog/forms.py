@@ -25,7 +25,7 @@ class Post_Form(ModelForm):
         }
 
     def clean_tags_str(self):
-        print(self.cleaned_data.get("tags_str"))
+        print("Clean Tags in New", self.cleaned_data.get("tags_str"))
         return self.cleaned_data.get("tags_str")
 
 class Update_Post_Form(Post_Form):
@@ -44,3 +44,7 @@ class Update_Post_Form(Post_Form):
         widgets = {
             "icon": Blog_Icon_Widget(),
         }
+
+    def clean_tags_str(self):
+        print("Clean Tags in Update", self.cleaned_data.get("tags_str"))
+        return self.cleaned_data.get("tags_str")
