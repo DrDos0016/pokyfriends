@@ -39,3 +39,6 @@ class Project(models.Model):
         if self.external_url:
             return self.external_url
         return reverse("project_details", kwargs={"category_slug": self.category, "slug": self.slug})
+
+    def get_preview_image_url(self):
+        return "/static/og_image/{}".format(self.preview_image)
