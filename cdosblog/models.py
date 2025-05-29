@@ -179,6 +179,12 @@ class Post(models.Model):
             output += "#" + tag.name + ", "
         return output
 
+    def get_front_page_image(self):
+        if self.has_preview_image():
+            return self.get_preview_image_url()
+        else:
+            return self.icon.get_absolute_url()
+
 
 
 class Like(models.Model):
