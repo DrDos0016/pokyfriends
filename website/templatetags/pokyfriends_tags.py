@@ -4,7 +4,7 @@ register = template.Library()
 
 @register.inclusion_tag("website/subtemplate/meta.html", takes_context=True)
 def meta_tags(context, title=None, description="", image=None, url=None, author=None, kind=None):
-    if context.get("project"):
+    if context.get("project") and context.request.path != "/":  # Fix front page
         p = context["project"]
         (title, description, image) = (p.title, p.description, p.preview_image)
 

@@ -1,5 +1,7 @@
-import glob  # Cohost
+import glob
 import os  # Cohost
+
+from datetime import datetime
 
 from django.http import HttpResponse  # Cohost
 from PIL import Image
@@ -8,6 +10,8 @@ from django.views.generic import TemplateView
 from django.views.generic import DetailView, ListView
 
 from website.models import Project
+from cdosblog.models import Post
+from cdosgallery.models import Exhibit
 
 import time
 
@@ -19,6 +23,11 @@ class Index_View(TemplateView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Landing"
         context["TS"] = str(int(time.time()))
+
+        # Get latest things
+        context["blog"] = Post.objects.filter(privacy=Post.PRIVACY_PUBLIC).order_by("-date").first()
+        context["project"] = Project.objects.all().order_by("-date").first()
+        context["exhibit"] = Exhibit.objects.filter(rating=Exhibit.CLEAN, visibility=Exhibit.VISIBLE).order_by("-date").first()
         return context
 
 
@@ -54,44 +63,16 @@ class Project_Detail_View(DetailView):
         return Project.objects.filter(slug=self.kwargs["slug"])
 
 
-# TODO: This can be removed when Cohost is gone
-def counter(request):
-    SITE_ROOT = "/home/drdos/projects/pokyfriends/"
-    VALID_KEYS = ["profile", "post"]
-    counter_key = request.GET.get("key")
+def tf2_time(request):
+    context = {}
+    with open("/home/drdos/projects/pokyfriends/website/static/etc/tf2-playtime.log") as fh:
+        lines = fh.readlines()
+    context["line_count"] = 1
+    lines = lines[:-14]
+    return render(request, "museum_site/index.html", context)
 
-    if counter_key not in VALID_KEYS:
-        return HttpResponse("Invalid key provided", status=404)
+def openparty(request):
+    context = {}
+    return render(request, "website/openparty.html", context)
 
-    match = glob.glob(os.path.join(SITE_ROOT, "website", "static", "cohost", "{}*".format(counter_key)))
-    print("MATCH?", match)
 
-    # Get the number
-    if match:
-        current = match[0]
-        number = int(os.path.basename(current).split("-", maxsplit=1)[-1][:-4])
-        number += 1
-    else:
-        number = 1
-
-    # Generate the next image
-    digits = str(number).zfill(5)
-    im = Image.new("RGB", (len(digits)*32, 32))
-
-    path = os.path.join(SITE_ROOT, "website", "static", "cohost")
-    x = 0
-    for d in digits:
-        dim = Image.open(path + "/" + d + ".png")
-        im.paste(dim, (x, 0))
-        x += 32
-    im.save(os.path.join(SITE_ROOT, "website", "static", "cohost", "{}-{}.png".format(counter_key, number)))
-
-    # Serve the current image
-    if not match:
-        return HttpResponse("0")
-
-    with open(current, "rb") as fh:
-        raw = fh.read()
-
-    os.remove(current)  # And remove the image
-    return HttpResponse(raw, content_type="image/png")

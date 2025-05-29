@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
 <title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
 {% block meta %}{% meta_tags %}{% endblock %}
+<style>body { background-image:url("{{bg_url}}"); }
 {% block css %}{% endblock %}
 </head>
 
@@ -36,12 +37,13 @@
 </main>
 
 {% block footer %}
-<div class="c">
-    <sub>&mdash; Pokyfriends &mdash;</sub>
+<footer class="c">
+    &mdash; Pokyfriends &mdash;
+    {% block footer_extra %}{% endblock %}
     {% if request.GET.debug or DEBUG %}
     <div style="background-color:#AAA;display:flex;justify-content:center;max-width:fit-content;margin:auto;text-align:left;border:1px solid #000;"><img id="meta-preview-image" src="" style="height:150px"><table id="meta-tags" style="max-width:800px;margin:auto;background:#FFF;font-size:10pt;"></table></div>
     {% endif %}
-</div>
+</footer>
 {% endblock %}
 
 <script src="{% static 'global/js/jquery-3.7.1.min.js' %}"></script>

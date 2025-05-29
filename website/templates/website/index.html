@@ -10,12 +10,96 @@
 {
     margin:auto;
     text-align:center;
+    max-width:250px;
 }
+
+#latest-wrapper
+{
+    display:flex;
+    flex-wrap:wrap;
+    gap:25px;
+    justify-content:center;
+    text-align:center;
+}
+
+#latest-wrapper > div
+{
+    flex:0 0 300px;
+    border:1px solid #000;
+    padding:4px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+}
+
+#latest-wrapper > div h2 { text-align:center; margin:0px; }
+#latest-wrapper > div img { max-width:50%; min-width:100px;}
+
+#bg-toggle { color:#00F; cursor:pointer; }
 </style>
 {% endblock %}
 
 {% block content %}
+<div id="latest-wrapper">
+    <div>
+        <h2>Latest Blog Entry</h2>
+        <div><img src="{{blog.get_front_page_image}}"></div>
+        <div><a href="{{blog.get_absolute_url}}">{{blog.title}}</a></div>
+        <div>{{blog.date|date:"M jS, Y"}}</div>
+    </div>
+    <div>
+        <h2>Latest Project</h2>
+        <div><img src="{{project.get_preview_image_url}}"></div>
+        <div><a href="{{blog.get_absolute_url}}">{{project.title}}</a></div>
+        <div>{{project.date|date:"M jS, Y"}}</div>
+    </div>
+    <div>
+        <h2>Latest Art Exhibit</h2>
+        <div><img src="/static/{{exhibit.thumbnail}}"></div>
+        <div><a href="{{blog.get_absolute_url}}">{{exhibit.title}}</a></div>
+        <div>{{exhibit.date|date:"M jS, Y"}}</div>
+    </div>
+</div>
+
+<img src="{% static 'art/stickers/bloodsbane/hfive.png' %}" style="float:left;height:256px;transform:scale(-1, 1)" alt="Sugar, waving hello!">
+<!--Intro from 5/27/25 -->
+<p>Hello! And welcome to Pokyfriends! The personal website of Dr. Dos. On this website you'll find my personal blog, an archive of my creations, and a gallery of art I've commissioned/received over the years.</p>
+
+<p>You might know me from all sorts of places! I'm primarily known for my work running the <a href="https://museumofzzt.com" target="_blank">Museum of ZZT</a>, an archive of thousands of worlds where I preserve, curate, and write about these obscure, overlooked games whose authors were historically teenagers.</p>
+
+<p>You might also recognize me from the furry fandom where I often go by Sugar. Sugar is my fursona, a normal/fairy type Meowth named Sugar. In ye olden times I was a raccoon. I created the websites used for the old DeviantArt worldbuilding groups <i>Pokémon Mystery Dungeon: Unity</i> and <i>Pokemon: Tales of Tabira</i>.</p>
+
+<p>I've been a furry since 2003, a programmer <a href="https://museumofzzt.com/file/view/virus302/" target="_blank">since 1998</a>, and have generally had some form of website since 2004 or so. I enjoy creating games, websites, and other little tools. Most of my games have been made with ZZT, though I've also made things with PICO8 and PyGame. I've recently started dabbling in making Doom maps as well!</p>
+
 <div id="poky-logo"><img src="{% static 'global/pokyfriends-logo.png' %}"></div>
 
-<p>Let's be Pokyfriends</p>
+<p class="c">Let's be Pokyfriends!</p>
+{% endblock %}
+
+{% block footer_extra %}
+<div id="bg-toggle">[Show Background]</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function (){
+    $("#bg-toggle").click(toggle_bg)
+});
+
+function toggle_bg()
+{
+    $("main").toggleClass("hidden");
+    if ($("main").hasClass("hidden"))
+    {
+        $("#bg-toggle").text("[Hide Background]");
+        $("main").animate({"opacity": 0}, 800);
+    }
+    else
+    {
+        $("#bg-toggle").text("[Show Background]");
+        $("main").animate({"opacity": 1}, 800);
+    }
+}
+</script>
 {% endblock %}

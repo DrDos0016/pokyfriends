@@ -15,11 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+
 from django.urls import include, path
 
 from website.views import *
 from website.pokedex_ebooks_web_views import *
 from website.tbr_views import *
+from .settings import DEBUG
+if DEBUG:
+    from django.conf.urls.static import static
 
 urlpatterns = [
     path("", Index_View.as_view(), name="index"),
@@ -27,6 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include("cdosblog.urls")),
     path('art/gallery/', include("cdosgallery.urls")),
+    path('upload/', include("cdosupload.urls")),
 
     # Pages which require serverside processing
     path('doodle/pokedex-ebooks-web/', pokedex_ebooks_web_index, name="pokedex_ebooks_web_index"),
@@ -34,10 +39,14 @@ urlpatterns = [
 
     path('doodle/train-box-release/', train_box_release, name="train_box_release"),
 
-    # TODO: Remove when Cohost is gone
-    path('counter.png', counter, name='counter'),
+    # Special Pages Unrelated to Pokyfriends
+    #path('tf2-time/', tf2_time, name='tf2_time'),
+    #path('openparty/', openparty, name="openparty"),
 
     # Standard Pages
     path("<slug:slug>/", Project_List_View.as_view(), name="project_list"),
     path("<slug:category_slug>/<slug:slug>/", Project_Detail_View.as_view(), name="project_details"),
 ]
+
+if DEBUG:
+    urlpatterns += static("/dos", document_root=os.path.join("/home/drdos/projects/pokyfriends/", "dos"))

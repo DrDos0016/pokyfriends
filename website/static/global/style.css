@@ -4,7 +4,12 @@ a, a:visited { color: #00F; }
 a[target=_blank] { padding-right:16px; background:url("/static/global/external-link.png"); background-position:top right; background-repeat:no-repeat; }
 
 body {
-    background:var(--pale-blue);
+    background-color:#222;
+    background-size: cover;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    background-position:center center;
+    image-rendering:pixelated;
     font-family:sans-serif;
     font-size:14pt;
     margin:0px auto 0px auto;
@@ -30,7 +35,7 @@ h1 { margin-top:0px; }
 #site-nav {
     position:sticky;
     top:0px;
-    background:var(--border);
+    background:var(--border-translucent);
     z-index:999;
     padding-bottom:5px;
     margin:auto;
@@ -52,6 +57,8 @@ h1 { margin-top:0px; }
 #site-nav .nav-text { text-align:center; width:64px;}
 #site-nav .icon { background:var(--hot-pink); width:50px; height:50px; margin:auto; font-size:24pt; text-align:center; text-shadow:4px 6px var(--border);}
 #sugar-img { width:50px; height:50px; }
+
+footer { font-size:12pt; font-family:monospace; }
 
 @media (max-width:799px) {
     #site-nav ul { justify-content:flex-start; max-width:fit-content;}
@@ -77,6 +84,7 @@ h1 { margin-top:0px; }
 /* Variables */
 :root {
     --border: #36001F;
+    --border-translucent: #36001FAA;
     --pink: #FF9DC6;
     --hot-pink: #FF77B1;
     --lavender: #E7BEEE;
