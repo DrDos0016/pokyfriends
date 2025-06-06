@@ -51,13 +51,13 @@
     <div>
         <h2>Latest Project</h2>
         <div><img src="{{project.get_preview_image_url}}"></div>
-        <div><a href="{{blog.get_absolute_url}}">{{project.title}}</a></div>
+        <div><a href="{{project.get_absolute_url}}">{{project.title}}</a></div>
         <div>{{project.date|date:"M jS, Y"}}</div>
     </div>
     <div>
         <h2>Latest Art Exhibit</h2>
         <div><img src="/static/{{exhibit.thumbnail}}"></div>
-        <div><a href="{{blog.get_absolute_url}}">{{exhibit.title}}</a></div>
+        <div><a href="{{exhibit.get_absolute_url}}">{{exhibit.title}}</a></div>
         <div>{{exhibit.date|date:"M jS, Y"}}</div>
     </div>
 </div>
