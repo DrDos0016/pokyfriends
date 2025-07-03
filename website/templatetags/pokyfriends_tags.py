@@ -35,3 +35,7 @@ def retired_project():
 def zeta_launcher(filename, save_db, launch_file="", engine="czoo439-dos.zip", zeta_version="1.0.7", commands=""):
     zeta_path = "/static/game/zzt/zeta-{}/".format(zeta_version)
     return {"filename": filename, "save_db": save_db, "launch_file": launch_file, "zeta_version": zeta_version, "engine": engine, "commands": commands}
+
+@register.inclusion_tag("website/subtemplate/nav-links.html")
+def nav_links():
+    return {}

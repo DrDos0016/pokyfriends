@@ -1,46 +1,18 @@
 {% extends "website/main.html" %}
 
-{% block title %}Links{% endblock %}
+{% block title %}Cool Websites{% endblock %}
+
+{% block css %}
+<style>
+.link + .link { border-top: 2px dashed; margin-top:16px; padding-top:8px; }
+.link a { font-weight:bold; }
+</style>
+{% endblock %}
 
 {% block content %}
-<h1>Links</h1>
+<h1>Cool Websites</h1>
 
-<h2>YouTube</h2>
-<ul>
-    <li><a href="https://youtube.com/@DoctorDos0016" target="_blank">@DoctorDos0016</a></li>
-    <li><a href="https://youtube.com/@WorldsOfZZT" target="_blank">@WorldsOfZZT</a></li>
-</ul>
-<p>Videos both personal and ZZT related</p>
+<div class="link"><a href="http://hellowordle.net" target="_blank">hello wordl</a> - Freely available wordle clone.</div>
+<div class="link"><a href="http://joshreads.com" target="_blank">The Comics Curmudgeon</a> - I've been reading this guy for like two decades now. Just poking fun at newspaper comics. Be warned, read them for too long and you'll begin to appreciate them!!!</div>
 
-<h2>Twitch</h2>
-<ul>
-    <li><a href="https://twitch.tv/dosmeow" target="_blank">@Dosmeow</a></li>
-    <li><a href="https://twitch.tv/worldsofzzt" target="_blank">@WorldsOfZZT</a></li>
-</ul>
-<p>Live streams both personal and ZZT related</p>
-
-<h2>Twitter</h2>
-<ul>
-    <li><a href="https://twitter.com/dosmeow" target="_blank">@Dosmeow</a></li>
-    <li><a href="https://twitter.com/worldsofzzt" target="_blank">@WorldsOfZZT</a></li>
-</ul>
-<p>My personal Twitter account has been abandoned. My ZZT account is still active, but rarely used for anything other than an announcement feed.</p>
-
-<h2>Steam</h2>
-<ul>
-    <li><a href="https://steamcommunity.com/id/sugarmeowth" target="_blank">Sugar Meowth</a></li>
-</ul>
-<p>Gamer cat. I have no interest in trading or selling anything here.</p>
-
-<h2>Weasyl</h2>
-<ul>
-    <li><a href="https://www.weasyl.com/~sugarmeowth" target="_blank">Sugar Meowth</a></li>
-</ul>
-<p>Gallery of art I have received over the years. I stopped updating it once the gallery on this site was complete.</p>
-
-<h2>GitHub</h2>
-<ul>
-    <li><a href="https://github.com/DrDos0016" target="_blank">DrDos0016</a></li>
-</ul>
-<p>Code for any open source projects that I bothered to set up version control on.</p>
 {% endblock %}

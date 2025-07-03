@@ -138,6 +138,7 @@ class Upload_View(FormView):
 
     def form_valid(self, form):
         print("FORM VALID")
+        form.process()
         post = form.save(commit=False)
         post.save()
         return redirect(post.get_absolute_url())
