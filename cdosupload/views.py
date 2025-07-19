@@ -51,11 +51,12 @@ class Directory_Listing_View(FormView):
             info = {"phys_path": file, "basename": basename, "url": self.root_url + self.subdir + "/" + basename,
                 "stat": stat,
                 "mtime": datetime.fromtimestamp(stat.st_mtime),
-                "directory": os.path.isdir(file)
+                "directory": os.path.isdir(file),
+                "ops": [{"url": "?op=del", "operation":"DELETE"}]
             }
-
-            if self.request.user.is_staff and self.request.GET.get("op") == "del" and self.request.GET.get("filename") == info["basename"]:
+            if self.request.user.is_staff and self.request.GET.get("op") == "del" and self.request.GET.get("fname") == info["basename"]:
                 os.remove(info["phys_path"])
+                print("DELETING THIS ONE")
             else:
                 files_with_data.append(info)
 
@@ -142,7 +143,7 @@ class Edit_Text_View(FormView):
                 "stat": stat,
                 "mtime": datetime.fromtimestamp(stat.st_mtime),
                 "directory": os.path.isdir(file),
-                "ext": ""
+                "ext": "",
             }
 
             if self.request.user.is_staff and self.request.GET.get("op") == "del" and self.request.GET.get("filename") == info["basename"]:

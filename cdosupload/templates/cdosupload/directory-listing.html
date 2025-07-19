@@ -11,7 +11,7 @@
 </head>
 
 <body>
-&bull; {% for k, v in available_directories.items %}<a href="?dir={{k}}">/{{k}}/</a> &bull; {% endfor %}
+<div class="bookmarks">&bull; {% for k, v in available_directories.items %}<a href="?dir={{k}}">/{{k}}/</a> &bull; {% endfor %}</div>
 
 <div class="faux-table cycle-bg">
     <div class="fr header-row">
@@ -33,7 +33,12 @@
         <div class="basename"><a href="{{file.url}}" target="_blank">{{file.basename}}</a></div>
         <div class="mtime" title="{{file.stat.st_mtime}}">{{file.mtime}}</div>
         <div class="size" title="{{file.stat.st_size}}">{{file.stat.st_size|filesizeformat}}</div>
-        {% if request.user.is_staff %}<div class="ops">{% for op in files.ops %}<a href="{{op.url}}">&bull;{{op.operation}}</a> &bull;{% endfor %}</div>{% endif %}
+        {% if request.user.is_staff %}<div class="ops">
+            <details>
+                <summary>[DELETE]</summary>
+            <a href="?dir={{dir}}&subdir={% if request.GET.subdir %}{{request.GET.subdir}}{% endif %}&fname={{file.basename}}&op=del">[CONFIRM]</a><br>
+            </details>
+        </div>{% endif %}
     </div>
     {% endif %}
     {% endfor %}
