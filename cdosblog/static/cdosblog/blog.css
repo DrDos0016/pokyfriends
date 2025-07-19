@@ -1,7 +1,7 @@
 main
 {
     border:0px;
-    background-color:var(--pale-blue);
+    background-color:initial;
 }
 
 .rss-logo { width:16px; height:16px; }
@@ -80,7 +80,7 @@ main
 }
 
 
-.blog-post .post-summary { font-style: oblique; border-bottom:5px double #000; margin-bottom:5px; }
+.blog-post .post-summary { font-style: oblique; border-bottom:5px double #000; margin-bottom:5px; min-height:10px; }
 .blog-post .post-author { font-family: monospace; }
 .blog-post .post-date { font-family: monospace; }
 .blog-post .post-tags { font-family: monospace; }

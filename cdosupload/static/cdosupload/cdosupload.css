@@ -1,4 +1,9 @@
-body { margin:1ch; }
+body { margin:1ch; background-color:#DDD; }
+
+.bookmarks
+{
+    font-family:monospace;
+}
 
 h1
 {

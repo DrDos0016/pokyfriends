@@ -35,6 +35,10 @@
     text-decoration:none;
 }
 
+@media (max-width:479px) {
+    .exhibit-thumb { flex: 1 0 100%; }
+}
+
 .exhibit-thumb:hover { background-color:var(--pale-blue); }
 a.exhibit-thumb:visited { color:var(--text); }
 
