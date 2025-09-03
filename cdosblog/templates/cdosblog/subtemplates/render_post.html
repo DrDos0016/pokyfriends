@@ -29,11 +29,12 @@
     {% if show_post %}
     {{post.css|safe}}
     <section class="post-content">
-        {% if post.revision_details %}<p><i>{{post.revision_date}} Post Update:</i><ul><li>{{post.revision_details}}</li></ul>{% endif %}
+        {{post.privacy_heading|safe}}
+        {% if post.revision_details %}<div class="post-revision"><p><i>{{post.revision_date}} Post Update:</i><ul><li>{{post.revision_details}}</li></ul></div>{% endif %}
         {% if post.warnings %}<details class="cw"><summary>Content Warning:<br>{{post.warnings}}<br>Click to view full post</summary>
-            {{parsed|safe}}
+            {{parsed|safe|urlize}}
         </details>
-        {% else %}{{parsed|safe}}{% endif %}
+        {% else %}{{parsed|safe|urlize}}{% endif %}
     </section>
     <footer>
         <div class="current-mood">{% if post.current_mood %}Current Mood: {{post.current_mood}}{% endif %}</div>

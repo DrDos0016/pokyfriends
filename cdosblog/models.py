@@ -13,7 +13,7 @@ import markdown
 # Create your models here.
 class Icon(models.Model):
     title = models.CharField(max_length=100)
-    filename = models.CharField(max_length=100)
+    filename = models.CharField(max_length=100, help_text="/static/cdosblog/icons/<this.gif>")
     description = models.CharField(max_length=255)
 
     class Meta:
@@ -73,11 +73,12 @@ class Post(models.Model):
         (PRIVACY_PRIVATE, "Private")
     )
 
-    (SCHEMA_HTML, SCHEMA_MARKDOWN, SCHEMA_DJANGO) = (1, 2, 3)
+    (SCHEMA_HTML, SCHEMA_MARKDOWN, SCHEMA_DJANGO, SCHEMA_LJ) = (1, 2, 3, 4)
     SCHEMA_CHOICES = (
         (SCHEMA_DJANGO, "Django"),
         (SCHEMA_HTML, "HTML"),
         (SCHEMA_MARKDOWN, "Markdown"),
+        (SCHEMA_LJ, "LiveJournal")
     )
 
     DJANGO_ADD_ON_CHOICES = (
@@ -147,6 +148,8 @@ class Post(models.Model):
     def render_content(self):
         if self.schema == Post.SCHEMA_MARKDOWN:
             return markdown.markdown(self.content)
+        elif self.schema == Post.SCHEMA_LJ:
+            return self.content.replace("\r\n", "<br>")
         else:
             return self.content
 
@@ -184,6 +187,21 @@ class Post(models.Model):
             return self.get_preview_image_url()
         else:
             return self.icon.get_absolute_url()
+
+    def privacy_heading(self):
+        if self.privacy == Post.PRIVACY_DRAFT:
+            return "<div class='privacy privacy-draft'>This post is a DRAFT. It should only be visible by staff.</div>"
+        if self.privacy == Post.PRIVACY_PUBLIC:
+            return ""
+        if self.privacy == Post.PRIVACY_UNLISTED:
+            return "<div class='privacy privacy-unlisted'>This post is UNLISTED. Please do not share this link without permission!</div>"
+        if self.privacy == Post.PRIVACY_PASSWORD:
+            return "<div class='privacy privacy-password'>This post is PASSWORD PROTECTED. Please do not share this post or its password with others!</div>"
+        if self.privacy == Post.PRIVACY_PRIVATE:
+            return "<div class='privacy privacy-private'>This post is PRIVATE. If you aren't Dr. Dos. Something has gone horribly wrong. Please tell me so I can fix this...</div>"
+        return ""
+
+
 
 
 

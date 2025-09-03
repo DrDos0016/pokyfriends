@@ -108,6 +108,21 @@ main
     font-size:smaller;
 }
 
+.blog-post .post-revision, .blog-post .privacy
+{
+    background:#6EE;
+    padding:5px;
+    border-radius:8px;
+    max-width:500px;
+    margin:5px auto 5px auto;
+}
+
+.privacy-draft { background:#AAA; }
+.privacy-unlisted { background:#FFD700; }
+.privacy-password { background:#C22; }
+.privacy.privacy-private { background:#000; color:#F00; }
+.privacy-draft { background:#AAA; }
+
 .current-mood { grid-area:mood; }
 .current-music { grid-area:music; }
 
