@@ -1,4 +1,5 @@
 {% load blog_tags %}
+{% load tz %}
 <article class="blog-post" data-pk="{{post.pk|default:0}}">
     <header{% if show_post %} class="bordered"{% endif %}>
         <h2><a href="{{post.get_absolute_url}}">{{post.title}}</a></h2>
@@ -7,6 +8,7 @@
             <img src="{{post.icon.get_absolute_url}}" title="{{post.icon.description}}">
         </div>
         <div class="post-meta-info">
+            {% timezone "America/Los_Angeles" %}
             <div class="post-date"><div class="label">Date:</div><div> {{post.date}}</div></div>
             {% if post.revision_date %}
             <div class="post-date"><div class="label">Last Edited:</div><div> {{post.revision_date}}</div></div>
@@ -21,6 +23,7 @@
             {% if request.user.is_staff %}
             <div class="post-admin"><div class="label">Admin:</div><div> <a href="/admin/cdosblog/post/{{post.pk}}/change/">Admin Post #{{post.pk}}</a> | <a href="{% url 'cdb_form_edit' post.pk %}">Edit Post #{{post.pk}}</a></div></div>
             {% endif %}
+            {% endtimezone %}
         </div>
         {% if post.has_preview_image %}<div class="post-preview-image">
             <img src="{{post.get_preview_image_url}}">
