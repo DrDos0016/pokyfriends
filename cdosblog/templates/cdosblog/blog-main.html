@@ -4,7 +4,10 @@
 
 {% block title %}{% if title %}{{title}} - {% endif %}C:\Dos\Blog\{% endblock %}
 
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/blog.css'  %}?{{TS}}">{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/blog.css'  %}?{{TS}}">
+<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/forms.css'  %}?{{TS}}">
+{% endblock %}
 
 {% block content %}
     {% block blog_nav_top %}{% paginator_block page_obj %}{% endblock %}

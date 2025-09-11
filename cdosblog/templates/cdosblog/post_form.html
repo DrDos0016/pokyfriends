@@ -4,11 +4,6 @@
 
 {% block title %}{% if post.title %}{{post.title}} - {% endif %} C:\Dos\Blog\{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/blog.css'  %}?{{TS}}">
-<link rel="stylesheet" type="text/css" href="{% static 'cdosblog/forms.css'  %}?{{TS}}">
-{% endblock %}
-
 {% block blog_content %}
 <div class="block">
 <form method="POST" class="blog-form">

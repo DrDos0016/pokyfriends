@@ -14,7 +14,7 @@ from django.views.generic.list import ListView
 from website.settings import REMOTE_ADDR_HEADER
 
 # Create your views here.
-from .models import Like, Post, Tag, Icon
+from .models import Like, Post, Tag, Icon, Comment
 from .forms import Post_Form, Update_Post_Form
 
 
@@ -216,3 +216,15 @@ class Post_Edit_View(UpdateView):
 
         return redirect(post.get_absolute_url())
         #return super().form_valid(form)
+
+
+def process_comment(request):
+    post = Post.objects.filter(pk=request.POST.get("post_id")).first()
+    ip = request.get_host()
+    if not post:
+        return redirect("/")
+    c = Comment(name=request.POST.get("name"), content=request.POST.get("comment_body"), pokemon_icon=request.POST.get("pokemon_icon"), ip=ip)
+    c.save()
+    post.comments.add(c)
+
+    return redirect(request.POST.get("redirect", "/"))

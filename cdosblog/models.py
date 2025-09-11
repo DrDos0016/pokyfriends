@@ -104,6 +104,7 @@ class Post(models.Model):
     revision_date = models.DateTimeField(help_text="Date article content was last revised", default=None, null=True, blank=True)
     revision_details = models.TextField(help_text="Reference for revisions made to the article", default="", blank=True)
     likes = models.IntegerField(default=0)
+    comments = models.ManyToManyField("Comment")
     tags = models.ManyToManyField("Tag")
     account = models.CharField(max_length=32, default="dr-dos")
     preview_extension = models.CharField(max_length=5, default=".png")
@@ -209,3 +210,15 @@ class Like(models.Model):
     ip = models.GenericIPAddressField()
     datetime = models.DateTimeField(auto_now=True)
     post = models.ForeignKey("Post", null=True, blank=True, on_delete=models.SET_NULL)
+
+
+class Comment(models.Model):
+    ip = models.GenericIPAddressField()
+    visible = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now=True)
+    pokemon_icon = models.IntegerField(default=25)
+    name = models.CharField(max_length=100)
+    content = models.TextField()
+
+    def render_comment(self):
+        return self.content

@@ -61,3 +61,28 @@ border:1px solid #000;
     flex-direction:column;
     flex-wrap:wrap;
 }
+
+.flex-form
+{
+    display:flex;
+    flex-wrap:wrap;
+    margin:auto;
+    max-width:750px;
+    background:red;
+}
+
+.flex-form label
+{
+    flex:1 0 100%;
+    display:flex;
+    justify-content:space-betweenn;
+    border-bottom:1px dotted #000;
+    background-color:#BBB;
+    padding:4px;
+}
+
+.flex-form label > div:first-child { flex:1; font-weight:bold;}
+.flex-form label > div { flex:2; }
+.flex-form textarea { width:95%; height:100px; }
+
+.comment-display { width:80%; max-width:500px; height:120px; background:#FFBBBB; font-size:14pt; }

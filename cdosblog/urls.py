@@ -18,6 +18,7 @@ urlpatterns = [
     path("post/<slug:slug>/next/", quick_and_dirty_nav, {"direction": "next"}, name="cdb_post_next"),
     path("rss/", quick_and_dirty_rss_landing, name="cdb_rss"),
     path("rss/<slug:blog_name>/", Blog_Feed(), name="rss_blog"),
+    path("process/comment/", process_comment, name="cdb_process_comment"),
 
     path("action/post-like/", post_like, name="post_like")
 ]

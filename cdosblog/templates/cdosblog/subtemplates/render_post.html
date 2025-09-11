@@ -1,5 +1,6 @@
 {% load blog_tags %}
 {% load tz %}
+{% with post.comments.count as comment_count %}
 <article class="blog-post" data-pk="{{post.pk|default:0}}">
     <header{% if show_post %} class="bordered"{% endif %}>
         <h2><a href="{{post.get_absolute_url}}">{{post.title}}</a></h2>
@@ -19,6 +20,7 @@
             {% endfor %}</div></div>
             {% if post.warnings %}<div class="post-content-warnings"><div class="label">Warnings:</div><div> {{post.warnings}}</div></div>{% endif %}
             <div class="post-likes"><div class="label">Likes:</div><div>{% if show_post %}{% likes_widget post %}{% else %}{{post.likes}}{% endif %}</div></div>
+            <div class="post-comments"><div class="label">Comments:</div><div>{{comment_count|default:"<i>None</i>"|safe}}</div></div>
             {% if post.source %}<div class="post-source"><div class="label">Source:</div><div> <a href="{{post.source}}" target="_blank">{{post.source}}</a></div></div>{% endif %}
             {% if request.user.is_staff %}
             <div class="post-admin"><div class="label">Admin:</div><div> <a href="/admin/cdosblog/post/{{post.pk}}/change/">Admin Post #{{post.pk}}</a> | <a href="{% url 'cdb_form_edit' post.pk %}">Edit Post #{{post.pk}}</a></div></div>
@@ -44,5 +46,41 @@
         <div class="current-music">{% if post.current_music %}Current Media: {{post.current_music}}{% endif %}</div>
         <div class="post-likes">{% likes_widget post %}</div>
     </footer>
+    {% comment %}
+    <section class="post-comments">
+        <h2>Comments ({{comment_count}})</h2>
+        {% for c in post.comments.all %}
+        {% if c.visible %}
+        <div class="comment">
+        <div>[{% timezone "America/Los_Angeles" %}{{c.created}}{% endtimezone %}] <img src="/static/global/pokedex-media/pokemon/icons/{{c.pokemon_icon}}.png" alt="{{c.pokemon_icon}}"> <b>{{c.name}}</b></div>
+        <div><textarea class="comment-display" readonly>{{c.render_comment}}</textarea></div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </section>
+    <details style="max-width:500px;margin:auto;" open>
+        <summary style="font-size:14pt;text-align:center;font-weight:bold;">Leave A Comment</summary>
+        <form method="POST" class="flex-form" action="{% url 'cdb_process_comment' %}">
+        {% csrf_token %}
+        <input name="redirect" type="hidden" value="{{request.path}}">
+        <input name="post_id" type="hidden" value="{{post.pk}}">
+        <label><div>Your Name:</div><div><input name="name"></div></label>
+        <label><div>Comment:</div><div><textarea name="comment_body"></textarea></div></label>
+        <label><div>Pokesona:</div><div><input name="pokemon_icon"></div></label>
+        <label><div></div><div><input type="submit" value="Submit Comment"></div></label>
+        </form>
+        <hr>
+        <p><b>Temporary Comment Disclaimer</b></p>
+        <p>This comment system is still very experimental. I don't receive <b>any</b> notifications if a comment has been left currently, so try to be timely! You are of course always welcome to message me elsewhere (especially if you want to get a response from me!) There's also no way for me to reply to you on site!</p>
+
+        <p>Your IP gets logged if you post this way.</p>
+
+        <p>Your comment is public. Be SFW and consider what you say before you leave it on my website.</p>
+
+        <p>Depending on how the spam situation goes things will likely change.</p>
+
+    </details>
+    {% endcomment %}
     {% endif %}
 </article>
+{% endwith %}
