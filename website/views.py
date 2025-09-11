@@ -5,6 +5,7 @@ from datetime import datetime
 
 from django.http import HttpResponse  # Cohost
 from PIL import Image
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic import DetailView, ListView
@@ -75,4 +76,19 @@ def openparty(request):
     context = {}
     return render(request, "website/openparty.html", context)
 
+@login_required
+def notepad(request):
+    context = {}
+    with open("/home/drdos/projects/pokyfriends/pokyfriends-notepad-data.txt") as fh:
+        raw = fh.read()
 
+
+    if request.method == "POST" and request.POST.get("text"):
+        text = request.POST.get("text")
+        raw = text + "\n\n" + raw
+
+        with open("/home/drdos/projects/pokyfriends/pokyfriends-notepad-data.txt", "w") as fh:
+            fh.write(raw)
+
+    context["notepad"] = raw
+    return render(request, "website/notepad.html", context)

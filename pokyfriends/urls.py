@@ -44,6 +44,7 @@ urlpatterns = [
     #path('openparty/', openparty, name="openparty"),
 
     # Standard Pages
+    path("notepad/", notepad, name="notepad"),
     path("<slug:slug>/", Project_List_View.as_view(), name="project_list"),
     path("<slug:category_slug>/<slug:slug>/", Project_Detail_View.as_view(), name="project_details"),
 ]

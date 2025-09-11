@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="/static/global/favicon.png">
+<link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
+<title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
+
+<style>
+body
+{
+    display:flex;
+    flex-direction:column;
+    background-color:#AAA;
+    height:100vh;
+    align-items:center;
+    justify-content:center;
+    font-size:18pt;
+}
+
+body > * { width:95vw; margin:auto; }
+
+#form {
+    flex: 0 0 80px;
+    text-align:center;
+}
+
+#form input { font-size:36pt; }
+
+#notepad { flex: 1; background-color:#DFF; padding:4px;}
+
+body > footer { flex: 0 0 50px; background:#CCC; text-align:center; }
+</style>
+</head>
+
+<body>
+<section id="form">
+<form method="POST">
+{% csrf_token %}
+<input type="text" name="text">
+<input type="submit" value="Add">
+</form>
+</section>
+<section id="notepad">
+{{notepad|default:"Empty notepad"|urlize|linebreaks}}
+</section>
+<footer>
+    <a href="?edit">Bulk Edit</a>
+</footer>
+</body>
+
+</html>
