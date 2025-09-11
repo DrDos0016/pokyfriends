@@ -82,3 +82,10 @@ form
     .fr { flex-direction:column; }
     .fr > div.ops { text-align:right; }
 }
+
+#form-details-wrapper summary {
+        background-color:#FAF;
+        font-size:24pt;
+        padding:10px;
+        text-align:center;
+}

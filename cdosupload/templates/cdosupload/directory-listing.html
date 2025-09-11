@@ -13,6 +13,15 @@
 <body>
 <div class="bookmarks">&bull; {% for k, v in available_directories.items %}<a href="?dir={{k}}">/{{k}}/</a> &bull; {% endfor %}</div>
 
+<details id="form-details-wrapper">
+<summary>Upload New File</summary>
+<form method="POST" enctype="multipart/form-data" id="upload-form">
+{% csrf_token %}
+{{form.as_div}}
+<label><input type="submit" value="Upload File"></label>
+</form>
+</details>
+
 <div class="faux-table cycle-bg">
     <div class="fr header-row">
         <h1><div id="http-path">{{root_url}}</div><div id="phys-path">{{path}}</div></h1>
@@ -44,27 +53,6 @@
     {% endfor %}
 </div>
 
-<form method="POST" enctype="multipart/form-data" id="upload-form">
-{% csrf_token %}
-{{form.as_div}}
-<label><input type="submit" value="Upload File"></label>
-{% comment %}
-    <div class="upload-fields">
-        <label>File: <input type="file" name="file"></label>
-        <label>Alternate Name: <input name="new_name"></label>
-        <label>Destination: <select name="destination">
-            <option value="AUTO">Automatic</option>
-            <option value="current">Current Directory</option>
-            <option value="i">Image Directory</option>
-        </select>
-        </label>
-        <label>TODO Optipng (.PNG only): <input name="optipng" type="checkbox" checked></label>
-        <label>TODO Strip Spaces: <input name="stripspaces" type="checkbox" checked></label>
-        <label>Overwrite Existing Files: <input name="overwrite" type="checkbox"></label>
-        <label><input type="submit" value="Upload File"></label>
-    </div>
-{% endcomment %}
-</form>
 </body>
 
 </html>

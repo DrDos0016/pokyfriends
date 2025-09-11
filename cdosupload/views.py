@@ -20,6 +20,7 @@ class Directory_Listing_View(FormView):
     AVAILABLE_DIRECTORIES = {
         "dos": {"root": "/home/drdos/projects/pokyfriends/dos", "root_url": "https://pokyfriends.com/dos/"},
         "images": {"root": "/home/drdos/projects/pokyfriends/i.pokyfriends", "root_url": "https://i.pokyfriends.com/"},
+        "images/2025": {"root": "/home/drdos/projects/pokyfriends/i.pokyfriends/2025", "root_url": "https://i.pokyfriends.com/2025"},
     }
 
 
