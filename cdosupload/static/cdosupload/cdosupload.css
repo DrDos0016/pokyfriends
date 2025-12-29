@@ -41,12 +41,16 @@ h1
 .fr > div.size { flex:1 0; }
 .fr > div.ops { flex:1 0; }
 
-form
+#wrapper-upload-form
 {
+    margin:1ch;
+    background:#FFA;
+    border:1px solid #000;
     display:flex;
-    width:90vw;
-    margin:auto;
     flex-wrap:wrap;
+    justify-content:flex-start;
+    align-items:center;
+    gap:10px;
 }
 
 .fr.header-row { order:-99; }
@@ -55,9 +59,6 @@ form
 
 #upload-form
 {
-    display:flex;
-    flex-wrap:wrap;
-    max-width:640px;
     font-size:12pt;
 }
 
@@ -68,19 +69,41 @@ form
     "help field"
     "error field";
     column-gap:5px;
+    grid-template-columns: 60% 40%;
     border-bottom:1px dotted #000;
     margin:2px;
 }
 
 #upload-form label { grid-area: label; font-weight:bold; }
 #upload-form input, #upload-form select { grid-area: field; align-self:start; }
-#upload-form .helptext { grid-area: help; font-size: 10pt; }
+#upload-form .helptext { grid-area: help; font-size: 10pt; width:100%; max-width:300px;}
 
 #upload-form label { display:flex; flex:1 0 100%; justify-content:space-between; }
+
+.upload-area {
+    border:5px dashed #000;
+    width:360px;
+    height:250px;
+    padding:10px;
+    margin:10px;
+    display:flex;
+    flex-direction:column;
+    font-size:10pt;
+    text-align:center;
+}
+.upload-area.dragging
+{
+    border:5px solid #8F8;
+    background-color:#AFA;
+}
+
+.upload-area img { height:180px; }
+.upload-area > div { height:20px; border-top:1px dotted #000; margin-top:2px; }
 
 @media (max-width:799px) {
     .fr { flex-direction:column; }
     .fr > div.ops { text-align:right; }
+    #upload-form .helptext { width:100%; max-width:120px;}
 }
 
 #form-details-wrapper summary {
