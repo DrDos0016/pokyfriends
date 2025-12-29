@@ -8,19 +8,24 @@
 <link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
 <link rel="stylesheet" type="text/css" href="{% static 'cdosupload/cdosupload.css'  %}?{{TS}}">
 <title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
+<script src="{% static 'global/js/jquery-3.7.1.min.js' %}"></script>
 </head>
 
 <body>
 <div class="bookmarks">&bull; {% for k, v in available_directories.items %}<a href="?dir={{k}}">/{{k}}/</a> &bull; {% endfor %}</div>
 
-<details id="form-details-wrapper">
-<summary>Upload New File</summary>
-<form method="POST" enctype="multipart/form-data" id="upload-form">
-{% csrf_token %}
-{{form.as_div}}
-<label><input type="submit" value="Upload File"></label>
-</form>
-</details>
+<div id="wrapper-upload-form">
+    <form method="POST" enctype="multipart/form-data" id="upload-form">
+    {% csrf_token %}
+    {{form.as_div}}
+    <label><input type="submit" value="Upload File"></label>
+    </form>
+    <div class="upload-area">
+        <img id="upload-preview" src="">
+        <div id="upload-filename">-</div>
+        <div id="upload-filesize">-</div>
+    </div>
+</div>
 
 <div class="faux-table cycle-bg">
     <div class="fr header-row">
@@ -52,6 +57,31 @@
     {% endif %}
     {% endfor %}
 </div>
+
+{% block scripts %}
+<!--<script src="/static/cdosupload/cdosupload.js" type="module"></script>-->
+<script type="module">
+import { Uploader, filesize_format } from "/static/cdosupload/cdosupload.js";
+let overview = {"slugify": "Slugify the filename 'Cool Artwork #20.jpg' -> 'cool-artwork-20.jpg'"};
+$(document).ready(function (){
+    $("#id_post_processing option").mouseover(function (){
+        let key = $(this).val();
+        $("#id_post_processing_helptext").html(overview[key] || ("No help available for: " + key));
+    });
+
+    let uploader = new Uploader(".upload-area", "#id_upload");
+    uploader.process_file = function(file) {
+        if (file.type.slice(0,6) == "image/")
+            $("#upload-preview").attr("src", URL.createObjectURL(file));
+        else
+            $("#upload-preview").attr("src", "/static/cdosupload/file.svg");
+        $("#upload-filename").text(file.name);
+        $("#upload-filesize").text(filesize_format(file.size));
+        console.log(file);
+    }
+});
+</script>
+{% endblock %}
 
 </body>
 
