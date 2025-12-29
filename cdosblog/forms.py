@@ -15,6 +15,8 @@ class Post_Form(ModelForm):
             "privacy", "password", "schema", "css", "django_add_ons",
         ]
 
+        labels = {"current_music": "Current media" }
+
         widgets = {
             "icon": Blog_Icon_Widget(),
         }
