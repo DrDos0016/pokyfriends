@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import FormView
 from django.views.generic import DetailView, ListView
 
@@ -25,8 +25,6 @@ class Directory_Listing_View(FormView):
 
 
     def setup(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            raise PermissionDenied()
         super().setup(request, *args, **kwargs)
         self.success_url = request.get_full_path()
         self.dir = request.GET.get("dir", "dos")
@@ -40,6 +38,11 @@ class Directory_Listing_View(FormView):
         self.upload_errors = []
         if request.method != "POST":
             self.get_file_directory()
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect("/admin/login/?next=/upload/")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_file_directory(self):
         files = glob.glob(os.path.join(self.path, "*"))
