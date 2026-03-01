@@ -8,7 +8,7 @@ import time
 
 #@login_required
 def cdosorganize(request):
-    context = {}
+    context = {"title": "CDosOrganize"}
     STATE_IGNORE = -1
     STATE_TODO = 0
     STATE_DONE = 1
