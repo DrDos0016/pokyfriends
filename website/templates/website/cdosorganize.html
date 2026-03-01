@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="/static/global/favicon.png">
+<title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
+
+<style>
+body
+{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    font-size:32pt;
+    background-color:#111;
+    font-family:sans-serif;
+}
+
+main { height:648px; width:360px; text-align:center; overflow:clip; background-color:#36A;%}
+
+
+.sticker, .stickers > div { flex:1 0 18%; background: #0CC; margin:5px; border-radius:10px; border:5px solid #FFD700; }
+.sticker { cursor: pointer; }
+.sticker[data-state="-1"] { filter:grayscale(100%) brightness(40%); }
+.sticker[data-state="0"] { background:#C00; }
+.sticker[data-state="1"] { background:#0C0; }
+.sticker[data-state="2"] { background:#CC0; }
+
+.stickers
+{
+    display:flex;
+    flex-wrap:wrap;
+    height:360px;
+}
+
+.info { flex:1; background:#FFF; margin:5px; border-radius:10px;}
+input[name=info] { font-size:18pt; width:80%; text-align:center; }
+
+.options
+{
+    display:none;
+    font-size:18pt;
+    background:#C42;
+    height:360px;
+}
+
+input[type="button"], select {
+    font-size:20pt;
+    width:50%;
+    margin:auto;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+<main>
+    <section class="stickers">
+        <div class="date">{{today|date:"d"}}</div>
+        {% for sticker in stickers %}<div class="sticker" data-state="{{sticker.state}}" data-title="{{sticker.title}}">{{sticker.icon}}</div>
+        {% endfor %}
+        <div class="info"><input name="info" value="---"></div>
+    </section>
+    <section class="options">
+        <br><br>
+        <input type="button" id="input-close-options" value="close">
+        <br><br><br>
+        <label>Set All To State:<br>
+            <select name="state-all" id="input-set-all-to-state">
+                <option value="">- Pick -</option>
+                <option value="-1">IGNORE</option>
+                <option value="0">TO DO</option>
+                <option value="1">DONE</option>
+            </select>
+        </label>
+    </section>
+</main>
+</body>
+
+<script src="{% static 'global/js/jquery-3.7.1.min.js' %}"></script>
+<script>
+$(document).ready(function (){
+    $(".sticker").click(function (){
+        let state = parseInt($(this).attr("data-state"));
+        state++;
+        if (state > 2)
+            state = -1;
+        $(this).attr("data-state", "" + state);
+        $("input[name=info]").val($(this).attr("data-title"));
+    });
+
+    $(".date").click(function (){
+        $(".stickers").hide();
+        $(".options").show();
+    });
+
+    $("#input-set-all-to-state").change(function (){
+        let val = $(this).val();
+        if (val == "")
+            return false;
+
+        console.log("Setting all to ", val);
+        $(".sticker").attr("data-state", val);
+    });
+
+    $("#input-close-options").click(function (){
+        $(".options").hide();
+        $(".stickers").show();
+    });
+
+    //$(".date").click();
+});
+</script>
+</html>

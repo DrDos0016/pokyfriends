@@ -10,6 +10,8 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic import DetailView, ListView
 
+from website.cdosorganize_views import *
+
 from website.models import Project
 from cdosblog.models import Post
 from cdosgallery.models import Exhibit
