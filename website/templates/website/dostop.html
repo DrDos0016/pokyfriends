@@ -1,0 +1,23 @@
+{% extends "website/main.html" %}
+{% load static %}
+{% load pokyfriends_tags %}
+
+{% block css %}
+<style>
+</style>
+{% endblock %}
+
+{% block navigation %}
+<nav id="site-nav">
+    <ul>
+        <li><a href="{% url 'index' %}"><div class="nav-text">Home</div><div class="icon"><img src="{% static 'global/sugar.png' %}" id="sugar-img"></div></a></li>
+        <li><a href="{% url 'cdb_form_create' %}"><div class="nav-text">Blog Post</div><div class="icon">📔</div></a></li>
+        <li><a href="{% url 'cdosorganize' %}"><div class="nav-text">Organize</div><div class="icon">🗓️</div></a></li>
+        <li><a href="{% url 'notepad' %}"><div class="nav-text">Notepad</div><div class="icon">🗒️</div></a></li>
+        <li><a href="{% url 'cdosupload' %}"><div class="nav-text">Upload</div><div class="icon">📁</div></a></li>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
