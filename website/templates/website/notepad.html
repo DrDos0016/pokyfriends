@@ -32,10 +32,18 @@ body > * { width:95vw; margin:auto; }
 #notepad { flex: 1; background-color:#DFF; padding:4px; max-height:80vh; overflow:auto;}
 
 body > footer { flex: 0 0 50px; background:#CCC; text-align:center; }
+
+p { margin:8px 4px 8px 4px; padding-left:20px; border-bottom:1px solid #000; }
+
+.bulk-edit
+{
+    flex: 1; background-color:#FDD; padding:4px; max-height:80vh; overflow:auto; height:80vh; width:80vw; font-size:14pt;
+}
 </style>
 </head>
 
 <body>
+{% if not editing %}
 <section id="form">
 <form method="POST">
 {% csrf_token %}
@@ -49,6 +57,15 @@ body > footer { flex: 0 0 50px; background:#CCC; text-align:center; }
 <footer>
     <a href="?edit">Bulk Edit</a>
 </footer>
+{% else %}
+<section id="form">
+    <form method="POST" action="/notepad/">
+    {% csrf_token %}
+    <textarea class="bulk-edit" name="bulk">{{notepad}}</textarea>
+    <input type="submit" value="Save">
+    </form>
+</section>
+{% endif %}
 </body>
 
 </html>

@@ -87,10 +87,18 @@ def notepad(request):
 
     if request.method == "POST" and request.POST.get("text"):
         text = request.POST.get("text")
-        raw = text + "\n\n" + raw
+        ts = str(datetime.now())[:19]
+        raw = "[{}] {}\n\n{}".format(ts, text, raw)
 
         with open("/home/drdos/projects/pokyfriends/pokyfriends-notepad-data.txt", "w") as fh:
             fh.write(raw)
+    if request.method == "POST" and request.POST.get("bulk"):
+        raw = request.POST.get("bulk")
+
+        with open("/home/drdos/projects/pokyfriends/pokyfriends-notepad-data.txt", "w") as fh:
+            fh.write(raw)
+    elif "edit" in request.GET:
+        context["editing"] = True
 
     context["notepad"] = raw
     return render(request, "website/notepad.html", context)
