@@ -94,3 +94,8 @@ def notepad(request):
 
     context["notepad"] = raw
     return render(request, "website/notepad.html", context)
+
+@login_required
+def dostop(request):
+    context = {"title": "Dostop"}
+    return render(request, "website/dostop.html", context)

@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 
 from django.urls import include, path
+from django.views.generic.base import TemplateView
 
 from website.views import *
 from website.pokedex_ebooks_web_views import *
@@ -36,7 +37,6 @@ urlpatterns = [
     # Pages which require serverside processing
     path('doodle/pokedex-ebooks-web/', pokedex_ebooks_web_index, name="pokedex_ebooks_web_index"),
     path('doodle/pokedex-ebooks-web/comics/', pokedex_ebooks_web_comics, name="pokedex_ebooks_web_comics"),
-
     path('doodle/train-box-release/', train_box_release, name="train_box_release"),
 
     # Special Pages Unrelated to Pokyfriends
@@ -44,6 +44,7 @@ urlpatterns = [
     #path('openparty/', openparty, name="openparty"),
 
     # Standard Pages
+    path("dostop/", dostop, name="dostop"),
     path("notepad/", notepad, name="notepad"),
     path("cdosorganize/", cdosorganize, name="cdosorganize"),
     path("<slug:slug>/", Project_List_View.as_view(), name="project_list"),
