@@ -1,9 +1,12 @@
+import json
+
 from collections import namedtuple
 from datetime import datetime, timedelta
 
 from PIL import Image
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 import time
 
 #@login_required
@@ -33,24 +36,39 @@ def cdosorganize(request):
     #W:Post Sunday VOD
     #:SAT Discord Poll for stream next
 
+    if request.method == "POST":
+        with open("/home/drdos/projects/pokyfriends/cdosorganize-data.json", "w") as fh:
+            fh.write(request.POST.get("stickers"))
+        return HttpResponse("OK")
+
     today = datetime.now()
     context["today"] = today
     last_visit = request.session.get("last_visit", today)
     print("Last visit is now", last_visit)
     if today > last_visit:
         print("Yo it's a new day")
-    Sticker = namedtuple("Sticker", "icon, state, title, kind", defaults=["?", STATE_TODO, "UNDEFINED", KIND_DAILY])
+
+    Sticker = namedtuple("Sticker", "icon, state, title, timestamp", defaults=["?", STATE_TODO, "UNDEFINED", ""])
+    stickers = []
+
+
+    raw = json.load(open("/home/drdos/projects/pokyfriends/cdosorganize-data.json"))
+    for s in raw:
+        print(s)
+        stickers.append(Sticker(icon=s["icon"], state=s["state"], title=s["title"], timestamp=s["timestamp"]))
+
+    """
     stickers = [
-        Sticker(icon="🏃‍➡️", state=STATE_TODO, title="Ring Fit", kind=KIND_DAILY),
-        Sticker(icon="🍴", state=STATE_TODO, title="Dishes", kind=KIND_DAILY),
-        Sticker(icon="🏛️", state=STATE_TODO, title="Museum Dev", kind=KIND_DAILY),
-        Sticker(icon="🔎", state=STATE_TODO, title="Closer Look", kind=KIND_DAILY),
-        Sticker(icon="🧠", state=STATE_TODO, title="Enrichment", kind=KIND_DAILY),
-        Sticker(icon="🚽", state=STATE_TODO, title="Clean Bathroom", kind=KIND_DAILY),
-        Sticker(icon="🍞", state=STATE_TODO, title="Clean Kitchen", kind=KIND_DAILY),
-        Sticker(icon="🧦", state=STATE_TODO, title="Laundry", kind=KIND_SATURDAY),
-        Sticker(icon="☕", state=STATE_TODO, title="Coffee", kind=KIND_DAILY),
-        Sticker(icon="🍄", state=STATE_TODO, title="Metamucil", kind=KIND_DAILY),
+        Sticker(icon="🏃‍➡️", state=STATE_TODO, title="Ring Fit", timestamp=""),
+        Sticker(icon="🍴", state=STATE_TODO, title="Dishes", timestamp=""),
+        Sticker(icon="🏛️", state=STATE_TODO, title="Museum Dev", timestamp=""),
+        Sticker(icon="🔎", state=STATE_TODO, title="Closer Look", timestamp=""),
+        Sticker(icon="🧠", state=STATE_TODO, title="Enrichment", timestamp=""),
+        Sticker(icon="🚽", state=STATE_TODO, title="Clean Bathroom", timestamp=""),
+        Sticker(icon="🍞", state=STATE_TODO, title="Clean Kitchen", timestamp=""),
+        Sticker(icon="🧦", state=STATE_TODO, title="Laundry", timestamp=""),
+        Sticker(icon="☕", state=STATE_TODO, title="Coffee", timestamp=""),
+        Sticker(icon="🍄", state=STATE_TODO, title="Metamucil", timestamp=""),
         Sticker(icon="📺", state=STATE_TODO, title="Post VOD"),
         Sticker(icon="📊", state=STATE_TODO, title="CL Poll"),
         Sticker(icon="📊", state=STATE_TODO, title="Stream Poll"),
@@ -68,7 +86,8 @@ def cdosorganize(request):
         Sticker(icon="🫐", state=STATE_TODO, title="Custom"),
         Sticker(icon="🫐", state=STATE_TODO, title="Custom"),
         Sticker(icon="🫐", state=STATE_TODO, title="Custom"),
-    ]
+    ]"""
+
 
     """🍎🍏🍐🍑🍒🍓🫐"""
 

@@ -57,10 +57,11 @@ input[type="button"], select {
 </head>
 
 <body>
+{% csrf_token %}
 <main>
     <section class="stickers">
         <div class="date">{{today|date:"d"}}</div>
-        {% for sticker in stickers %}<div class="sticker" data-state="{{sticker.state}}" data-title="{{sticker.title}}">{{sticker.icon}}</div>
+        {% for sticker in stickers %}<div class="sticker" data-timestamp="{{sticker.timestamp}}" data-state="{{sticker.state}}" data-title="{{sticker.title}}">{{sticker.icon}}</div>
         {% endfor %}
         <div class="info"><input name="info" value="---"></div>
     </section>
@@ -89,6 +90,7 @@ $(document).ready(function (){
         if (state > 2)
             state = -1;
         $(this).attr("data-state", "" + state);
+        save();
         $("input[name=info]").val($(this).attr("data-title"));
     });
 
@@ -110,8 +112,38 @@ $(document).ready(function (){
         $(".options").hide();
         $(".stickers").show();
     });
-
-    //$(".date").click();
 });
+
+function save()
+{
+    console.log("SAVING");
+    let data = {"stickers": []};
+    for (let sticker of $(".sticker"))
+    {
+        let timestamp;
+        if ($(sticker).data("timestamp") != "")
+            timestamp = new Date().toString();
+        else
+            timestamp = new Date().toString();
+        let s = {"icon": $(sticker).text(), "title": $(sticker).data("title"), "state": $(sticker).data("state"), "timestamp": timestamp};
+        data["stickers"].push(s);
+    }
+    console.log("Added", data["stickers"].length,"icons");
+
+
+    $.ajax({
+        "url":"/cdosorganize/",
+        "method":"POST",
+        "data":{
+            "csrfmiddlewaretoken":$("input[name=csrfmiddlewaretoken]").val(),
+            "stickers": JSON.stringify(data["stickers"]),
+            }
+    }).done(function (data){
+        console.log("data")
+    }).fail(function (data){
+        console.log("uh oh");
+    });
+
+}
 </script>
 </html>
