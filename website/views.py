@@ -1,12 +1,12 @@
 import glob
-import os  # Cohost
+import os
 
 from datetime import datetime
 
 from django.http import HttpResponse  # Cohost
 from PIL import Image
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.views.generic import DetailView, ListView
 
@@ -81,26 +81,64 @@ def openparty(request):
 @login_required
 def notepad(request):
     context = {}
-    with open("/home/drdos/projects/pokyfriends/pokyfriends-notepad-data.txt") as fh:
+    NOTEBOOK_ROOT = "/home/drdos/projects/pokyfriends/dos/notebook/"
+    notebooks = glob.glob(os.path.join(NOTEBOOK_ROOT, "*.txt"))
+    default_notebook_path = os.path.join(NOTEBOOK_ROOT, "default.txt")
+    requested_notebook_name = request.GET.get("notebook", "default.txt")
+    filename = request.POST.get("filename")
+
+    if default_notebook_path not in notebooks:
+        with open(default_notebook_path, "w") as fh:
+            print("WRITING", default_notebook_path)
+            fh.write("This is the default notebook. It was automatically created.")
+
+    # If making a new notebook, create it and switch to it
+    if request.method == "POST" and request.POST.get("action") == "Create":
+        if filename:
+            with open(os.path.join(NOTEBOOK_ROOT, filename), "w") as fh:
+                ts = str(datetime.now())[:19]
+                raw = "[{}] Created notebook `{}`".format(ts, filename)
+                fh.write(raw)
+                return redirect("/notepad/?notebook=" + filename)
+
+    notebook = requested_notebook_name
+    active_notebook_path = os.path.join(NOTEBOOK_ROOT, notebook)
+
+    with open(active_notebook_path) as fh:
         raw = fh.read()
 
-
+    # Add a line
     if request.method == "POST" and request.POST.get("text"):
         text = request.POST.get("text")
         ts = str(datetime.now())[:19]
         raw = "[{}] {}\n\n{}".format(ts, text, raw)
+        print("ADDING A LINE TO", active_notebook_path)
 
-        with open("/home/drdos/projects/pokyfriends/pokyfriends-notepad-data.txt", "w") as fh:
+        with open(active_notebook_path, "w") as fh:
             fh.write(raw)
+    # Bulk write the entire file
     if request.method == "POST" and request.POST.get("bulk"):
         raw = request.POST.get("bulk")
+        filename = request.POST.get("notebook")
+        active_notebook_path = os.path.join(NOTEBOOK_ROOT, filename)
 
-        with open("/home/drdos/projects/pokyfriends/pokyfriends-notepad-data.txt", "w") as fh:
+        with open(active_notebook_path, "w") as fh:
             fh.write(raw)
-    elif "edit" in request.GET:
+        return redirect("/notepad/?notebook=" + filename)
+    elif "edit" in request.GET:  # Present entire file for bulk editing
         context["editing"] = True
 
-    context["notepad"] = raw
+    # Set up alternate notebooks
+    context["alternate_notebooks"] = []
+    for n in notebooks:
+        alt = os.path.basename(n)
+        context["alternate_notebooks"].append(alt)
+
+    context["alternate_notebooks"] = sorted(context["alternate_notebooks"])
+
+    context["notebook"] = notebook
+    context["contents"] = raw
+    context["size"] = len(raw)
     return render(request, "website/notepad.html", context)
 
 @login_required

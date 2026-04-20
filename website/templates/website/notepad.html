@@ -6,32 +6,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="/static/global/favicon.png">
 <link rel="stylesheet" type="text/css" href="{% static 'global/style.css'  %}?{{TS}}">
-<title>Pokyfriends - {% block title %}{{title}}{% endblock %}</title>
+<title>{{notebook}} ({{size|filesizeformat}}) - Notepad</title>
 
 <style>
 body
 {
-    display:flex;
-    flex-direction:column;
+    display:grid;
+    grid-template-areas: "header"
+    "body"
+    "footer";
+    grid-template-rows:10vh auto 10vh;
     background-color:#AAA;
     height:100vh;
-    align-items:center;
-    justify-content:center;
-    font-size:18pt;
 }
 
 body > * { width:95vw; margin:auto; }
 
-#form {
-    flex: 0 0 80px;
-    text-align:center;
+form {
+    display:flex;
+    font-size:36pt;
+    gap: 5px;
 }
 
-#form input { font-size:36pt; }
+form input { flex:1; height:8vh; font-size:16pt;}
+form input[type=submit] { flex:0 0 15vw; }
 
-#notepad { flex: 1; background-color:#DFF; padding:4px; max-height:80vh; overflow:auto;}
+#notepad { padding:4px; overflow:auto; height:100%; display:flex; flex-direction:column; gap:5px; }
+#notepad > div { background-color:#DFF; flex: 1; width:90vw; max-width:90vw; margin:auto;}
+h1
+{
+    margin:auto;
+    background-color:#7CC;
+    border-radius:12px;
+    font-size:14pt;
+    text-align:center;
+    overflow:clip;
+    flex:0;
+    width:50vw;
+    max-width:50vw;
+}
 
-body > footer { flex: 0 0 50px; background:#CCC; text-align:center; }
+
+body > footer { text-align:center; width:100vw; max-width:95vw; display:flex; gap:5px; background:initial;}
+body > footer > div { background-color:#CCC; }
 
 p { margin:8px 4px 8px 4px; padding-left:20px; border-bottom:1px solid #000; }
 
@@ -39,6 +56,8 @@ p { margin:8px 4px 8px 4px; padding-left:20px; border-bottom:1px solid #000; }
 {
     flex: 1; background-color:#FDD; padding:4px; max-height:80vh; overflow:auto; height:80vh; width:80vw; font-size:14pt;
 }
+
+footer > div { flex: 1; align-content:center; justify-content:center; border:2px solid #000; height:8vh;}
 </style>
 </head>
 
@@ -47,25 +66,61 @@ p { margin:8px 4px 8px 4px; padding-left:20px; border-bottom:1px solid #000; }
 <section id="form">
 <form method="POST">
 {% csrf_token %}
-<input type="text" name="text">
-<input type="submit" value="Add">
+<input type="text" name="text" placeholder="Enter Text">
+<input type="submit" value="➤">
 </form>
 </section>
 <section id="notepad">
-{{notepad|default:"Empty notepad"|urlize|linebreaks}}
+<h1>{{notebook}}</h1>
+<div>
+    {{contents|default:"Empty notepad"|urlize|linebreaks}}
+</div>
 </section>
 <footer>
-    <a href="?edit">Bulk Edit</a>
+    <div><a href="?edit&notebook={{request.GET.notebook|default:'default.txt'}}">Bulk Edit</a></div>
+    <div><input type="button" value="New Notebook" id="notebook-new"></div>
+    <div><input type="button" value="Open Notebook" id="notebook-open"></div>
 </footer>
 {% else %}
 <section id="form">
     <form method="POST" action="/notepad/">
     {% csrf_token %}
-    <textarea class="bulk-edit" name="bulk">{{notepad}}</textarea>
+    <h1>{{notebook}}</h1>
+    <textarea class="bulk-edit" name="bulk">{{contents}}</textarea>
+    <input type="hidden" value="{{request.GET.notebook}}" name="notebook">
     <input type="submit" value="Save">
     </form>
 </section>
 {% endif %}
+
+<dialog id="modal-new" closedby="any">
+    <form method="POST">
+    {% csrf_token %}
+    <input name="filename" placeholder="file.txt">
+    <input type="submit" name="action" value="Create">
+    </form>
+</dialog>
+<dialog id="modal-open" closedby="any">
+    <ul>
+        {% for alt in alternate_notebooks %}<li><a href="?notebook={{alt}}">{{alt}}</li>
+        {% endfor %}
+    </ul>
+</dialog>
 </body>
+
+<script>
+const new_button = document.getElementById("notebook-new");
+const open_button = document.getElementById("notebook-open");
+const new_modal = document.getElementById("modal-new");
+const open_modal = document.getElementById("modal-open");
+
+new_button.addEventListener("click", () => {
+  new_modal.showModal();
+});
+
+open_button.addEventListener("click", () => {
+  open_modal.showModal();
+});
+</script>
 
 </html>
