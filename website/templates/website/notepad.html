@@ -22,14 +22,23 @@ body
 
 body > * { width:95vw; margin:auto; }
 
+#form { width:95vw; margin:auto; overflow:hidden;}
+
 form {
     display:flex;
+    max-width:95vw;
+    width:95vw;
     font-size:36pt;
     gap: 5px;
 }
 
-form input { flex:1; height:8vh; font-size:16pt;}
-form input[type=submit] { flex:0 0 15vw; }
+form input { flex:1; height:8vh; font-size:16pt; width:auto;}
+form label { flex:1; font-size:14pt; height:8vh; text-align:center; background: #333; padding-top:20px;}
+form label:has(input:checked) { background: #AFA; }
+form input[type=checkbox] { }
+form input[name=text] { flex:1; }
+form input[name=timestamp] { display:none; }
+form input[type=submit] { flex:1; }
 
 #notepad { padding:4px; overflow:auto; height:100%; display:flex; flex-direction:column; gap:5px; }
 #notepad > div { background-color:#DFF; flex: 1; width:90vw; max-width:90vw; margin:auto;}
@@ -44,6 +53,7 @@ h1
     flex:0;
     width:50vw;
     max-width:50vw;
+    cursor:pointer;
 }
 
 
@@ -66,12 +76,13 @@ footer > div { flex: 1; align-content:center; justify-content:center; border:2px
 <section id="form">
 <form method="POST">
 {% csrf_token %}
+<label>🕓<input type="checkbox" name="timestamp" value="1" {% if request.POST.timestamp or request.method == 'GET' %}checked{% endif %}></label>
 <input type="text" name="text" placeholder="Enter Text">
 <input type="submit" value="➤">
 </form>
 </section>
 <section id="notepad">
-<h1>{{notebook}}</h1>
+<h1 id="notebook-open">{{notebook}}</h1>
 <div>
     {{contents|default:"Empty notepad"|urlize|linebreaks}}
 </div>
@@ -79,7 +90,6 @@ footer > div { flex: 1; align-content:center; justify-content:center; border:2px
 <footer>
     <div><a href="?edit&notebook={{request.GET.notebook|default:'default.txt'}}">Bulk Edit</a></div>
     <div><input type="button" value="New Notebook" id="notebook-new"></div>
-    <div><input type="button" value="Open Notebook" id="notebook-open"></div>
 </footer>
 {% else %}
 <section id="form">

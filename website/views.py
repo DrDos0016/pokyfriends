@@ -110,9 +110,11 @@ def notepad(request):
     # Add a line
     if request.method == "POST" and request.POST.get("text"):
         text = request.POST.get("text")
-        ts = str(datetime.now())[:19]
-        raw = "[{}] {}\n\n{}".format(ts, text, raw)
-        print("ADDING A LINE TO", active_notebook_path)
+        if request.POST.get("timestamp"):
+            ts = str(datetime.now())[:19]
+            raw = "[{}] {}\n\n{}".format(ts, text, raw)
+        else:
+            raw = "{}\n\n{}".format(text, raw)
 
         with open(active_notebook_path, "w") as fh:
             fh.write(raw)
