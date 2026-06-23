@@ -9,6 +9,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import time
 
+from .settings import ORG_DATA_PATH
+
 #@login_required
 def cdosorganize(request):
     context = {"title": "CDosOrganize"}
@@ -37,7 +39,7 @@ def cdosorganize(request):
     #:SAT Discord Poll for stream next
 
     if request.method == "POST":
-        with open("/home/drdos/projects/pokyfriends/cdosorganize-data.json", "w") as fh:
+        with open(ORG_DATA_PATH, "w") as fh:
             fh.write(request.POST.get("stickers"))
         return HttpResponse("OK")
 
@@ -52,7 +54,7 @@ def cdosorganize(request):
     stickers = []
 
 
-    raw = json.load(open("/home/drdos/projects/pokyfriends/cdosorganize-data.json"))
+    raw = json.load(open(ORG_DATA_PATH))
     for s in raw:
         print(s)
         stickers.append(Sticker(icon=s["icon"], state=s["state"], title=s["title"], timestamp=s["timestamp"]))
